@@ -1,3 +1,5 @@
+[![在线预览](https://img.shields.io/badge/在线预览-Live-orange)](https://luckiiilixuanyi.github.io/portfolio/)
+[![AI Agent](https://img.shields.io/badge/Focus-AI%20Agent-blue)](https://github.com/luckiiilixuanyi/portfolio)
 # 个人 AI Agent 作品集
 
 李宣奕 · AI 产品经理作品集
