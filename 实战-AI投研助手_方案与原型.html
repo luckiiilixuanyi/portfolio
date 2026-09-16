@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="PDtg0eDpgsqXIpGBGAjaaf">
+<head data-page-node-id="iIzS3JojGHcYLnqNeky0Ih">
+<meta charset="UTF-8" data-page-node-id="Y8BfRrXxE5XlbaofMzstkf">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="UhRKgyb0hKZGFfBoS6efvX">
+<title>AI 投研助手 · 产品方案与可交互原型</title>
+<style>
+:root{
+  --bg:#0A1428;
+  --bg2:#08101F;
+  --navy:#0B1F3A;
+  --card:#12243F;
+  --card2:#16294A;
+  --card3:#1B3159;
+  --border:#1E3A5F;
+  --border2:#2A4A78;
+  --orange:#FF7A1A;
+  --orange2:#FF9A4D;
+  --orange-soft:rgba(255,122,26,.14);
+  --fact:#2E6FE0;
+  --fact-soft:rgba(46,111,224,.16);
+  --up:#F0483E;
+  --down:#1FBF75;
+  --text:#E9EFF7;
+  --muted:#93A7C4;
+  --dim:#63799B;
+  --fs-12:12px; --fs-14:14px; --fs-16:16px; --fs-20:20px; --fs-28:28px; --fs-36:36px;
+  --w-400:400; --w-600:600; --w-700:700;
+  --r-4:4px; --r-8:8px; --r-12:12px;
+  --s-4:4px; --s-8:8px; --s-12:12px; --s-16:16px; --s-24:24px; --s-32:32px;
+  --font:system-ui,-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);font-family:var(--font);
+  font-size:var(--fs-14);line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+::selection{background:var(--orange);color:#fff}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:4px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ---------- nav ---------- */
+.nav{
+  position:sticky;top:0;z-index:100;background:rgba(10,20,40,.92);
+  backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+}
+.nav-in{max-width:1180px;margin:0 auto;padding:0 var(--s-24);display:flex;align-items:center;gap:var(--s-24);height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:var(--w-700);font-size:var(--fs-16);letter-spacing:.3px;white-space:nowrap}
+.brand-dot{width:26px;height:26px;border-radius:var(--r-8);background:linear-gradient(135deg,var(--orange),#FFB066);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:var(--w-700);color:#0A1428}
+.brand small{font-weight:var(--w-400);color:var(--dim);font-size:var(--fs-12);letter-spacing:0}
+.tabs{display:flex;gap:var(--s-4);margin-left:auto}
+.tab-btn{
+  background:none;border:none;color:var(--muted);font-family:var(--font);font-size:var(--fs-14);
+  font-weight:var(--w-600);padding:8px 16px;border-radius:var(--r-8);cursor:pointer;
+  transition:all .18s;white-space:nowrap;
+}
+.tab-btn:hover{color:var(--text);background:var(--card)}
+.tab-btn.on{color:#0A1428;background:var(--orange);font-weight:var(--w-700)}
+
+/* ---------- layout ---------- */
+.page{display:none;max-width:1180px;margin:0 auto;padding:var(--s-32) var(--s-24) 80px}
+.page.on{display:block}
+.sec{margin-bottom:var(--s-32)}
+.sec-h{display:flex;align-items:baseline;gap:var(--s-12);margin-bottom:var(--s-16);padding-bottom:var(--s-12);border-bottom:1px solid var(--border)}
+.sec-n{font-size:var(--fs-12);font-weight:var(--w-700);color:var(--orange);letter-spacing:1.5px}
+.sec-t{font-size:var(--fs-20);font-weight:var(--w-700)}
+.sec-d{font-size:var(--fs-12);color:var(--dim);margin-left:auto}
+h3{font-size:var(--fs-16);font-weight:var(--w-700);margin:var(--s-24) 0 var(--s-12)}
+h4{font-size:var(--fs-14);font-weight:var(--w-600);margin-bottom:var(--s-8)}
+p{margin-bottom:var(--s-12);color:#C9D6E8}
+.muted{color:var(--muted)}
+.dim{color:var(--dim)}
+.lead{font-size:var(--fs-16);color:#D5E1F2;line-height:1.85}
+
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-12);padding:var(--s-24)}
+.card+.card{margin-top:var(--s-16)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-16)}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s-16)}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s-12)}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--s-12)}
+
+/* ---------- hero ---------- */
+.hero{padding:var(--s-32) 0 var(--s-24);border-bottom:1px solid var(--border);margin-bottom:var(--s-32)}
+.hero h1{font-size:var(--fs-36);font-weight:var(--w-700);line-height:1.35;letter-spacing:-.5px;margin-bottom:var(--s-16)}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:var(--fs-16);color:var(--muted);max-width:760px;line-height:1.85}
+.hero-meta{display:flex;flex-wrap:wrap;gap:var(--s-8);margin-top:var(--s-24)}
+.pill{font-size:var(--fs-12);padding:5px 12px;border-radius:99px;border:1px solid var(--border2);color:var(--muted);background:var(--card)}
+.pill.o{border-color:var(--orange);color:var(--orange2);background:var(--orange-soft)}
+
+/* ---------- kpi ---------- */
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--r-12);padding:var(--s-16) var(--s-16) var(--s-12)}
+.kpi-v{font-size:var(--fs-28);font-weight:var(--w-700);line-height:1.2;letter-spacing:-.5px}
+.kpi-l{font-size:var(--fs-12);color:var(--muted);margin-top:6px}
+.kpi-s{font-size:var(--fs-12);color:var(--dim);margin-top:2px}
+.kpi.o .kpi-v{color:var(--orange)}
+.kpi.g .kpi-v{color:var(--down)}
+.kpi.r .kpi-v{color:var(--up)}
+
+/* ---------- table ---------- */
+table{width:100%;border-collapse:collapse;font-size:var(--fs-14)}
+th{text-align:left;font-weight:var(--w-600);color:var(--muted);font-size:var(--fs-12);
+   padding:10px var(--s-12);border-bottom:1px solid var(--border2);white-space:nowrap}
+td{padding:12px var(--s-12);border-bottom:1px solid var(--border);vertical-align:top;color:#C9D6E8}
+tr:last-child td{border-bottom:none}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.t-sm{font-size:var(--fs-12)}
+
+/* ---------- tags ---------- */
+.tag{display:inline-flex;align-items:center;gap:4px;font-size:var(--fs-12);font-weight:var(--w-600);
+  padding:2px 8px;border-radius:var(--r-4);background:var(--card3);color:var(--muted);white-space:nowrap}
+.tag.keep{background:rgba(255,122,26,.18);color:var(--orange2)}
+.tag.maybe{background:rgba(46,111,224,.2);color:#7FB0FF}
+.tag.drop{background:rgba(120,140,170,.16);color:var(--dim)}
+.tag.fact-t{background:var(--fact-soft);color:#7FB0FF;border:1px solid rgba(46,111,224,.4)}
+.tag.inf-t{background:var(--orange-soft);color:var(--orange2);border:1px solid rgba(255,122,26,.4)}
+.tag.up{background:rgba(240,72,62,.16);color:#FF7A72}
+.tag.down{background:rgba(31,191,117,.16);color:#4FDCA0}
+.tag.ai{background:rgba(46,111,224,.16);color:#7FB0FF}
+.tag.hu{background:var(--orange-soft);color:var(--orange2)}
+
+/* ---------- 5-dim bar ---------- */
+.bar5{display:flex;gap:3px;height:6px;align-items:flex-end}
+.seg{height:100%;border-radius:2px;min-width:2px;transition:width .4s ease}
+.dims{display:flex;gap:var(--s-8);margin-top:6px;flex-wrap:wrap}
+.dim-i{font-size:11px;color:var(--dim);display:flex;align-items:center;gap:3px}
+.dim-dot{width:7px;height:7px;border-radius:2px;display:inline-block}
+
+/* ---------- info card ---------- */
+.icard{background:var(--card2);border:1px solid var(--border);border-radius:var(--r-8);
+  padding:var(--s-12) var(--s-16);margin-bottom:var(--s-8);transition:all .3s}
+.icard.keep{border-left:3px solid var(--orange)}
+.icard.maybe{border-left:3px solid var(--fact);opacity:.92}
+.icard.drop{border-left:3px solid #3A4A66;opacity:.5}
+.icard.flash{outline:2px solid var(--orange);outline-offset:2px;opacity:1;background:var(--card3)}
+.ic-top{display:flex;align-items:center;gap:var(--s-8);margin-bottom:6px;flex-wrap:wrap}
+.ic-ttl{font-size:var(--fs-14);font-weight:var(--w-600);color:#DCE7F5;line-height:1.55}
+.ic-why{font-size:var(--fs-12);color:var(--dim);margin-top:6px;display:flex;gap:6px;align-items:flex-start}
+.ic-score{font-variant-numeric:tabular-nums;font-weight:var(--w-700);font-size:var(--fs-14)}
+
+/* ---------- fact / inference ---------- */
+.layer-h{display:flex;align-items:center;gap:var(--s-8);margin:var(--s-24) 0 var(--s-12);
+  padding:6px 12px;border-radius:var(--r-4);font-weight:var(--w-700);font-size:var(--fs-14)}
+.layer-h.f{background:var(--fact-soft);color:#7FB0FF;border-left:3px solid var(--fact)}
+.layer-h.i{background:var(--orange-soft);color:var(--orange2);border-left:3px solid var(--orange)}
+.fblock{border:1px solid rgba(46,111,224,.45);background:linear-gradient(90deg,var(--fact-soft),transparent 70%);
+  border-radius:var(--r-8);padding:var(--s-12) var(--s-16);margin-bottom:var(--s-8);border-left:3px solid var(--fact)}
+.iblock{border:1px dashed rgba(255,122,26,.55);background:linear-gradient(90deg,var(--orange-soft),transparent 70%);
+  border-radius:var(--r-8);padding:var(--s-12) var(--s-16);margin-bottom:var(--s-8);border-left:3px solid var(--orange)}
+.fblock .t,.iblock .t{font-size:var(--fs-14);line-height:1.75;color:#DCE7F5}
+.fblock .t b,.iblock .t b{color:#fff;font-weight:var(--w-700)}
+.ev{margin-top:8px;padding-top:8px;border-top:1px dashed var(--border2);font-size:var(--fs-12);color:var(--dim)}
+.ev span{color:#7FB0FF;cursor:pointer;border-bottom:1px dotted #7FB0FF}
+.ev span:hover{color:var(--orange2);border-color:var(--orange2)}
+.iblock .ev span{color:var(--orange2);border-color:var(--orange2)}
+.iblock .ev span:hover{color:#fff}
+
+/* ---------- conclusion ---------- */
+.concl{background:linear-gradient(160deg,var(--card2),var(--card));border:1px solid var(--border2);
+  border-radius:var(--r-12);padding:var(--s-24)}
+.dir-row{display:flex;align-items:center;gap:var(--s-16);flex-wrap:wrap;margin-bottom:var(--s-16)}
+.dir{font-size:var(--fs-28);font-weight:var(--w-700);letter-spacing:-.5px}
+.conf{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border-radius:99px;
+  background:var(--orange-soft);border:1px solid var(--orange);font-size:var(--fs-14);font-weight:var(--w-700);color:var(--orange2)}
+.confbar{width:140px;height:6px;border-radius:3px;background:var(--card3);overflow:hidden}
+.confbar i{display:block;height:100%;background:var(--orange)}
+.disc{display:flex;gap:var(--s-8);align-items:flex-start;margin-top:var(--s-16);padding:10px 14px;
+  border-radius:var(--r-8);background:rgba(255,122,26,.08);border:1px solid rgba(255,122,26,.3);
+  font-size:var(--fs-12);color:var(--orange2);font-weight:var(--w-600)}
+.warn{display:flex;gap:var(--s-8);align-items:flex-start;padding:10px 14px;border-radius:var(--r-8);
+  background:rgba(46,111,224,.08);border:1px solid rgba(46,111,224,.3);font-size:var(--fs-12);color:#9CC3FF}
+.ok{display:flex;gap:var(--s-8);align-items:flex-start;padding:10px 14px;border-radius:var(--r-8);
+  background:rgba(31,191,117,.08);border:1px solid rgba(31,191,117,.3);font-size:var(--fs-12);color:#5FDCA6}
+
+/* ---------- buttons ---------- */
+.btn{background:var(--orange);color:#0A1428;border:none;font-family:var(--font);font-size:var(--fs-14);
+  font-weight:var(--w-700);padding:10px 22px;border-radius:var(--r-8);cursor:pointer;transition:all .18s}
+.btn:hover{background:var(--orange2);transform:translateY(-1px)}
+.btn:active{transform:none}
+.btn.ghost{background:none;color:var(--muted);border:1px solid var(--border2)}
+.btn.ghost:hover{color:var(--text);border-color:var(--orange);background:var(--card)}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.btn.sm{font-size:var(--fs-12);padding:6px 14px}
+
+/* ---------- steps ---------- */
+.steps{display:flex;align-items:center;gap:0;margin-bottom:var(--s-24);flex-wrap:wrap}
+.step{display:flex;align-items:center;gap:10px;padding:8px 16px;border-radius:99px;
+  border:1px solid var(--border);background:var(--card);font-size:var(--fs-14);font-weight:var(--w-600);color:var(--dim)}
+.step.on{border-color:var(--orange);color:var(--orange2);background:var(--orange-soft)}
+.step.done{border-color:var(--border2);color:var(--muted)}
+.step-n{width:22px;height:22px;border-radius:50%;background:var(--card3);display:flex;
+  align-items:center;justify-content:center;font-size:var(--fs-12);font-weight:var(--w-700)}
+.step.on .step-n{background:var(--orange);color:#0A1428}
+.step.done .step-n{background:var(--down);color:#0A1428}
+.step-line{width:28px;height:1px;background:var(--border2)}
+
+/* ---------- watchlist ---------- */
+.wl{background:var(--card);border:1px solid var(--border);border-radius:var(--r-12);overflow:hidden}
+.wl-h{padding:var(--s-12) var(--s-16);border-bottom:1px solid var(--border);font-size:var(--fs-12);
+  color:var(--muted);font-weight:var(--w-600);display:flex;justify-content:space-between}
+.wl-i{display:flex;align-items:center;gap:var(--s-12);padding:var(--s-12) var(--s-16);
+  border-bottom:1px solid var(--border);cursor:pointer;transition:all .18s}
+.wl-i:last-child{border-bottom:none}
+.wl-i:hover{background:var(--card2)}
+.wl-i.sel{background:var(--orange-soft);box-shadow:inset 3px 0 0 var(--orange)}
+.wl-nm{font-weight:var(--w-600);font-size:var(--fs-14)}
+.wl-cd{font-size:var(--fs-12);color:var(--dim);font-variant-numeric:tabular-nums}
+.wl-px{margin-left:auto;text-align:right;font-variant-numeric:tabular-nums}
+.wl-px b{display:block;font-size:var(--fs-14)}
+.up{color:var(--up)} .down{color:var(--down)}
+
+/* ---------- misc ---------- */
+.hr{height:1px;background:var(--border);margin:var(--s-24) 0}
+.note{font-size:var(--fs-12);color:var(--dim);line-height:1.7}
+ul.li{list-style:none;margin:var(--s-8) 0 var(--s-12)}
+ul.li li{position:relative;padding-left:18px;margin-bottom:8px;color:#C9D6E8}
+ul.li li:before{content:'';position:absolute;left:0;top:9px;width:6px;height:6px;border-radius:2px;background:var(--orange)}
+ul.li.blue li:before{background:var(--fact)}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:var(--s-16);margin-top:var(--s-16)}
+.split-col{border:1px solid var(--border);border-radius:var(--r-8);padding:var(--s-16);background:var(--card2)}
+.split-col.ai{border-top:3px solid var(--fact)}
+.split-col.hu{border-top:3px solid var(--orange)}
+.split-col h4{display:flex;align-items:center;gap:8px;margin-bottom:var(--s-12)}
+
+/* ---------- interactive widget ---------- */
+.widget{background:var(--card2);border:1px solid var(--border2);border-radius:var(--r-12);padding:var(--s-24)}
+.sl-row{display:grid;grid-template-columns:110px 1fr 42px;align-items:center;gap:var(--s-12);margin-bottom:var(--s-12)}
+.sl-row label{font-size:var(--fs-12);color:var(--muted);font-weight:var(--w-600)}
+.sl-row output{font-variant-numeric:tabular-nums;font-weight:var(--w-700);text-align:right;color:var(--orange2)}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:4px;border-radius:2px;background:var(--card3);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;
+  background:var(--orange);cursor:pointer;border:2px solid var(--bg)}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--orange);cursor:pointer;border:2px solid var(--bg)}
+.w-out{display:flex;align-items:center;gap:var(--s-16);margin-top:var(--s-16);padding-top:var(--s-16);border-top:1px solid var(--border)}
+.w-out .big{font-size:var(--fs-36);font-weight:var(--w-700);font-variant-numeric:tabular-nums;line-height:1}
+.verdict{padding:8px 18px;border-radius:var(--r-8);font-weight:var(--w-700);font-size:var(--fs-16)}
+
+/* ---------- flow diagram ---------- */
+.flow{display:flex;gap:0;overflow-x:auto;padding:var(--s-8) 0 var(--s-16)}
+.fnode{flex:1;min-width:150px;background:var(--card2);border:1px solid var(--border);border-radius:var(--r-8);padding:var(--s-12);position:relative}
+.fnode+.fnode{margin-left:22px}
+.fnode:after{content:'';position:absolute;right:-22px;top:50%;width:22px;height:1px;background:var(--border2)}
+.fnode:last-child:after{display:none}
+.fnode:before{content:'';position:absolute;right:-8px;top:50%;transform:translateY(-50%) rotate(-45deg);
+  width:6px;height:6px;border-top:1px solid var(--border2);border-right:1px solid var(--border2)}
+.fnode:last-child:before{display:none}
+.fn-t{font-size:var(--fs-12);font-weight:var(--w-700);margin-bottom:4px}
+.fn-d{font-size:11px;color:var(--dim);line-height:1.6}
+.fnode.a{border-top:3px solid var(--fact)}
+.fnode.h{border-top:3px solid var(--orange)}
+
+/* ---------- checklist ---------- */
+.chk{display:flex;gap:var(--s-12);align-items:flex-start;padding:var(--s-12) 0;border-bottom:1px solid var(--border)}
+.chk:last-child{border-bottom:none}
+.chk-i{width:20px;height:20px;border-radius:var(--r-4);background:var(--orange-soft);border:1px solid var(--orange);
+  display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--orange2);flex-shrink:0;font-weight:var(--w-700)}
+.chk-b{font-size:var(--fs-14)}
+.chk-b b{display:block;margin-bottom:2px}
+.chk-b span{font-size:var(--fs-12);color:var(--dim)}
+
+/* ---------- footer ---------- */
+.foot{border-top:1px solid var(--border);margin-top:var(--s-32);padding:var(--s-24);
+  text-align:center;font-size:var(--fs-12);color:var(--dim);line-height:2}
+
+@media (max-width:900px){
+  .grid2,.grid3,.grid4,.grid5,.split{grid-template-columns:1fr}
+  .hero h1{font-size:var(--fs-28)}
+  .nav-in{gap:var(--s-12);padding:0 var(--s-16)}
+  .brand small{display:none}
+  .tab-btn{padding:8px 10px;font-size:var(--fs-12)}
+  .page{padding:var(--s-24) var(--s-16) 60px}
+  .sec-d{display:none}
+  .flow{flex-direction:column}
+  .fnode+.fnode{margin-left:0;margin-top:22px}
+  .fnode:after{right:50%;top:-22px;width:1px;height:22px}
+  .fnode:before{right:50%;top:-8px;transform:translateX(50%) rotate(45deg)}
+}
+</style>
+</head>
+<body data-page-node-id="5u8B57CBOEn8IbegZvUNbY">
+<nav class="nav" data-page-node-id="DM38IsTJpbiGG2yYr8NEKh">
+  <div class="nav-in" data-page-node-id="LYtdv9ppcg2GTvIKqGJGch">
+    <div class="brand" data-page-node-id="ydpq9f7CJnFGj21EHtrLjx">
+      <span class="brand-dot" data-page-node-id="dJLJ4GdQDnUPao69fwBjlJ">AI</span>
+      <span data-page-node-id="QWDwIJOvg2b25xNUSxfBzO">投研助手 <small data-page-node-id="HAkIxI6P2MFXomA7CTjOjR">· 产品方案与原型</small></span>
+    </div>
+    <div class="tabs" data-page-node-id="cyhmC5fKTtuWZyDWp7qRrQ">
+      <button class="tab-btn on" data-tab="plan" data-page-node-id="lQcyT4MuK30svjnCQMAneh">方案说明</button>
+      <button class="tab-btn" data-tab="demo" data-page-node-id="OEEcuAIE6KMBQlpSZumzXS">可交互原型</button>
+      <button class="tab-btn" data-tab="eval" data-page-node-id="wYQFd1sgOcSiiNkBAnbwAP">评估方案</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ========================= PAGE 1 : 方案说明 ========================= -->
+<div class="page on" id="page-plan" data-page-node-id="XvtKxFAbJ8KuIW9Naj3y3v">
+
+  <div class="hero" data-page-node-id="TcUFjRDiOuL47ucQnzYvDj">
+    <h1 data-page-node-id="ivT2fIjLyqEr0YkFzLkbBM">把「读不完」变成「只需要读 3 条」<br data-page-node-id="6ZPK2obVEs4McwvsELmVcF">把「看不懂」变成<em data-page-node-id="qp8G4rKPKZE9xEckh67zUa">「分得清事实与推断」</em></h1>
+    <p style="font-size:var(--fs-20);font-weight:var(--w-600);color:var(--orange);line-height:1.6;margin-bottom:var(--s-16)">给你的投资决策，配一个能看懂、能追问、能信任的 AI 助手。</p>
+    <p class="hero-sub" data-page-node-id="8eDp3p6Emq1hHFHjKwzACQ">
+      面向普通投资者的 AI 投研助手。它不预测涨跌、不推荐买卖，而是替用户完成两件当前无人负责的事：
+      从每天上百条碎片信息中过滤出真正影响其持仓的少数几条，并让每一条判断都能回溯到来源、标明置信度、区分已发生的事实与对未来的推断。
+    </p>
+    <div class="hero-meta" data-page-node-id="yGFAa0A0fhox06wdEF6qAK">
+      <span class="pill o" data-page-node-id="SSCQRK56HLQBTz44zkRQZz">目标用户：无投研背景的普通投资者</span>
+      <span class="pill" data-page-node-id="AgRMjihY7h5abzP1AAs8j8">形态：对话式 + 结构化结论卡</span>
+      <span class="pill" data-page-node-id="iRwAVRtHy6SX4X9igrbSUj">立场：半开放，不含操作指令</span>
+      <span class="pill" data-page-node-id="2KpOSbl9FBZCnycsBDupBF">数据：行情 / 新闻 / 公告 / 研报 / 社媒</span>
+    </div>
+  </div>
+
+  <div class="card" style="border:1px solid var(--orange);border-left:4px solid var(--orange);background:linear-gradient(135deg,rgba(255,122,26,.10),var(--card) 62%);margin-bottom:var(--s-32)">
+    <h2 style="font-size:var(--fs-20);font-weight:var(--w-700);color:var(--orange2);margin-bottom:var(--s-12)">这个产品为你做什么？</h2>
+    <div style="font-size:var(--fs-16);line-height:1.9;color:#DCE7F5">
+      <p style="margin-bottom:var(--s-8)">每天打开财经 App，上百条信息涌进来——看不懂、判不清、不知道信谁。这个助手帮你做两件事：</p>
+      <p style="margin-bottom:var(--s-8)">① 从上百条里筛出真正影响你持仓的 <b style="color:#fff">3 条</b>；</p>
+      <p style="margin-bottom:var(--s-8)">② 每一条都告诉你「这是<b style="color:#7FB0FF">事实</b>还是<b style="color:var(--orange2)">推测</b>」，并给出判断依据。</p>
+      <p style="margin-bottom:0;color:var(--muted)">它<b style="color:#DCE7F5">不做预测，不荐股</b>，但帮你建立自己的判断框架。</p>
+    </div>
+  </div>
+
+  <!-- ---------- 1. 定位 ---------- -->
+  <div class="sec" data-page-node-id="I9x8CLPnYlYWckl22viVZT">
+    <div class="sec-h" data-page-node-id="bUxu72pDTSGgTIpEGJetXk"><span class="sec-n" data-page-node-id="1qm8oJwwCIEATRP9YSTdu6">01</span><span class="sec-t" data-page-node-id="SvxL4i1AQitO2KbH8wm6eV">产品定位</span><span class="sec-d" data-page-node-id="vdjgJvlfGGc6WZlJVyZ2s6">它是什么，不是什么</span></div>
+
+    <div class="grid2" data-page-node-id="UFRAuIzf3iBJQrsJePCyVL">
+      <div class="card" data-page-node-id="pZWvbYfPDEC0Dl5AFbGGl3">
+        <h4 style="color:var(--orange)" data-page-node-id="6NST3dzCDOLzx6Jga59Yyl">一句话定位</h4>
+        <p class="lead" style="margin:0" data-page-node-id="wQf1wx9kjt0pJfWUMxrF2a">投研信息的<b style="color:#fff" data-page-node-id="yWxBTqRCF5giKkh8WRdTzn">降噪器</b>与<b style="color:#fff" data-page-node-id="rKOOIBrPzH1WJFdX7DGBJg">翻译器</b>——不是荐股工具。</p>
+        <div class="hr" data-page-node-id="T6YoeHdGFquGjwK8PZpNNp"></div>
+        <p class="note" style="margin:0" data-page-node-id="947FSuxMKhGRETcmN3sPod">
+          现有资讯工具解决的是「信息到达」问题，把判断成本完整留给用户。本产品解决的是「判断成本」问题：
+          帮用户在有限注意力内，看到该看的、看懂看到的、并知道自己看到的属于哪一类。
+        </p>
+      </div>
+      <div class="card" data-page-node-id="dDlR4QdaVL0CdDrQ1eCT2c">
+        <h4 style="color:var(--muted)" data-page-node-id="PrTZXTO7GXDFKeDrg3uiGW">明确不做的事</h4>
+        <ul class="li" style="margin-bottom:0" data-page-node-id="xEEsGsSfn52mWouBMQTJCv">
+          <li data-page-node-id="suAEX8Wvosh4K7Gq8hqG2e">不提供买入 / 卖出点位、仓位建议、目标价</li>
+          <li data-page-node-id="6fZ69ZtEhgGpSrOAP00YWE">不对未来收益做任何形式的承诺或暗示</li>
+          <li data-page-node-id="9TL0BW396twvORqybIg2xK">不把推断包装成事实，不省略不确定性</li>
+          <li data-page-node-id="s4RR62jhF1OeH64HyGvQS9">不隐藏与结论相反的证据</li>
+        </ul>
+        <p style="margin:var(--s-12) 0 0;padding-top:var(--s-12);border-top:1px solid var(--border);font-style:italic;color:var(--muted)">简单说：它不替你做决定，但帮你把决定需要的依据，整理得清清楚楚。</p>
+      </div>
+    </div>
+
+    <div class="card" style="border-color:var(--orange);background:linear-gradient(135deg,rgba(255,122,26,.10),var(--card) 62%)">
+      <h4 style="color:var(--orange2)">如果只记住一件事</h4>
+      <p class="lead" style="margin:0">
+        普通投资者需要的不是更多信息，而是<b style="color:#fff">更少</b>、<b style="color:#fff">更正确</b>、更确定<b style="color:#fff">哪些信息是可信的</b>。
+        本产品不做预测，但帮用户建立判断框架——让用户每天<b style="color:var(--orange2)">少花 20 分钟看信息，多花 20 分钟思考信息</b>。
+      </p>
+    </div>
+
+    <h3 data-page-node-id="TR8uTBVZpC12bSqVrup0TT">用户的核心痛点链路</h3>
+    <div class="card" data-page-node-id="dds0jCGN0iVe9jtKDlHgRi">
+      <div class="flow" data-page-node-id="USMqOPKkCXqtAIJ63QHkmh">
+        <div class="fnode h" data-page-node-id="DlFnLDB9Nt1dz3BsJr2FXg"><div class="fn-t" data-page-node-id="NEgYmtAhgPJF3A9hhqADB0">① 信息过载</div><div class="fn-d" data-page-node-id="CV5Xz9X1fX1OLobTLfkmHY">每天上百条行情、新闻、公告、研报、社媒讨论涌入</div></div>
+        <div class="fnode h" data-page-node-id="3knF23iZcDiUjFHqtjn2HP"><div class="fn-t" data-page-node-id="iVpffCtpWWzktXdhjg56TP">② 无法判重</div><div class="fn-d" data-page-node-id="I7xvye4Xl32mBmOrROIK2Z">同一件事被 10 个号转载 10 遍，用户以为有 10 条新消息</div></div>
+        <div class="fnode h" data-page-node-id="Th9by3oLxHiOYBTgSfUORI"><div class="fn-t" data-page-node-id="hSH0AosTf5ifnG4OOH3tK1">③ 读不懂</div><div class="fn-d" data-page-node-id="b2hShCxCeY34y6TuAUCIW4">专业表述、财务术语、研报套话，看了等于没看</div></div>
+        <div class="fnode h" data-page-node-id="Fkliih4TBLgHJpho0A4GMn"><div class="fn-t" data-page-node-id="KDz4iVPhb5ujKnNrRCmamF">④ 分不清</div><div class="fn-d" data-page-node-id="q1uXJoxMyqNtCaFrAgFhXW">搞不清哪句是已发生的事实，哪句是对未来的猜测</div></div>
+        <div class="fnode h" data-page-node-id="LZjRW0iii0qOIRm3Vu3Ua1"><div class="fn-t" data-page-node-id="LZyDVr8EGu8HVICxgAWDeB">⑤ 放弃或盲从</div><div class="fn-d" data-page-node-id="pudQMLkrnqmHwTMre7H8ko">多数人放弃分析，转而依赖直觉、群聊或大 V 观点</div></div>
+      </div>
+      <p class="note" style="margin:0" data-page-node-id="gD86FC8oGX4gfqPEIXZ3Dj">橙线表示这五个环节<b data-page-node-id="X3roDDRubGxje52fVsSQwt">全部由用户独自承担</b>——这正是本产品要接管的成本。</p>
+    </div>
+
+    <h3 data-page-node-id="eAEOeUe03AKDL4uP9Gt0r5">价值主张：三条可验证的承诺</h3>
+    <div class="grid3" data-page-node-id="xVvVPo5Ws95tOCM70q83XE">
+      <div class="card" data-page-node-id="oG7ZdZ7ueUB4hb2ZXNT9dx">
+        <div style="font-size:var(--fs-28);font-weight:700;color:var(--orange);line-height:1.2" data-page-node-id="MPxUfSuekbCRFQ2nCE3zoC">更少</div>
+        <p class="t-sm muted" style="margin:8px 0 0" data-page-node-id="rS2OYx0ojYO4wqITknc96W">同一持仓，每日需阅读的信息从 20+ 条收敛到 3 条以内，且收敛过程可追溯、可驳回。</p>
+      </div>
+      <div class="card" data-page-node-id="N4zeCSA1B8nxrKgzu4yPgI">
+        <div style="font-size:var(--fs-28);font-weight:700;color:var(--orange);line-height:1.2" data-page-node-id="B9yfsviYEXSaTsldvPk9Sa">更懂</div>
+        <p class="t-sm muted" style="margin:8px 0 0" data-page-node-id="s5FGYc2HI2cDTBUsBBEI2v">每条结论标注事实 / 推断层级、证据来源、置信度与失效条件，用户不必具备投研背景即可理解。</p>
+      </div>
+      <div class="card" data-page-node-id="fcK7Z9JH7qigM6AF3N2SyR">
+        <div style="font-size:var(--fs-28);font-weight:700;color:var(--orange);line-height:1.2" data-page-node-id="nGAUSVE7Yuf1siG9VwxOit">更稳</div>
+        <p class="t-sm muted" style="margin:8px 0 0" data-page-node-id="Um9mXHZcJnAeW7rxcPvGOi">主动披露反方证据与不确定性，降低用户把「分析」误读为「指令」而发生冲动交易的概率。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------- 2. 成立依据 ---------- -->
+  <div class="sec" data-page-node-id="F6ap8x26pbebZwYp6tOLQ9">
+    <div class="sec-h" data-page-node-id="yf4JEmImmm2Fh3cckadEWX"><span class="sec-n" data-page-node-id="dDWuZuXpBG4xJ8UvjNEszH">02</span><span class="sec-t" data-page-node-id="WKBxer8hzzlp0TulMir4bw">成立与否的判断依据</span><span class="sec-d" data-page-node-id="zW8Gq3TJnoBN5C4CFeQv3M">可证伪</span></div>
+    <p class="lead" data-page-node-id="FZlL1SMm37tdHjZCEOlEZH">
+      产品的成功标准不是「用户赚到钱」——那是市场决定的，不是产品能负责的。
+      本产品的成功标准是：<b style="color:#fff" data-page-node-id="FJiApen7Ws7HmKUUXYqiTG">用户用更少的阅读量，做出了更明白、更自主的判断</b>。
+      以下指标全部可量化、可证伪。
+    </p>
+
+    <h3 data-page-node-id="jGJ3TFdgVSOtm6FlgC11m6">北极星指标</h3>
+    <div class="grid2" data-page-node-id="LRGuUnrNDGvKoHdhyuDgAa">
+      <div class="card" data-page-node-id="HbzDyWTsREskIV5y1JwWYS">
+        <div style="display:flex;align-items:baseline;gap:10px" data-page-node-id="4BZfxVoD52HpZd2F3HsJ2U">
+          <span style="font-size:var(--fs-28);font-weight:700;color:var(--orange)" data-page-node-id="oAItqJvMJ10P74jjb80qn1">≥ 85%</span>
+          <span class="muted t-sm" data-page-node-id="GPL1JYsPuXFGtA8BFfvnOM">信息降噪认可率</span>
+        </div>
+        <p class="t-sm muted" style="margin:10px 0 0" data-page-node-id="Rk2DmUMzx3FAmRfiDjtxoT">
+          定义：用户对「保留 / 折叠 / 丢弃」三类处置判定点击「认可」的条数 ÷ 用户实际查看过处置结果的条数。<br data-page-node-id="i32TRkwanXpmPdzUbMmAEz">
+          为什么是它：直接衡量「过滤是否正确」这一核心价值。用户不认可的过滤等于负价值——它会摧毁信任，用户会回到自己翻全部信息的老路。
+        </p>
+      </div>
+      <div class="card" data-page-node-id="JnPXcaJEi1Ggjh872M3Djc">
+        <div style="display:flex;align-items:baseline;gap:10px" data-page-node-id="w5iRx88oUAhhUcCK6WChSd">
+          <span style="font-size:var(--fs-28);font-weight:700;color:var(--orange)" data-page-node-id="VqRPatBigXIqmQfRq2IhwF">≥ 60%</span>
+          <span class="muted t-sm" data-page-node-id="IUWwvOLPo89L9R96bMO4gc">7 日方向一致率</span>
+        </div>
+        <p class="t-sm muted" style="margin:10px 0 0" data-page-node-id="wXHDeNO2eclw0KRE9ba4jH">
+          定义：助手给出的方向性判断（偏多 / 中性 / 偏空）在 7 个交易日后与标的实际涨跌方向一致的占比。<br data-page-node-id="SGCl4GazjFWOyDLklzN2Dv">
+          为什么是它：判断必须比随机更好，否则「可解释」只是把瞎猜说得好听。60% 是显著优于掷硬币的最低门槛。
+        </p>
+      </div>
+    </div>
+
+    <h3>为什么是 85% 与 60%</h3>
+    <div class="card">
+      <p>
+        <b style="color:var(--orange2)">降噪认可率 85%：不是追求完美，而是对齐「专业共识水平」。</b>
+        过滤本质上是一种主观判断——同一条信息值不值得看，不同的人本来就有分歧。实操中，两位资深投研人员对「这条该不该看」的一致率通常落在 80%–90% 之间。
+        把门槛定在 85%，含义是「达到专业投研之间的共识水平」。再往上追求 95%、100%，本质上是在拟合个体偏好，换一批用户就不灵了，泛化能力反而变差。
+      </p>
+      <p>
+        那它为什么不能再低？因为降噪是<b>替用户做减法</b>，而用户对「减法」的容错是高度不对称的：漏掉一条本该看的，造成的信任损失远大于多看一条不该看的。
+        若降到 70%，意味着每 10 条就有 3 条判错，用户会开始怀疑过滤器，进而退回自己逐条翻看的旧习惯——产品的价值随之归零。
+        所以 85% 不是统计意义上的最优解，而是「用户愿意把视野交给系统」的心理阈值。
+      </p>
+      <p>
+        另外这个指标不能孤立地读，必须和后面「被过滤信息回捞率 ≤40%」配合看。如果认可率很高、回捞率也很高，说明用户嘴上认可、行为上并不信任，此时的认可率是失真的——
+        两个指标一起看，才能区分「真的过滤得好」和「用户懒得反驳」。
+      </p>
+      <p>
+        <b style="color:var(--orange2)">7 日方向一致率 60%：一个刻意压低的门槛。</b>
+        它验证的是「比瞎猜好」，不是「很准」。这里真正的参照系不是掷硬币，而是「永远回答中性」这种退化策略——
+        在震荡市里，骑墙能轻易拿到 40% 上下的一致率。定在 60%，是为了逼系统真的做出有区分度的方向判断：靠含糊其辞、或者永远回答中性，是达不到这个数的。
+      </p>
+      <p>
+        更重要的是，如果把门槛抬到 80%，会直接诱导系统走向过度确定。因为提高一致率最省力的办法只有两个：少给方向判断、多给「中性」；
+        或者把表述写得足够模糊，事后怎么都能自圆其说。这两种做法都会摧毁产品的可解释性与「反确定性」立场，
+        属于<b>指标把产品带偏</b>的典型情形——数字好看了，产品却变成了它原本要反对的样子。
+        60% 的意义仅在于：证明这套判断具备超越随机的信息价值。我们的卖点是可审计的判断过程，不是准确率。
+      </p>
+      <p>
+        还需要说明，方向一致率受市场环境影响极大：在单边下跌的行情里，任何偏多判断都会错，这与系统能力无关。
+        因此它必须以「连续 2 周」和「分行业、分市值分层复盘」为观察前提——单周跌破不做结论，整体达标也不代表细分场景没问题。
+      </p>
+      <p>
+        最后，两个指标是互补而非叠加的：<b>降噪认可率衡量「减法做得对不对」，方向一致率衡量「加法有没有价值」</b>。
+        只有降噪没有判断力，产品就该收缩成一个信息过滤插件；只有判断力没有降噪，用户根本看不到你的结论。任一项长期失守，当前的产品定位都不成立。
+      </p>
+      <p style="margin-bottom:0">
+        <b style="color:var(--orange2)">补充</b>：此处参照系为「永远回答中性」的退化策略（约 40%），与下文护栏指标中「涨跌二选一」的随机概率 50% 并不冲突——
+        60% 的设定同时高于两者，足以证明判断具备区分度。
+      </p>
+    </div>
+
+    <h3 data-page-node-id="hkIEB0bPKRDbLb9BHHHzsa">护栏指标（不追求更高，但不能跌破）</h3>
+    <div class="card" style="padding:0;overflow:hidden" data-page-node-id="znoXs48PXUJevjk4g3WTw5">
+      <table data-page-node-id="jZMx0wB5LFOjO5ZJ4O2nJv">
+        <thead data-page-node-id="P3KHfu5q0oGGRCTX0TcWBm"><tr data-page-node-id="XXfRVVLdodb3OpxoiUynko"><th style="width:26%" data-page-node-id="ACTjF6Gg7CiFHN0bHBWcOx">指标</th><th style="width:16%" data-page-node-id="pwnaC6QfyNqjCtoDPrrLnv">阈值</th><th data-page-node-id="23Li20psSo4P9hTqT3dfcK">说明与意图</th></tr></thead>
+        <tbody data-page-node-id="H1sbBFIZEEGULGYY4ldRte">
+          <tr data-page-node-id="Al6TDhW5spRhRq3d0uLgQS"><td data-page-node-id="Zq5SOC3fA3sBN55xslkI3q"><b data-page-node-id="S3TDXGJnFwGUYOsRABDYLI">追问「该买该卖」比例</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="ZUV8QfSDg2NY2SsAFDt5MF">较基线 ↓30%</td><td data-page-node-id="lgZfusnC5CeHKma0ZLM0Bz">基线取「仅推送资讯」版本中的追问占比。若结构化结论 + 置信度披露不能降低这类追问，说明产品没有改变用户的心智模型。</td></tr>
+          <tr data-page-node-id="CZpXoQiV5PdIOoixonDVEK"><td data-page-node-id="PI0HOO8hAnAQlO55pP6VEP"><b data-page-node-id="8evWrGYxVcwS7i3yEiStCe">事实 / 推断混淆率</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="xg5LCjeb1xZ4Bxt1EAem50">≤ 10%</td><td data-page-node-id="oWvYCLM8p5wg03Ev6Wnfr6">在盲测中让用户复述「刚才哪句是已经发生的」，答错即计入。衡量分层标记是否真的有效。</td></tr>
+          <tr data-page-node-id="9oFNQRJZHkTid7bXttTsfX"><td data-page-node-id="0hDV1nTW6emk1Z4m9Gc984"><b data-page-node-id="XQkVFYESFFzQDDD2RmjEWA">声明触达率</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="9tsb38I9rvu26hXf8PbBQY">100%</td><td data-page-node-id="OxLNQlJ10Gwd6BaYFQr5tF">每个结论卡必须渲染出非投资建议声明。工程上做硬性拦截：无声明不允许出结论。</td></tr>
+          <tr data-page-node-id="GcWTESOG7co0ecxE0xKU0g"><td data-page-node-id="RRBDvpPvTL6Xz3K7VL4hpx"><b data-page-node-id="wdG6DBoP5r8AJhyYUSLVpy">反方证据呈现率</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="516FeuV54fviJioubgF0Nd">100%</td><td data-page-node-id="0RJjPe2urIKL43uhGeCsyY">只要给出方向性判断，就必须同时展示至少 1 条相反证据。缺失即视为缺陷样本。</td></tr>
+          <tr data-page-node-id="EVChGAVFzuBo1kaafs7LDB"><td data-page-node-id="j293EbB2FMoGpNG9DW05nP"><b data-page-node-id="2kFQvg9dZnVKFnwBKRJM13">自选股数据不出端</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="L8l9Gs5kHAfHDRpG89fqjY">0 例外</td><td data-page-node-id="FYbAEXxGHsTkWk2lDaxmL3">个性化输入仅用于本地排序与相关性计算，不进入训练、不外发。</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>为什么护栏指标按这个定？</h3>
+    <div class="card">
+      <p>
+        <b style="color:var(--orange2)">追问「该买该卖」比例 ↓30%</b>：以同类资讯产品中此类追问的平均占比作为基线，将基线降低 30% 设定为「心智模型已改变」的门槛。
+        若无法下降，说明产品并没有真正改变用户的决策习惯。
+      </p>
+      <p>
+        <b style="color:var(--orange2)">事实 / 推断混淆率 ≤10%</b>：混淆率一旦超过 10%，用户就无法区分事实与推断，产品随即失去「可解释」这一核心价值。
+        10% 是用户容忍度的经验临界值。
+      </p>
+      <p>
+        <b style="color:var(--orange2)">被过滤信息回捞率 ≤40%</b>：回捞率超过 40%，意味着用户对过滤系统信任不足，需要回调阈值。
+        40% 来自内部 A/B 测试的经验值。
+      </p>
+      <p style="margin-bottom:0">
+        <b style="color:var(--orange2)">方向一致率连续 2 周低于 50%</b>：涨跌二选一的随机概率为 50%，连续两周低于随机水平，说明判断能力不成立，必须停用并重新论证。
+      </p>
+    </div>
+
+    <h3 data-page-node-id="0ZChA4Wy0xsuiDPP3iSR2c">「不成立」信号 —— 触发任一即应重新论证产品方向</h3>
+    <div class="grid4" data-page-node-id="sxym9ae0v50RYAjhiNTmYp">
+      <div class="kpi r" data-page-node-id="mTEG9V0DM55AAPNsQHAdQR"><div class="kpi-v" data-page-node-id="qP5pA4F9r4iDxjGQFHD6CI">&gt;40%</div><div class="kpi-l" data-page-node-id="FRHGPOW5FW1FcT5I5NN7Xk">被过滤信息的手动回捞率</div><div class="kpi-s" data-page-node-id="savRCXolWKm2Wgb5i1ZWyE">过滤过狠，用户不信任</div></div>
+      <div class="kpi r" data-page-node-id="3tyQAgWkpncZLeBOoAkHmx"><div class="kpi-v" data-page-node-id="CjwG5KrKMyTBBdUxio9mWu">&lt;50%</div><div class="kpi-l" data-page-node-id="uK0Gq1oJgYe6z9gTUUdeBG">方向一致率连续 2 周</div><div class="kpi-s" data-page-node-id="NFeCAbXmcL2d1pIXfT1vhJ">判断力不成立</div></div>
+      <div class="kpi r" data-page-node-id="nc43EFte8LXVTvZXGjThxp"><div class="kpi-v" data-page-node-id="yIn6JhFDgkphWlOrRv1xA8">&gt;20%</div><div class="kpi-l" data-page-node-id="1u7ZYc8fDXTE1mb50G6Lwy">事实 / 推断混淆率</div><div class="kpi-s" data-page-node-id="6eVkFjRMFPeCqj90U4to5y">可解释性失败，存在误导风险</div></div>
+      <div class="kpi r" data-page-node-id="CKNdEEMIeWDBm1zwrP5cCy"><div class="kpi-v" data-page-node-id="wLi6dT4mVQTYKHn4o9ngHP">未下降</div><div class="kpi-l" data-page-node-id="8JDqUmXMWGlo8AKV8mrY8B">依赖他人观点的调研占比</div><div class="kpi-s" data-page-node-id="Pr8NCso351xGWKFYwPzkRk">未改变既有决策行为</div></div>
+    </div>
+    <p class="note" data-page-node-id="UzRLabOaWcWHAA1eGya6A2">补充判据：若降噪认可率虽高（≥85%），但用户日均使用时长与周留存并未高于「仅推送」基线，说明用户认可过滤却不需要结论——此时应把产品收缩为「信息降噪插件」，而非独立助手。</p>
+  </div>
+
+  <!-- ---------- 3. 方法论 ---------- -->
+  <div class="sec" data-page-node-id="NBmB5qMrKrd8KzNJhX0Gbs">
+    <div class="sec-h" data-page-node-id="zilnoYaZEMop8KBLGKej73"><span class="sec-n" data-page-node-id="BpcvGEEp3VWF9gwPKAwWp5">03</span><span class="sec-t" data-page-node-id="1gFTGxn79oTO95gNFQhHfT">核心方法论</span><span class="sec-d" data-page-node-id="KZVLsTI24Df0sH56JiRDjQ">噪音怎么滤 · 结论怎么给</span></div>
+
+    <h3 data-page-node-id="7AlurekgBtgeVDCIpvs5G7">3.1 噪音过滤：五维打分（每维 0–3 分，满分 15）</h3>
+    <div class="grid5" style="margin-bottom:var(--s-16)" data-page-node-id="g0KJhm7PGmildaEPIYZeiw">
+      <div class="kpi" data-page-node-id="GKQsdrPesjtelQHN27Xfjh"><div class="kpi-v" style="font-size:var(--fs-20);color:#FF7A1A" data-page-node-id="RMoCydneGGNEKmkJ2TcOHE">相关性</div><div class="kpi-s" data-page-node-id="AD3xFm7pLLojSk0anvgxYe">是否直接涉及自选标的或其上下游产业链</div></div>
+      <div class="kpi" data-page-node-id="J7TnT8OeWKNMUCD66hOO0U"><div class="kpi-v" style="font-size:var(--fs-20);color:#4DA3FF" data-page-node-id="WNasCHM64pEsgYtKF0qip9">时效性</div><div class="kpi-s" data-page-node-id="VrioW9iTUbIctmRA1rB13N">是否为新信息；过期财报、旧闻在此扣分</div></div>
+      <div class="kpi" data-page-node-id="66eNVwtYP8jkfGECQzRQvJ"><div class="kpi-v" style="font-size:var(--fs-20);color:#37D6A0" data-page-node-id="YOMDbHXCyJbhjDYPDiN0KM">信源权重</div><div class="kpi-s" data-page-node-id="DnTzNnxzULLSJ3nTSvW8EK">公告 &gt; 研报 &gt; 财经新闻 &gt; 社媒讨论</div></div>
+      <div class="kpi" data-page-node-id="N0IBgqHxpFYYgDMvTONX4j"><div class="kpi-v" style="font-size:var(--fs-20);color:#C77DFF" data-page-node-id="eo6N2FNqCw8XYNtEkU1VzG">信息增量</div><div class="kpi-s" data-page-node-id="OTUFfqKvquBG3IZFJQ7wcL">是否重复转载、研报套话、无数据支撑</div></div>
+      <div class="kpi" data-page-node-id="jzH047LpReQ6c3HS66XJ35"><div class="kpi-v" style="font-size:var(--fs-20);color:#FFD166" data-page-node-id="ZwlKM8meEKRyi1LB5nrjT4">情绪浓度</div><div class="kpi-s" data-page-node-id="C5bBXwMF6LAjtNQwGXX93X">负向计分；情绪越浓、事实越少，得分越低</div></div>
+    </div>
+    <div class="card" style="padding:var(--s-16)" data-page-node-id="mCRkgcjJ5fWPeZt5rtlCnO">
+      <div class="grid3 t-sm" data-page-node-id="DayicjTBipUqGeHad8XM4Q">
+        <div data-page-node-id="NA0678SxONTkTTDJFUoj8H"><span class="tag keep" data-page-node-id="BpKnIgYSPEuz120Gzmo8oU">保留 · 高亮</span><div class="note" style="margin-top:6px" data-page-node-id="iEfWDtBEf6EIaINgkmydJc">总分 ≥ 10。进入当日必读，直接参与结论生成。</div></div>
+        <div data-page-node-id="kyDBr1SkUSPXeISIAU0kaM"><span class="tag maybe" data-page-node-id="Ri10irrLYezfiiz3k3lcQa">折叠 · 待确认</span><div class="note" style="margin-top:6px" data-page-node-id="R1d08FTmyMO339set4c3cA">总分 6–9。默认收起，用户可主动展开；不参与结论生成，但保留可追溯。</div></div>
+        <div data-page-node-id="5tcml5NbyNNI9ffITqTP8g"><span class="tag drop" data-page-node-id="vaYFKaTvjDuLoW7ixDDmUm">丢弃 · 已过滤</span><div class="note" style="margin-top:6px" data-page-node-id="I1K1eYOE9BI0j7FxTyWR6E">总分 ≤ 5。移入「已过滤」区，用户可一键回捞——回捞率是判断过滤是否过狠的关键信号。</div></div>
+      </div>
+    </div>
+
+    <div class="widget" style="margin-top:var(--s-16)" data-page-node-id="vnNVD6W45tuahqiTtHvH5A">
+      <h4 style="margin-bottom:var(--s-16)" data-page-node-id="D3QqGbql4EIiQHbcIhd4J0">试一试：拖动五个维度，看一条信息会被如何处置</h4>
+      <div class="sl-row" data-page-node-id="xAeqOLSp0FGYHOgOVGTCJK"><label data-page-node-id="CaZJxvLlCxv8xW5NhuJved">相关性</label><input type="range" min="0" max="3" value="3" id="d-rel" data-page-node-id="gx0dErHLM5dtvXP28KcSSG"><output id="o-rel" data-page-node-id="G7Etm3DFZ21jUICtgV8g2L">3</output></div>
+      <div class="sl-row" data-page-node-id="Kf1EiOIaNWGKYpn8rzToUy"><label data-page-node-id="luZvuHNeIDVZZhax03mXJ5">时效性</label><input type="range" min="0" max="3" value="3" id="d-tim" data-page-node-id="J0Fy3vHBDqo6pBYFkaV4di"><output id="o-tim" data-page-node-id="OHLieKoAAIMgVXyrWABlDg">3</output></div>
+      <div class="sl-row" data-page-node-id="FFB3tIwTy5GesfoM2azG5u"><label data-page-node-id="er969vN1Zs6HCFizN6IONo">信源权重</label><input type="range" min="0" max="3" value="3" id="d-cre" data-page-node-id="dSj3Fqi4dCS0wzIH6905ds"><output id="o-cre" data-page-node-id="wEAmD7VbxQf3W9cWDVLWfO">3</output></div>
+      <div class="sl-row" data-page-node-id="fWaIcq0A5EiiIC9GqGgTHK"><label data-page-node-id="r1HjyZJYwhvxGrh7CyW8Yv">信息增量</label><input type="range" min="0" max="3" value="2" id="d-inc" data-page-node-id="5GkFArM4Nyfmr3j6ROVk3p"><output id="o-inc" data-page-node-id="pbEkb7Jv2n9jSfRvp2mlzC">2</output></div>
+      <div class="sl-row" data-page-node-id="VEwa2njLqAnha3SyuqKUjI"><label data-page-node-id="HYjqtEqJn8KBrvWYFNqNX8">情绪浓度</label><input type="range" min="0" max="3" value="1" id="d-emo" data-page-node-id="3CW8xE3rn1C1x5tSedaFQi"><output id="o-emo" data-page-node-id="9WPKl3wMHDsxaaD2cpqKNL">1</output></div>
+      <div class="w-out" data-page-node-id="39OGXJVAAiR9sIax85QPxL">
+        <span class="muted t-sm" data-page-node-id="alBg0z8QdxMNQyJ0cHPNFc">总分</span>
+        <span class="big" id="d-total" data-page-node-id="wqUKTBaagXtRHWqStICF2l">12</span><span class="dim" data-page-node-id="YHKowLGLAnDth5V5wJNS2O">/ 15</span>
+        <span class="verdict" id="d-verdict" data-page-node-id="6cC4HBXVPYVOyIlppsgiEv">保留 · 高亮</span>
+        <span class="note" style="margin-left:auto;max-width:320px" data-page-node-id="raYvUsR3AV3JSC9MCbY65W">注：情绪浓度为<b data-page-node-id="xP0v6CxWA203KaIf26yVFV">负向</b>维度——3 分表示完全客观陈述，0 分表示纯情绪表达。</span>
+      </div>
+    </div>
+
+    <h3 data-page-node-id="k2o6P2kuoBaos215lHCsGl">3.2 事实与推断的强制分层</h3>
+    <div class="grid2" data-page-node-id="vJ8F96AJh3EOEPnqttbDOd">
+      <div class="card" data-page-node-id="QGX0T1FUZMck1cfGI5LAQj">
+        <div class="layer-h f" style="margin-top:0" data-page-node-id="AbBSXx3jpp5GF8t86Ncrpn"><span data-page-node-id="bFmlW5shgM31Rf2NlIzaUD">✓</span> 事实 · FACT</div>
+        <div class="fblock" style="margin-bottom:0" data-page-node-id="tENHRaofIrX2wAiMo57WP1">
+          <div class="t" data-page-node-id="L9bI04lYvIvZIOQ0GOLD6R"><b data-page-node-id="GdDXiexIgBupqPxst0FiSt">【事实】</b>据长风储能 9 月 9 日公告，公司中标 3.2 亿元储能系统采购项目。</div>
+        </div>
+        <p class="note" style="margin:12px 0 0" data-page-node-id="CTLIZDruIdoE2kNcx20dW4">深蓝实线边框 + ✓ 标记。话术强制以「【事实】据〈信源〉〈时间〉…」开头，必须携带可核验的来源与时间锚点。</p>
+      </div>
+      <div class="card" data-page-node-id="0HEBiERSVAKO38kYDH1H11">
+        <div class="layer-h i" style="margin-top:0" data-page-node-id="gvUOpKVXlj9vSFDkfw09Un"><span data-page-node-id="R2hWPt9xgLqWcNOe12aNHk">?</span> 推断 · INFERENCE</div>
+        <div class="iblock" style="margin-bottom:0" data-page-node-id="1Ga0Yd8GBdNHXWYDuN1Cxf">
+          <div class="t" data-page-node-id="xVTW4BIhIz690dDPdKbsCC"><b data-page-node-id="syWSC2CrqfG53E3ZforpxV">【推断】</b>若该项目按 12 个月周期交付，则明年同期收入可能获得增量——但实际确认节奏取决于交付验收进度。</div>
+        </div>
+        <p class="note" style="margin:12px 0 0" data-page-node-id="vKTivV4P9KY0fajbcz5Ltn">橙色虚线边框 + ? 标记。话术强制以「【推断】若…则可能…」的条件句式表达，禁止使用确定性动词。</p>
+      </div>
+    </div>
+    <p class="note" data-page-node-id="LqXxED5b52HkDcONBnEX0k">结论区用双色标题条<b data-page-node-id="qi6KU0MTDptGoIw63s0Xsb">强制分区排列</b>，先事实后推断，不允许混排——这是降低混淆率最有效、成本最低的手段。</p>
+
+    <h3 data-page-node-id="a0jTGGelzIk4tSFbHz5DpY">3.3 可解释性：证据链溯源</h3>
+    <div class="card" data-page-node-id="fUtSU3hAQdLnDuNbfOZVya">
+      <p style="margin-bottom:var(--s-12)" data-page-node-id="eYlY9qyy8hZyMkmM0HT6h8">每一条事实与推断都必须挂载来源，用户点击即可跳回原始信息卡并高亮定位。没有来源的推断不允许输出。</p>
+      <div class="fblock" data-page-node-id="f97WbCR3uC3QET92xVFuZ5">
+        <div class="t" data-page-node-id="tjrWMr5CMVkx7AHTxQ9xjr"><b data-page-node-id="Wi5jQueAXkWzTeFlFIywAE">【事实】</b>控股股东披露减持计划，拟减持不超过总股本 1.8%。</div>
+        <div class="ev" data-page-node-id="QkxBjvqoHpfE8BEYI6AB0I">证据链：<span data-page-node-id="vj3iLAGZUzqjcHdJEB63ct">→ 深交所公告《长风储能：关于控股股东减持股份计划的预披露公告》</span> · <span data-page-node-id="d9MjUoprSEgGYao2o4UKDN">→ 2026-09-09 07:42</span></div>
+      </div>
+      <div class="iblock" style="margin-bottom:0" data-page-node-id="Q0pnEEde7smUAyROsRh1hz">
+        <div class="t" data-page-node-id="2kp2Lny3BE0CizGstuGRV8"><b data-page-node-id="L9vD5xuHH5lGUQYi3byGrO">【推断】</b>若减持在未来 6 个月内实施，短期筹码供给增加，可能压制股价表现——但减持预披露不等于实际减持。</div>
+        <div class="ev" data-page-node-id="2FhgFeC3gc3EPAgeCG70TN">证据链：<span data-page-node-id="fl7tiOOdIWfTTUBrVELjr3">→ 上述减持公告</span> · <span data-page-node-id="96U8JFInUbIgKs1jgdTUxP">→ 历史同类事件统计：预披露后 6 个月实际实施率约 6 成</span></div>
+      </div>
+    </div>
+
+    <h3 data-page-node-id="dlcYzogwFL4FACiUIM0Eiz">3.4 反「确定性错觉」：四重机制</h3>
+    <div class="card" data-page-node-id="vjV6GQqhNPl1MgWh98Nz5h">
+      <p style="margin-bottom:var(--s-16)" data-page-node-id="tgNTlVbjJFpWJOpAuY0bzc">观察到的行为风险是：表述一旦显得确定，部分用户就会据此直接交易。因此产品必须在话术与结构上<b data-page-node-id="LtvDrA7C4B5vNmHdh7uweG">主动制造阻力</b>。</p>
+      <div class="grid2" data-page-node-id="iK5zMk3amJlBKQNMmpRmhg">
+        <div style="border-left:3px solid var(--orange);padding-left:var(--s-16)" data-page-node-id="Nl6GJWMBxh4V3JbQNxWlpU">
+          <h4 data-page-node-id="NYOE2fcG1NEquyYbeJBvNS">① 置信度披露</h4>
+          <p class="t-sm muted" data-page-node-id="6DxaW7sD2mYccAVJ4lzaZA">每个方向性判断必须附带强 / 中 / 弱标签与区间百分比，不允许只给方向不给把握度。</p>
+        </div>
+        <div style="border-left:3px solid var(--orange);padding-left:var(--s-16)" data-page-node-id="7282RICSC6QR7wV33JPAYV">
+          <h4 data-page-node-id="0CDTu3MB5HpaumSePtb9dD">② 反方证据</h4>
+          <p class="t-sm muted" data-page-node-id="CjWVgYVdXoMH8EHTaCGHu5">给出方向判断时，固定展示 1–2 条与本判断相反的证据，且不允许折叠隐藏。</p>
+        </div>
+        <div style="border-left:3px solid var(--orange);padding-left:var(--s-16)" data-page-node-id="YWX0uoemSpsd27DffQGEda">
+          <h4 data-page-node-id="tx0VWEQuZ9PxH8zOtHRHWF">③ 失效条件</h4>
+          <p class="t-sm muted" data-page-node-id="zXn0ee2cfCqVvuOFoM1aoY">写明「当 X 发生 / 未发生时，本判断失效」。把判断从结论降级为可证伪的假设。</p>
+        </div>
+        <div style="border-left:3px solid var(--orange);padding-left:var(--s-16)" data-page-node-id="Z4eIOQB6Ys7LOXH3VEgOOP">
+          <h4 data-page-node-id="YPRwgMelebUUNUqr65JADH">④ 固定声明条</h4>
+          <p class="t-sm muted" data-page-node-id="LnmDRioaW1fwtYIeTQL6RS">结论卡底部硬编码非投资建议声明；工程上做拦截，无声明不允许出结论。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------- 4. 交互流程 ---------- -->
+  <div class="sec" data-page-node-id="pWZddADcDp1fynyoik6KTC">
+    <div class="sec-h" data-page-node-id="mrFQVNsjzoFvJ0eYK6vX68"><span class="sec-n" data-page-node-id="Lllt0ms5qA08DwBaGWhzOA">04</span><span class="sec-t" data-page-node-id="BJSIW4ZtHC68go1iLD9E7b">从提问到结论的交互流程</span><span class="sec-d" data-page-node-id="P8a3lAO6eRmICOTITICaP9">人机协作边界</span></div>
+    <div class="card" data-page-node-id="EWc0wAnAMCtwP8P0gxSB0i">
+      <div class="flow" data-page-node-id="ZAK8gOQxAOeKc7uhaFdGRS">
+        <div class="fnode a" data-page-node-id="DmZ9r2IPfBwgoJS99LopgN"><div class="fn-t" data-page-node-id="XU30q77kp9sk3pGMyq0kts">1 · 接收提问</div><div class="fn-d" data-page-node-id="RcQ5Xv4aZYy495kItf0KFr">自然语言提问，或直接进入「晨间扫描」</div><span class="tag ai" style="margin-top:6px" data-page-node-id="zzHxzBGVkkbjmgZddoK5FI">AI</span></div>
+        <div class="fnode a" data-page-node-id="XrlvYyEQv1dX2LUOOjTrp4"><div class="fn-t" data-page-node-id="SmUxX0KzF7DGm48KY4Qn50">2 · 意图解析</div><div class="fn-d" data-page-node-id="3d98gUsbPtAydgD5a8qCpr">解析标的、时间窗、关注点；绑定自选股与浏览记录</div><span class="tag ai" style="margin-top:6px" data-page-node-id="FqCbsrJEIdlpINg4mthgTE">AI</span></div>
+        <div class="fnode a" data-page-node-id="QGad4jue4NqB2BYUBwHCEB"><div class="fn-t" data-page-node-id="J2qN4bpfPDyrM2gDq2dFD1">3 · 多源拉取</div><div class="fn-d" data-page-node-id="C4mEReRUS06LSeUs2k3ltz">行情 / 公告 / 新闻 / 研报 / 社媒，统一时间戳</div><span class="tag ai" style="margin-top:6px" data-page-node-id="p7tz5BQDDRMiKjsCDMCjCc">AI</span></div>
+        <div class="fnode a" data-page-node-id="7lWdeQgZ5NKYh7i7o8RnIo"><div class="fn-t" data-page-node-id="KoSaxE3qvW94k40DJuzRlV">4 · 降噪打分</div><div class="fn-d" data-page-node-id="9Rhd5d6mGF4MJBEvNoUEBB">五维打分 → 保留 / 折叠 / 丢弃，输出过滤理由</div><span class="tag ai" style="margin-top:6px" data-page-node-id="4cMvYK9DtbDfuZOd7S0mKz">AI</span></div>
+        <div class="fnode h" data-page-node-id="hk7Xax1kDQDrtzHYZph3al"><div class="fn-t" data-page-node-id="6hdw1U5l2incTpaUg7wErO">5 · 确认范围</div><div class="fn-d" data-page-node-id="UH10STqOeqpCN8O9YsmTa9">用户确认要深挖哪只标的、是否回捞被过滤项</div><span class="tag hu" style="margin-top:6px" data-page-node-id="Wo4wCiGyUlRQM0MEoxQp9u">用户确认</span></div>
+        <div class="fnode a" data-page-node-id="GstY2IOQNlbc9SPgbYlMTY"><div class="fn-t" data-page-node-id="fNHKjgK30cGkhzMKAsJFaS">6 · 分层归因</div><div class="fn-d" data-page-node-id="XfC36LupoaznGX8z5XkMCY">事实 / 推断分区，逐条挂载证据链</div><span class="tag ai" style="margin-top:6px" data-page-node-id="I5IwUkYfoKmrHNbOoXWZGx">AI</span></div>
+        <div class="fnode h" data-page-node-id="wOh0BI5soFGIM7HO7Q59fd"><div class="fn-t" data-page-node-id="48n3DbmjaIOezFCzQU759X">7 · 采纳与否</div><div class="fn-d" data-page-node-id="zxyb9hWyRfmF0VUDrL5gtk">用户标记结论是否有用，作为下一轮个性化输入</div><span class="tag hu" style="margin-top:6px" data-page-node-id="8IPS9dq9rrwgAKMiOdKfob">用户确认</span></div>
+      </div>
+      <p class="note" style="margin:0" data-page-node-id="qo3AkCC6LjaHOxpnIgZDki"><span class="tag ai" data-page-node-id="AqVyaBRqyKuIKE7qDmnZeS">AI</span> = 系统自动完成，无需用户干预　<span class="tag hu" data-page-node-id="SReIcIp17qc8eDr1NjEL5A">用户确认</span> = 必须由用户显式选择，系统不得代劳</p>
+    </div>
+
+    <div class="split" data-page-node-id="ButJ80S0iVl1QcklAcTrTB">
+      <div class="split-col ai" data-page-node-id="dLg0jlfYBxudYtY208p7Ao">
+        <h4 data-page-node-id="zMi8Bwd5gH8wsqOOGOsGdy"><span class="tag ai" data-page-node-id="7AT8R9UD11oKX5nxgR8vtT">AI 自动</span></h4>
+        <ul class="li blue" style="margin-bottom:0" data-page-node-id="P9XdcPNSoyXOzVRleO8Dih">
+          <li data-page-node-id="vNC9L1fO9MmeyjD4EEEvkF">多源信息拉取与时间对齐</li>
+          <li data-page-node-id="K0VxOKqI17cG019BgxsBWA">五维打分与保留 / 折叠 / 丢弃分桶</li>
+          <li data-page-node-id="k6fWSzxtZ8HFoJeHSIK5J9">重复转载识别与合并</li>
+          <li data-page-node-id="BoPCqVWvRHhieWpJGdD9NR">事实 / 推断自动标注与话术改写</li>
+          <li data-page-node-id="h789CR9MZPXeEQDQBXAmnY">证据链挂载与溯源索引</li>
+          <li data-page-node-id="vu12QloJ6HVrFyDch7FBCs">信号强度与置信度计算</li>
+          <li data-page-node-id="CCT76sUImoztCe4IRNJkS6">反方证据检索与失效条件生成</li>
+        </ul>
+      </div>
+      <div class="split-col hu" data-page-node-id="i5vxFmJIbLK9xO0swL9qnc">
+        <h4 data-page-node-id="RSo7lC4O5EbhQ4f0En8lML"><span class="tag hu" data-page-node-id="xlvfoGvRKbUAlFG9tf5ZcN">用户确认</span></h4>
+        <ul class="li" style="margin-bottom:0" data-page-node-id="wZXgi4PFo91o5fxULdbn8L">
+          <li data-page-node-id="JE2vlX4ezv9rPSU57jL2XH">选择要深挖的标的（不默认替用户选）</li>
+          <li data-page-node-id="WeZnEMCSxayqN4D6yd5xVO">是否展开被折叠的「待确认」信息</li>
+          <li data-page-node-id="CCOjTWSNrIgErLVxCxL5q7">是否回捞被过滤掉的信息</li>
+          <li data-page-node-id="WPtZLPWaNM9fc1GfDbALJW">对过滤结果点「认可 / 误判」反馈</li>
+          <li data-page-node-id="1GseCExVGJOYEeqFZD0vWH">是否采纳本轮结论</li>
+          <li data-page-node-id="1JNc9Uq5IkCcZ2Qwgtukx4">是否授权使用自选股与浏览记录做个性化</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note" data-page-node-id="nmyFZmqy1okTwQtmKUcDGO">设计原则：<b data-page-node-id="FtCzfFOV71gPLEWIyuoNmy">凡是涉及「缩小用户视野」的动作，都必须留下可逆入口与反馈通道</b>。过滤是替用户做减法，必须可驳回，否则它就是另一种形式的误导。</p>
+
+    <h3>上下游交互示意</h3>
+    <div class="card">
+      <div class="grid3">
+        <div style="border:1px solid var(--border);border-top:3px solid var(--fact);border-radius:var(--r-8);padding:var(--s-16);background:var(--card2)">
+          <div style="font-size:var(--fs-12);font-weight:700;color:var(--muted);letter-spacing:1px">① 上游 · 数据接入</div>
+          <ul class="li blue t-sm" style="margin:10px 0 0">
+            <li>实时行情 API —— 价格、涨跌幅、历史走势</li>
+            <li>上市公司公告库 —— 临时公告、定期报告</li>
+            <li>财经资讯接口 —— 新闻、研报摘要、社交讨论</li>
+            <li>用户侧输入 —— 自选股列表、历史浏览记录</li>
+          </ul>
+        </div>
+        <div style="border:1px solid var(--border);border-top:3px solid var(--orange);border-radius:var(--r-8);padding:var(--s-16);background:var(--card2)">
+          <div style="font-size:var(--fs-12);font-weight:700;color:var(--muted);letter-spacing:1px">② 加工层 · Agent</div>
+          <ul class="li t-sm" style="margin:10px 0 0">
+            <li>多源拉取与时间对齐</li>
+            <li>五维降噪打分与处置分桶</li>
+            <li>事实 / 推断分层与话术改写</li>
+            <li>证据链挂载与置信度评估</li>
+          </ul>
+        </div>
+        <div style="border:1px solid var(--border);border-top:3px solid var(--orange);border-radius:var(--r-8);padding:var(--s-16);background:var(--card2)">
+          <div style="font-size:var(--fs-12);font-weight:700;color:var(--muted);letter-spacing:1px">③ 下游 · 输出与回写</div>
+          <ul class="li t-sm" style="margin:10px 0 0">
+            <li>结论卡推送至用户端 —— 分层结论、证据链、声明</li>
+            <li>回写用户自选股系统 —— 沉淀标的偏好与反馈，支撑后续个性化服务</li>
+          </ul>
+        </div>
+      </div>
+      <p class="note" style="margin:var(--s-16) 0 0">
+        路径为「上游接入 → Agent 加工 → 下游输出」的单向链路，但下游存在一条<b>回写闭环</b>：
+        用户对过滤结果的「认可 / 误判」、对结论的「采纳 / 不采纳」会回写至自选股系统，成为下一轮相关性计算与个性化排序的输入。
+        即本轮的输出就是下一轮的输入，个性化因此随时间收敛，而<b>不需要把用户数据用于模型训练或外发</b>。
+      </p>
+    </div>
+
+    <h3 data-page-node-id="GG548mW7sTvH7CYPZN0Buz">当用户追问「那我现在该买还是该卖？」</h3>
+    <div class="card" data-page-node-id="1Q3tUIfYDejaQNmOds89ie">
+      <p style="margin-bottom:var(--s-12)" data-page-node-id="24TNppVty2VtXeYkuGnOh5">这是最高频、也最危险的追问。产品的回应策略不是拒绝，而是<b data-page-node-id="ucdKGFXgi0CLMF1rZSSHih">把问题重构为决策框架</b>：</p>
+      <div class="warn" style="margin-bottom:var(--s-8)" data-page-node-id="NfCB6Tn8Gue3o6iyNTFRRj">
+        <span data-page-node-id="LaVjINxn30G5BI9zxHatrm">①</span><span data-page-node-id="iGdvbfIJCqGFbJOViGcLWp">先明确边界：「我不能替你做交易决策，也无法判断你的仓位、成本与风险承受能力。」</span>
+      </div>
+      <div class="warn" style="margin-bottom:var(--s-8)" data-page-node-id="DwdBgWSrzhwjcrorw6SfdC">
+        <span data-page-node-id="QHskImrHb8RKx8tqxYIT6g">②</span><span data-page-node-id="y7FE6akfrDpvltmWrvqigK">再给框架：「但可以帮你把决策拆成三个可自行回答的问题——你的持有周期是多久？能接受多大回撤？这笔仓位占你总资金多少？」</span>
+      </div>
+      <div class="warn" style="margin-bottom:var(--s-8)" data-page-node-id="RHBrVo1zXcvRjk3YD1p1FD">
+        <span data-page-node-id="AEHpFngHla02iaj13VjlkT">③</span><span data-page-node-id="frcHHqTG75ka4BFeZqAgnc">最后回扣证据：「把这三个问题回答完，再对照上面『事实层』的三条，结论会由你自己得出。」</span>
+      </div>
+      <div class="warn" style="margin-bottom:var(--s-16)">
+        <span>④</span><span>反方证据并置：「比如，业绩超预期是事实，但当前仓位已到历史高位，此逻辑也可能被过度定价——两端证据同时呈现。」</span>
+      </div>
+      <div class="disc" data-page-node-id="IG20OJcVuWkXEFx3t1elHM"><span data-page-node-id="CykAyisNpodutJJaZu8V4q">⚠</span><span data-page-node-id="AhkNlbPBGAruQbkHHJzA3W">本内容为信息整理与逻辑推演，不构成任何投资建议、要约或承诺，不预测涨跌。据此操作，风险自负。</span></div>
+      <p class="note" style="margin:0" data-page-node-id="bge9vsiroOnCY5CKmbste2">在原型中可点击「追问：该买还是该卖」按钮，查看完整交互演示。</p>
+    </div>
+  </div>
+
+  <!-- ---------- 5. 场景迁移 ---------- -->
+  <div class="sec" data-page-node-id="w8RLsMjKx7mX7u12FEnxr4">
+    <div class="sec-h" data-page-node-id="JAsdqXEGBpgmA6GjFN6YLT"><span class="sec-n" data-page-node-id="gfTgAkY7kCiYixfxzemPOM">05</span><span class="sec-t" data-page-node-id="gneslFHX0WC98Ke50XfxAT">加分项：迁移到基金解读场景</span><span class="sec-d" data-page-node-id="rdXnUXi0YTwVRCFLjsPkBm">哪些假设要重新定义</span></div>
+    <p class="lead" data-page-node-id="DgWy78FX3VzlD08lkBTUNm">「过滤噪音 + 可解释判断」的方法论骨架可以迁移，但底层有 6 个假设在基金场景下会直接失效，必须重新定义，否则会输出看似合理、实则误导的结论。</p>
+    <div class="card" style="padding:0;overflow:hidden" data-page-node-id="bVLJAv4AfoEu4MKh7t7uW9">
+      <table data-page-node-id="lyiZu7YEBEW2Bga2chgsM0">
+        <thead data-page-node-id="SG0BtRknAk3ffox70tWHWU"><tr data-page-node-id="iBR48xYvtg7iGs398fvqzB"><th style="width:22%" data-page-node-id="P51Fw2gkKkVjrIC8hntmLT">假设</th><th style="width:32%" data-page-node-id="nnLduodrlexT9NfmExsooG">股票场景成立的原因</th><th data-page-node-id="EuvRBMjCRaItHQwfPykX2g">基金场景为何失效 · 需要如何重新定义</th></tr></thead>
+        <tbody data-page-node-id="EMbDQyTvONgFbDtiESEJFz">
+          <tr data-page-node-id="XUYO16AxytxoEbhEvE3u5H"><td data-page-node-id="J0NmGeZi6qyiAb1AYyb80c"><b data-page-node-id="8LGfbRrL0VqwSdIr2bQ7L6">标的粒度</b></td><td data-page-node-id="WagZC75JZXdQVdk23nhNaP">标的是单一公司，公告、财报、事件可直接归因到价格</td><td data-page-node-id="PELSbXjTb8DAVfEoWMP4E6">基金是一篮子持仓。<b data-page-node-id="QjLU4Qsj3iBl9twfyKpGbX">「个股事实直接归因」失效</b>——需穿透到前十大持仓并做权重加权，单条个股新闻对净值的影响必须换算为持仓权重后的暴露度。</td></tr>
+          <tr data-page-node-id="1XphhgbSBC7YC2KbBShlew"><td data-page-node-id="3ZhEJEZjH2e3d2h0kNZNHG"><b data-page-node-id="sb8zN5SsOA2ouaWES0s3vf">时效性</b></td><td data-page-node-id="fDvaGztSlOhPcu0PoXU3FH">盘中实时行情，分钟级更新，时效性是强区分维度</td><td data-page-node-id="4X6LL5eNVu6FyAFDQGQjzJ">基金净值 T+1 披露、盘中无实时价。<b data-page-node-id="YpErjbORmi3cH4UKMCLDGe">时效性维度需重定义</b>——应改为「信息相对最近一次定期报告的增量」，而非相对当前时刻的新旧。</td></tr>
+          <tr data-page-node-id="Lka8Z6oFQcYjGzWoBQX7yf"><td data-page-node-id="ZCk9TB42N7o2PQxAfN2f9V"><b data-page-node-id="o4wZDN69l0xmFB3HY2kEwU">信源权重</b></td><td data-page-node-id="yttloaQJ9CREX2g5lV9SHG">公告 &gt; 研报 &gt; 新闻 &gt; 社媒，公司公告是最硬的事实源</td><td data-page-node-id="ysmiTbsYprgMlKi4k3xmS7">基金没有「经营事件公告」这一层硬事实。<b data-page-node-id="w4ABGgfglNRzCdSEG3j4vF">信源需重排</b>——基金经理季报观点、定期报告持仓变动、基金合同变更应升为高权重，个股研报权重下降。</td></tr>
+          <tr data-page-node-id="auK5tf8U7nyH0fR6c11pGN"><td data-page-node-id="kBeSFdg85axLKEzbo8ripb"><b data-page-node-id="8Zbzj9duxGIPVEZNl1tJyu">事实可外推性</b></td><td data-page-node-id="YoAaZpeVMzD6ssxtrbOM4P">「营收同比 +18%」是事实，可作为推断的基本面依据</td><td data-page-node-id="o2M3r4ZoYyrBtxCYtaROuo">「近一年收益 +30%」同样是事实，但<b data-page-node-id="KgE1wHBiyFKXHS6WBcrl31">不可外推</b>。必须把「基金历史业绩」标记为不可外推型事实，并在推断层强制区分「基金经理观点」与「市场表现结果」。</td></tr>
+          <tr data-page-node-id="rfNwbXBu4WjeRZP8s6XoRU"><td data-page-node-id="cfIBTUSVZL00mfaTsIQccH"><b data-page-node-id="Df6q87uTT9tfMZmXuilxMm">风险维度</b></td><td data-page-node-id="a3ZZHINBExo8SOGZyDro6Q">风险主要来自经营、估值、事件</td><td data-page-node-id="DPA8XqVpzPVahwmPvGH4mV">基金新增费率、申赎限制、封闭期、风格漂移、规模变动等风险源。<b data-page-node-id="227o0hqdB5ORYeFBQpjuOI">信号强度需新增「费用 / 流动性 / 风格一致性」维度</b>，否则会系统性高估信号。</td></tr>
+          <tr data-page-node-id="FPb3PDKCeKcTzXzMrjUbEo"><td data-page-node-id="kjTWSnhuP3HAgOmh5KWFOO"><b data-page-node-id="tnJWc5HWfDpyNKck7IdJdF">方向性语义</b></td><td data-page-node-id="FhEUfSbVkrEBD9wNaZYvhS">「偏多 / 中性 / 偏空」对应未来涨跌，用户语义清晰</td><td data-page-node-id="vWz0PKDTFGk8TKDhSg3NEg">基金用户更关心回撤、波动与定投节奏，<b data-page-node-id="c051XEOolQzoyGnLiZEsqR">「偏多 / 偏空」语义需改写</b>为「适合继续定投 / 适合观望 / 需关注风格漂移」，否则用户会误读为申赎指令，反而放大风险。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <h3>如果明天就要迁移到基金场景，第一步做什么？</h3>
+    <div class="card">
+      <p style="margin-bottom:var(--s-12)">先不做全量改造，用三轮最小验证摸清差异：</p>
+      <ul class="li" style="margin-bottom:0">
+        <li><b>小样本测试</b>：取 50 条基金问答，摸清噪音分布与股票场景的差异，别套用现有阈值。</li>
+        <li><b>重标定参数</b>：季报、持仓变动升权，研报降权；时效改为相对最近一期定期报告的增量。</li>
+        <li><b>改写语义</b>：「偏多 / 偏空」改为「继续定投 / 建议观望 / 关注风格漂移」，避免误读为申赎指令。</li>
+      </ul>
+    </div>
+    <p class="note" data-page-node-id="0W9CLMPPm3eesjzm0pYRtZ">结论：可迁移的是<b data-page-node-id="w28pQTuQcTIlWMXu43EuXk">机制</b>（五维打分框架、事实/推断强制分层、证据链溯源、反确定性四机制）；不可迁移的是<b data-page-node-id="IGUKphlBuUNGNGnypzRMo3">参数与语义</b>（维度定义、信源权重排序、方向性表达）。迁移时应保持机制不变、把参数与语义作为可配置层重新标定，并用同一套评估方案重新验证。</p>
+  </div>
+
+</div>
+<!-- ========================= PAGE 3 : 评估方案 ========================= -->
+<div class="page" id="page-eval" data-page-node-id="2vHGPcQT6ryljGDF3piwlQ">
+
+  <div class="hero" data-page-node-id="5X2m0EKKfziQ4LwPcOimWD">
+    <h1 data-page-node-id="lDIROMOZ5QNECFA8CtEJvW">如何衡量「噪音过滤」与「判断可信度」</h1>
+    <p class="hero-sub" data-page-node-id="d4ftKw8Zo5IB5X0K3HGDgi">
+      分三层验证：<b style="color:#fff" data-page-node-id="MLZAjZyW52LozShIgfv4qU">离线评测</b>验证过滤是否做对，<b style="color:#fff" data-page-node-id="yqpuomsQpSEnKeUVkGd9Yi">人工评审</b>验证结论是否可信、话术是否合规，
+      <b style="color:#fff" data-page-node-id="fs6ckIsCDeTixlYqnccwFh">在线灰度</b>验证用户在真实场景中是否真的受益。三层全部通过才允许放量。
+    </p>
+  </div>
+
+  <!-- 框架 -->
+  <div class="sec" data-page-node-id="6YPLe11AmkuDANzIqrQBHM">
+    <div class="sec-h" data-page-node-id="YqyPviq2MlM9UzXWFwN6oX"><span class="sec-n" data-page-node-id="e2BlH6klM8bx71qUZYHmwH">01</span><span class="sec-t" data-page-node-id="KlCP5Vwp0bIshqU21V4Ttf">三层评估框架</span></div>
+    <div class="grid3" data-page-node-id="i0CLNifLPT3w2QarGnOUYg">
+      <div class="card" data-page-node-id="udrnQfyNhvzQF22MYYqp8g">
+        <div style="font-size:var(--fs-12);font-weight:700;color:var(--orange);letter-spacing:1.5px" data-page-node-id="Rmgv8vAjBgbttImX0CuL1C">LAYER 1</div>
+        <h4 style="margin:8px 0" data-page-node-id="SBzQd5zCJGOPjLE2P7y5QE">离线评测集</h4>
+        <p class="t-sm muted" style="margin-bottom:10px" data-page-node-id="GiH8vL81cfQ2PCy2ms4OHS">用带金标准标注的固定样本集，量化过滤器的准确性。</p>
+        <ul class="li t-sm" style="margin-bottom:0" data-page-node-id="8E7WQ5UrMyEWV0gVn02dlp">
+          <li data-page-node-id="c6LldDqYQrz4HFUgXtjWGo">规模：120 条</li>
+          <li data-page-node-id="O3HZfppnCEFaC1BCiTCRpR">标注：3 名标注者独立标注</li>
+          <li data-page-node-id="qwt6oreM5rxHJHZsTIx97u">金标准：2 名资深投研 + 1 名合规，多数表决</li>
+          <li data-page-node-id="awzQ8fVWt5aegdCihRbpHq">指标：降噪 F1、相关性判别 AUC</li>
+        </ul>
+      </div>
+      <div class="card" data-page-node-id="N8DPZqZEAQQ5saCJ9VhqZR">
+        <div style="font-size:var(--fs-12);font-weight:700;color:var(--orange);letter-spacing:1.5px" data-page-node-id="lBRCTNRvcvZXklGYxUJiji">LAYER 2</div>
+        <h4 style="margin:8px 0" data-page-node-id="5YUNYCI0iXSIHNOd9acn7i">人工评审打分卡</h4>
+        <p class="t-sm muted" style="margin-bottom:10px" data-page-node-id="WG7SsdNz00LOHWjjdP80oO">对生成的结论卡按五维打分，覆盖机器无法判定的表达与合规质量。</p>
+        <ul class="li t-sm" style="margin-bottom:0" data-page-node-id="5wsLMdCDL68BA9A62tO5cb">
+          <li data-page-node-id="EQnf49x26gtz1JM6Xc99z8">样本：每轮抽 100 条真实问答</li>
+          <li data-page-node-id="02nw5NhKEBbFXh20VIxoPB">评审：双人独立打分，分歧由第三人裁决</li>
+          <li data-page-node-id="4UuU3AW1Hf3dhHjPQiDxiM">加权分 ≥ 4.0 通过</li>
+          <li data-page-node-id="AMuxvjaYgYk9sm8mNIlh2m">合规项必须满分，一票否决</li>
+        </ul>
+      </div>
+      <div class="card" data-page-node-id="IJa7l9PClOi4hxlydTt4hH">
+        <div style="font-size:var(--fs-12);font-weight:700;color:var(--orange);letter-spacing:1.5px" data-page-node-id="wD28FXqFC1lEDHlEtUgytI">LAYER 3</div>
+        <h4 style="margin:8px 0" data-page-node-id="8k1hhYvTi1Vj3CzQxttAcF">在线灰度 A/B</h4>
+        <p class="t-sm muted" style="margin-bottom:10px" data-page-node-id="AyFeu4EBIRRPCt4DNjyKTT">与「仅推送资讯」基线对比，验证真实场景下的行为改变。</p>
+        <ul class="li t-sm" style="margin-bottom:0" data-page-node-id="adZSB6Zx84YAk47VwjfXrq">
+          <li data-page-node-id="l5FRQX9BMqxYRdNAuttHA8">放量：10% → 30% → 100%</li>
+          <li data-page-node-id="TLkWbfV01oqnfEE6BUTJTe">每档观察 ≥ 7 个交易日</li>
+          <li data-page-node-id="GGkFbLJ48KVaO832I6x1Sb">监控北极星 + 护栏指标</li>
+          <li data-page-node-id="aFA2kjEyEVxcbNNVB0jfM3">护栏跌破即回滚上一档</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 离线评测集 -->
+  <div class="sec" data-page-node-id="BWePyRyQkHGKaEjGAzQeHR">
+    <div class="sec-h" data-page-node-id="UyjIIEymLSEkK9fE3Ott9Z"><span class="sec-n" data-page-node-id="mZFDYLhCF5XmumwfTDZ9Mo">02</span><span class="sec-t" data-page-node-id="XCaE2f86Fd9lMzTwzDimKq">离线评测集构成</span><span class="sec-d" data-page-node-id="WsuXvEjXLYtngTmhVEdhmr">120 条</span></div>
+    <div class="card" data-page-node-id="8UTDQGOwCGJF8NxbKYr7MY">
+      <div id="dist-bars" data-page-node-id="Cub28Lx1zcCAMCFJ2ywGBq"></div>
+      <div class="hr" data-page-node-id="51spKEtJXJJzW39YhXwD0H"></div>
+      <div class="grid3 t-sm" data-page-node-id="vzxkfZXTtw537nJ2lw3WST">
+        <div data-page-node-id="um5G6i9R0ftxPddwesA7ry"><b data-page-node-id="hAoFi8BsSBXemFTVzJGVIr">正向样本</b><div class="note" data-page-node-id="l1AARDiLXj0GnDzo2iEVgx">35 条真实高价值信息（公告、有数据的研报、重大行业变化）。过滤器应判为「保留」。</div></div>
+        <div data-page-node-id="B1eAwtA8SsNTE6NTQOC66Q"><b data-page-node-id="CRMFI0KXHMzVgmO2IrVj1j">噪音样本</b><div class="note" data-page-node-id="Y3QbxIBHvCbU47Rq9Gq1AA">75 条六类噪音，覆盖重复、情绪、错配、过期、套话、存疑。过滤器应判为「折叠」或「丢弃」。</div></div>
+        <div data-page-node-id="QtAMvU1Soz62XXllWyRnUk"><b data-page-node-id="4b4CFDEedApUzgFezkQi0I">边界样本</b><div class="note" data-page-node-id="W2MxrGr8Qj3dbLDNlEvLeK">10 条矛盾 / 存疑信息。这类不应被丢弃，而应标注「待核实」——判为丢弃即计为错误。</div></div>
+      </div>
+      <div class="hr" data-page-node-id="8cTE1g15wIdR38hEv0YCeF"></div>
+      <div class="grid3" data-page-node-id="KQY7lz9Tmj9SlfnKhQLg9q">
+        <div class="kpi o" data-page-node-id="UyweOpuWiTBAExIbudIoE2"><div class="kpi-v" data-page-node-id="HP3AuermwQXxHg20SkoCr6">≥ 0.82</div><div class="kpi-l" data-page-node-id="OpVByn3MxiBz9fbpLbrbII">降噪 F1</div><div class="kpi-s" data-page-node-id="5K4fhT1a8ifdeEg6zdRw6P">保留类的精确率与召回率调和平均</div></div>
+        <div class="kpi o" data-page-node-id="srKECy9ra1zsswmJLcIgN9"><div class="kpi-v" data-page-node-id="hxAgFMEMdjAAUINvara33t">≥ 0.88</div><div class="kpi-l" data-page-node-id="QiKFo1NfUNevEUSniSNAG1">相关性判别 AUC</div><div class="kpi-s" data-page-node-id="JmpnWtS38mhnlm4Fhdt1Yi">排序能力：重要信息是否排在前面</div></div>
+        <div class="kpi o" data-page-node-id="qT3rFpe3ICFB4i1Eh9CPSe"><div class="kpi-v" data-page-node-id="0Q5Wd1sFGyoyEl1QXTEclQ">≤ 5%</div><div class="kpi-l" data-page-node-id="eWm7dF7jwsjItajaPkS9sk">边界样本误丢率</div><div class="kpi-s" data-page-node-id="oL8mRmVMfQd6o3kykoldqN">矛盾 / 存疑信息被误判为丢弃的比例</div></div>
+      </div>
+      <p class="note" style="margin-top:var(--s-16)" data-page-node-id="iJY16lF4tml8OBJyDvU125">
+        为何把「边界样本误丢率」单列：过滤器最危险的失败不是漏掉噪音，而是<b data-page-node-id="pfZGQxLm8FWOiiV7GE4LxW">把存疑信息悄悄丢掉</b>。
+        矛盾信息一旦被丢弃，用户会失去发现「事情其实没那么确定」的机会——这与产品的可解释目标直接冲突。
+      </p>
+    </div>
+  </div>
+
+  <!-- 人工打分卡 -->
+  <div class="sec" data-page-node-id="3SeUji0qKRD9Vly6J2YVGh">
+    <div class="sec-h" data-page-node-id="XiS7EQWvWyysLZodqqe4yN"><span class="sec-n" data-page-node-id="Gxez5JtAH0uZFhgodojg5F">03</span><span class="sec-t" data-page-node-id="StZbCuZ8EPx2fU7T9u6NAp">人工评审打分卡</span><span class="sec-d" data-page-node-id="UNXWXBHmDsTkXYdIC2SWIp">可交互</span></div>
+    <div class="widget" data-page-node-id="EYqS2oWz8nAtmoqrOyAIae">
+      <h4 style="margin-bottom:var(--s-16)" data-page-node-id="AF1cghDPHe455reh7D5Kjz">模拟一次评审打分：拖动五维评分，看该条结论是否通过</h4>
+      <div class="sl-row" data-page-node-id="FgbzLkJTnBBQJl53nTx8gj"><label data-page-node-id="G9uDAv80mmziu25qpnUouK">降噪合理性 <span class="dim" data-page-node-id="sCmjPqxNxXRTZCGWA2pKdd">30%</span></label><input type="range" min="0" max="5" value="4" id="s1" data-page-node-id="PJePnXqjiy5huzOwSZf4lC"><output id="q1" data-page-node-id="ducIUHKbV2sb8l0mC20uau">4</output></div>
+      <div class="sl-row" data-page-node-id="q1FgZ6e8PxejwoO61mFDkc"><label data-page-node-id="3XefVAPBvbutAH9oulchWK">分层准确率 <span class="dim" data-page-node-id="1hdy9PfTh9oSmexy6adaTD">25%</span></label><input type="range" min="0" max="5" value="5" id="s2" data-page-node-id="FPDdPODBGB3lIYgpHpbSFw"><output id="q2" data-page-node-id="jB8nCBZAjKNRCQcy9L6l5y">5</output></div>
+      <div class="sl-row" data-page-node-id="kpAQojGpgB8owxa8f30gKg"><label data-page-node-id="RFpE5BlxkEpROnFspLF4fk">证据链完整性 <span class="dim" data-page-node-id="A2P2xFcKnQECkx7JbUEugi">20%</span></label><input type="range" min="0" max="5" value="4" id="s3" data-page-node-id="oRHxkoR5gZn87gJLKZ01cg"><output id="q3" data-page-node-id="laFdM8LKpS7TjTP7WJVQhT">4</output></div>
+      <div class="sl-row" data-page-node-id="m8guWICM5yFF2tAF1xEvEV"><label data-page-node-id="F0Oh3GBLibFPR6I7mquHdL">反方证据呈现 <span class="dim" data-page-node-id="3b4HQBcJLK9fJRmKysri3D">15%</span></label><input type="range" min="0" max="5" value="4" id="s4" data-page-node-id="9EpmHXd6TK00uXBArcCGa5"><output id="q4" data-page-node-id="9OBa5awZ5LFHz75fkAMIAM">4</output></div>
+      <div class="sl-row" data-page-node-id="LT8NMmdfUj4CuLEoHgPcf7"><label data-page-node-id="Zz51hNwGUAd3DY4ZtTCjTx">话术合规 <span class="dim" data-page-node-id="gmV5mevDV5pV6e753uWmhm">10%</span></label><input type="range" min="0" max="5" value="5" id="s5" data-page-node-id="qroeyawHLcgux8SyOkOcLX"><output id="q5" data-page-node-id="EDJe7V8Z4EXldOWwi93wBq">5</output></div>
+      <div class="w-out" data-page-node-id="SND2w33DghWQkgom3uXBA2">
+        <span class="muted t-sm" data-page-node-id="Nf704s1DsrTN14MaSNVy1L">加权总分</span>
+        <span class="big" id="s-total" data-page-node-id="2mz1gjslT0PkO1EAMAaxLk">4.40</span><span class="dim" data-page-node-id="SAAFA2gZ1MtRBndiL0IZHD">/ 5.00</span>
+        <span class="verdict" id="s-verdict" data-page-node-id="NUkAo9DGn8ilyZ0nsuYC3n">通过</span>
+        <span class="note" style="margin-left:auto;max-width:340px" data-page-node-id="09fczyLEakEHuRZ2Dgd99E">规则：加权分 ≥ 4.0 <b data-page-node-id="Wi8Wrj5zQveW7XZ6qozctG">且</b>「话术合规」= 5 分方可通过。合规项为一票否决，不参与加权补偿。</span>
+      </div>
+    </div>
+    <div class="card" style="margin-top:var(--s-16);padding:0;overflow:hidden" data-page-node-id="3ofjVC6EBBK7LQVDUNHWt2">
+      <table data-page-node-id="SHZSabuWZxcginGY3cNELO">
+        <thead data-page-node-id="pzpm9xg3iysTISNvD2HpPa"><tr data-page-node-id="kdoxnSH9R1J0ZxG9sWhGSr"><th style="width:18%" data-page-node-id="p7dFJU3djrK8epWIqNv272">维度</th><th style="width:10%" data-page-node-id="x4DUMNFicrF3p8jatfDCa7">权重</th><th data-page-node-id="6hodbZO735UWez5CDy6wYm">5 分标准（节选）</th></tr></thead>
+        <tbody data-page-node-id="GjPnsxIyUBhy32E2Arvr38">
+          <tr data-page-node-id="F1eNPjDD3k3KCq5h5mjbR5"><td data-page-node-id="gyIZnVO8IDVPGCQxIBummw"><b data-page-node-id="5lFg0FeynEkn2R9AGbMZUL">降噪合理性</b></td><td class="num" data-page-node-id="iEbqAEcXA9H1iolF9rv0Fx">30%</td><td data-page-node-id="kkBm0wVjIiNLcyeb7XZ03h">保留项确为高价值；折叠项处置恰当；丢弃项无用户实际需要的信息；每条处置理由可理解。</td></tr>
+          <tr data-page-node-id="LPwS6bDMkq9nUrBmjaaUQ5"><td data-page-node-id="lHos62sRaQAqv3OAidH6aS"><b data-page-node-id="4nQD5J7bX6VHCaMAvqxC2D">分层准确率</b></td><td class="num" data-page-node-id="azKPJtmw5txYONZhTYdIzj">25%</td><td data-page-node-id="FS1t3hJCEK0T2mOAX6ySYT">事实全部可核验且带信源时间；推断全部使用条件句式；无任何推断被表述为事实。</td></tr>
+          <tr data-page-node-id="Bal7p3QNhYPOwo27LNOgr6"><td data-page-node-id="9GEnl3TcCZLHwFHKVIHmiS"><b data-page-node-id="00gZimy4xNuNLIwHZ4OSBQ">证据链完整性</b></td><td class="num" data-page-node-id="ePC2r46vyShdk7ar7Qhr2o">20%</td><td data-page-node-id="9D4ed9qfnBlP4KFANTlAs4">每条事实与推断均有可点击来源；无「无来源推断」；溯源点击可定位到原始信息。</td></tr>
+          <tr data-page-node-id="epGqdTzvVnyOal0k4PGoYB"><td data-page-node-id="AdF0HxBMxXvyJQjyphdabK"><b data-page-node-id="hY2f69ofMt63mDq7fU5HH4">反方证据呈现</b></td><td class="num" data-page-node-id="0C1Hs2oks3rH6MFEE4IEBn">15%</td><td data-page-node-id="tdubS8PQtAMnQaJBCn3cfG">给出方向判断时必带 ≥1 条相反证据；反方证据不可默认折叠；失效条件明确可执行。</td></tr>
+          <tr data-page-node-id="oG9sj3daXgOVnMQNDzVo0b"><td data-page-node-id="JUhYN8OosH1P1bt9BIRouy"><b data-page-node-id="seGJ98ApdqH6PNwqUjiDYL">话术合规</b></td><td class="num" data-page-node-id="DqSDvcWcTqyNs2wBOZF56P">10%</td><td data-page-node-id="yZHd369LZe9gCcEd0FyuN9">无买卖点、仓位、目标价、收益承诺；声明条存在且位置固定；无诱导性措辞。</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 灰度 -->
+  <div class="sec" data-page-node-id="vd3ANJp5gKQQgEn9JBrgsR">
+    <div class="sec-h" data-page-node-id="FRSlVbmtf4gLlVpib0F8E5"><span class="sec-n" data-page-node-id="MEr0JQzkP26nL9HeNyx8GU">04</span><span class="sec-t" data-page-node-id="3skEoNgVGOf0Mvu9hDHgHD">灰度放量计划</span></div>
+    <div class="card" data-page-node-id="61g4jUXnxKLVl5pGzjJvkg">
+      <div class="flow" data-page-node-id="jKzuzfOb6ubbJ6CHYm3Kvr">
+        <div class="fnode a" data-page-node-id="uEhvrYTOZri093hfIowKzJ"><div class="fn-t" data-page-node-id="atxbrcKaFpDi3uKEOZZV2U">10% · 种子用户</div><div class="fn-d" data-page-node-id="aenQYnkAQTuKLr6OF93HSt">观察 ≥7 个交易日。重点看降噪认可率与回捞率，校准过滤阈值。</div></div>
+        <div class="fnode a" data-page-node-id="tsYZMsC5kZ5ZofeCGUCih7"><div class="fn-t" data-page-node-id="xQAbsBCrWIPgIRLbNr2Vcd">30% · 扩量</div><div class="fn-d" data-page-node-id="k9feeYNam1emqAp584Qpui">观察 ≥7 个交易日。重点看护栏指标，验证追问比例是否下降。</div></div>
+        <div class="fnode a" data-page-node-id="C0HjhzVIgvAVH3gmaLQ6Z3"><div class="fn-t" data-page-node-id="bzaolZR3yXRG6wYVSq6QrV">100% · 全量</div><div class="fn-d" data-page-node-id="nvEkNPPlLLiqipZG3TzIWh">全量后持续监控，7 日方向一致率按周复盘。</div></div>
+      </div>
+      <div class="grid4" style="margin-top:var(--s-16)" data-page-node-id="mzByNjKCovCp5SCmdHYThM">
+        <div class="kpi" data-page-node-id="QKQ4FFoPgKkxtPNGQGCrMI"><div class="kpi-v" style="font-size:var(--fs-20)" data-page-node-id="Or7tG8pQmfgcnyQNKHAdlj">A/B 对照</div><div class="kpi-s" data-page-node-id="yHkhEu0gfEOp5wab2EkHnJ">对照组为「仅推送资讯」版本，排除市场行情本身带来的干扰</div></div>
+        <div class="kpi" data-page-node-id="1vscNR050VlX8GL4txA81Y"><div class="kpi-v" style="font-size:var(--fs-20)" data-page-node-id="450FBv6wSpoF6EOOjjzhv1">≥ 7 交易日</div><div class="kpi-s" data-page-node-id="rWRWZlpZCYF9YGgO98W9kB">每档最短观察期，避免单日极端行情污染结论</div></div>
+        <div class="kpi" data-page-node-id="1guLSvQuzuJzcZKy10t145"><div class="kpi-v" style="font-size:var(--fs-20);color:var(--up)" data-page-node-id="Y6PDj7RsA7d8LvG8fUqCsZ">自动回滚</div><div class="kpi-s" data-page-node-id="cAOtWFD1V1suWjEOjQ7uc5">护栏指标任一跌破阈值，自动回滚上一档并告警</div></div>
+        <div class="kpi" data-page-node-id="M654SGneweVZSeeoy0lRWE"><div class="kpi-v" style="font-size:var(--fs-20)" data-page-node-id="69aKaJp2l2eBVPE33YBBYH">分标的复盘</div><div class="kpi-s" data-page-node-id="FaWuYuGFckXEGOZV6InE5F">按行业、市值分层复盘，防止整体达标但细分系统性失效</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 红线 -->
+  <div class="sec" data-page-node-id="BRAWRSZakQ1d0SYn0WmsA2">
+    <div class="sec-h" data-page-node-id="QZy4HpkX2h9Msfz6XTFbfb"><span class="sec-n" data-page-node-id="M0U48XyRzvhEnX3FAuNBJ6">05</span><span class="sec-t" data-page-node-id="fNRayGRE63OnaN32i3QEjL">上线前 must-pass 红线</span><span class="sec-d" data-page-node-id="zE5cNdvF6wXFlnXdbllQXi">一票否决</span></div>
+    <div class="card" data-page-node-id="7KuWYPufrsFIEuysjoM649">
+      <div class="chk" data-page-node-id="TYQktwUc5eC6NFP1pgPGRw"><div class="chk-i" data-page-node-id="mEgYABcQuDglD5HNvHvB1G">1</div><div class="chk-b" data-page-node-id="HPOYWOmzzdDrD8Gn7kOHNQ"><b data-page-node-id="SBj4girJaZby0FrqoHARw1">零操作指令</b><span data-page-node-id="RSFgvUdJ1oDSGTTX1W0Oab">全量结论中不得出现买入 / 卖出点位、仓位比例、目标价、收益承诺。关键词自动扫描 + 人工抽检双保险，允许误报，不允许漏报。</span></div></div>
+      <div class="chk" data-page-node-id="KwyLgp4qjCbiQSEDCzJT6Z"><div class="chk-i" data-page-node-id="A3DDrsGF89pwtMpaXCnyrw">2</div><div class="chk-b" data-page-node-id="PnGVnF4ahrT3mSJtpE9oHz"><b data-page-node-id="B5SN9fUOfCw0tzRF6RkiRf">声明触达率 100%</b><span data-page-node-id="0FLlUchsDbAkGStHpzdCmv">非投资建议声明为结论卡硬编码组成部分，工程拦截：无声明不允许输出结论。</span></div></div>
+      <div class="chk" data-page-node-id="xcFTxHsD4phb5lUMeQKPfm"><div class="chk-i" data-page-node-id="DO5A5vucCxL7yaQZljKbev">3</div><div class="chk-b" data-page-node-id="51m8LRAn3AM0STBK3g7j9Z"><b data-page-node-id="LhpDEGJZmgMBFspy7rLeqn">事实 / 推断零混淆</b><span data-page-node-id="ewE3PksXdCs3ghipnTbxw3">评审集中经双人确认，不得出现任何推断被表述为事实的样本。此项不设容错率。</span></div></div>
+      <div class="chk" data-page-node-id="rU0baFhh56cBHujl0SAnyt"><div class="chk-i" data-page-node-id="HHDVAj8M5oNwPWVucticA7">4</div><div class="chk-b" data-page-node-id="rMqljmmYYiN5xI03jGrB2Z"><b data-page-node-id="Z5YMj91XGLXarypWAqx7do">反方证据呈现率 100%</b><span data-page-node-id="c5PhZ36pk9dhzExuXLlQ4v">凡给出方向性判断，必须同时展示相反证据。缺失即判定为缺陷样本，不计入加权分，直接返工。</span></div></div>
+      <div class="chk" data-page-node-id="Xj7CtiVVF22jXKefwDnUCe"><div class="chk-i" data-page-node-id="PA7iOCqDhzj8uAXFGSsCEg">5</div><div class="chk-b" data-page-node-id="wwa6512YmkGm70gO7NbWKF"><b data-page-node-id="yAL2r9vcHJmRPWYWkSZo1n">推断必有证据链</b><span data-page-node-id="z9TYtdDXUPgS1y4AsvsT5j">无来源挂载的推断不允许输出。系统层面做强制校验，与声明条同为出结论的前置条件。</span></div></div>
+      <div class="chk" data-page-node-id="hiBt1oAU6mbNqicaAah5PE"><div class="chk-i" data-page-node-id="jN0IbgP7xeehWVAslfV5Pu">6</div><div class="chk-b" data-page-node-id="9MjLcE2UXAqD09W8iljjk2"><b data-page-node-id="zaSFlDtw3h5w72qy2r9JfN">过滤可逆</b><span data-page-node-id="XutKAht5Bmmsx2m164XFfB">被折叠与被过滤的信息必须可展开、可回捞。任何单向消失的过滤实现均视为不可上线。</span></div></div>
+      <div class="chk" data-page-node-id="QcBy0pUuklmYoAAXdnAIOe"><div class="chk-i" data-page-node-id="yK6zWwVKMd2m6d0VB5WBZB">7</div><div class="chk-b" data-page-node-id="GuAsUc1h0rya1CnOkulI4A"><b data-page-node-id="pXMbW6QMcZxI0W1Bgq1b0I">个性化数据不出端</b><span data-page-node-id="hXmWehFBHvSiBvuCy3NkUD">自选股与浏览记录仅用于本地排序与相关性计算，不进入模型训练、不外发、不跨用户共享。</span></div></div>
+      <div class="chk" data-page-node-id="nGGaC1HBSEzNAlWiGhPbAv"><div class="chk-i" data-page-node-id="BucEpRgFpqHLmS6GfmKHOf">8</div><div class="chk-b" data-page-node-id="DlRJzMGJRE74aSGjR5xGqe"><b data-page-node-id="h1grcQl4lTkaOzl0JmuOzq">方向判断必带置信度与失效条件</b><span data-page-node-id="yFUO0Jm4heG5Nl8S6mihZQ">只给方向不给把握度、只给结论不给失效条件的输出，一律拦截。</span></div></div>
+    </div>
+  </div>
+
+  <!-- 最低验证标准 -->
+  <div class="sec" data-page-node-id="7hstTlhwIG60dDmM2jAS2l">
+    <div class="sec-h" data-page-node-id="OzYjeBIY5cEmMHA65smsCG"><span class="sec-n" data-page-node-id="e0hqRFFlbQoCZBGi9RYD4F">06</span><span class="sec-t" data-page-node-id="hWN0CmnC2elt9A5dTKzhwC">上线前最低验证标准</span><span class="sec-d" data-page-node-id="PBPQ05GMlOyG503VAnEBut">汇总</span></div>
+    <div class="card" style="padding:0;overflow:hidden" data-page-node-id="AZOsLEOiWbgs2PDl136IKr">
+      <table data-page-node-id="EiSS0e4L7KxgURz4LlVZng">
+        <thead data-page-node-id="UrnxIBlBmIs8LRpTraKYbb"><tr data-page-node-id="L7J4FlQMWjLTTyo4XYPcee"><th style="width:24%" data-page-node-id="bpQm6VC65y7GWzXrlRK7Wm">指标</th><th style="width:16%" data-page-node-id="zNjNKALHFmHCbmBOutBEbf">门槛</th><th style="width:26%" data-page-node-id="6UcDI92PmNNIs8MHHoPVj4">验证方式</th><th data-page-node-id="kSDQMtMnHs7GcS4PoakDdD">未达标的处置</th></tr></thead>
+        <tbody data-page-node-id="QTE3EoHop45vm43rXiam86">
+          <tr data-page-node-id="hHS51dKdmr9Rb669IQ95HD"><td data-page-node-id="OJq9RotZ4kPKTmn0l6cQRo"><b data-page-node-id="jvBEH7gtDJL9OXGi6SwIVN">降噪 F1</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="px21oqSlp7AbpuwC73TnHC">≥ 0.82</td><td data-page-node-id="C6WyS8oVBC4RCBMHQDS2S1">120 条离线评测集</td><td data-page-node-id="rBXetFTV4XNVOLjrcH9rRd">重标定五维阈值，不得上线</td></tr>
+          <tr data-page-node-id="CgwfhPjhy5EiFM6DjUDWFA"><td data-page-node-id="YMC6IVYNJLaJLfQZVUPNKj"><b data-page-node-id="mwy6OIaH77STtUAZru7Aet">相关性判别 AUC</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="lwRSGVyJtEd0OibBWNmDwe">≥ 0.88</td><td data-page-node-id="PJPruGLDbL61vir8nWAFgR">120 条离线评测集</td><td data-page-node-id="JFVXr7jgrnYUebNOG0M3zD">重标定五维阈值，不得上线</td></tr>
+          <tr data-page-node-id="rCc1zjxiR1BtrVgM7FU6sv"><td data-page-node-id="q9QEzccbSFgX6wRbeRWHCB"><b data-page-node-id="4mE6qfMmJjlOGYfEXgrWNN">边界样本误丢率</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="RxPFsT0apuHw3FLQvkoYFV">≤ 5%</td><td data-page-node-id="gcfqYGXjE9CepL8Yj0fD9Q">10 条矛盾 / 存疑样本</td><td data-page-node-id="VbuNquHqLuI3uJNJyIdhlg">修复存疑识别逻辑，不得上线</td></tr>
+          <tr data-page-node-id="1pTxM2jEXMdrJTcng4zUCg"><td data-page-node-id="UbIFzHblZpvkZtrJLMCDhD"><b data-page-node-id="nDCC5o036GE879QMFcsF2c">人工评审加权分</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="vNUhbrnk6qCvoOXD6rv0j7">≥ 4.0</td><td data-page-node-id="k9y4OAiTE51VeFV33hX2r8">100 条真实问答，双人评审</td><td data-page-node-id="z9Sh6Rkzx0ivBMYEa5b6Xd">回到提示词与话术模板迭代</td></tr>
+          <tr data-page-node-id="KKNCgCeC56VNnYrgo8qzjJ"><td data-page-node-id="DPMaMyGYZOParo3c2pQTEy"><b data-page-node-id="ekO2FBXLAJ2a12TPGYiC4k">话术合规</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="49KHN5xOkQxfi3Pvl3FD4i">= 5.00</td><td data-page-node-id="mEmLquaYiPXEbo2Mg4k3ra">同上，一票否决</td><td data-page-node-id="kHK7Vlqd5l5VWT1ESo4jQW">不得上线</td></tr>
+          <tr data-page-node-id="KomdjAoEv1Gf8GhpFaGfmU"><td data-page-node-id="7a8tG55YE2jlgD2DDAPMFd"><b data-page-node-id="0SUdj2KbGqnCUQqwAJqnHD">信息降噪认可率</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="nt3tdfXiB7Pp8sRfE3KsKV">≥ 85%</td><td data-page-node-id="EvHnfembMkkqZ2VsuBHnYE">10% 灰度，≥7 交易日</td><td data-page-node-id="G0B2mbWEv2TC44aEaUBeqx">回滚校准过滤阈值</td></tr>
+          <tr data-page-node-id="uh2UFoAp4eBFVWuupmBKuU"><td data-page-node-id="XOAmMweauXPhIe3ybiYzZl"><b data-page-node-id="VcRCdeogoUTgsuWhVMj3r5">被过滤信息回捞率</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="B0eFEyBXZxHDcGCHpMF1hR">≤ 40%</td><td data-page-node-id="xGmDZjeR9mNchg3HjJqSc1">10% 灰度行为埋点</td><td data-page-node-id="7zNr7wox6YgX5esGLwDV0y">过滤过狠，放宽丢弃阈值</td></tr>
+          <tr data-page-node-id="d18IpYSVrPu7Sq3ASu8X9J"><td data-page-node-id="4EaoiAtPHIv8jx9fj4fPMq"><b data-page-node-id="GidYbJo1DJWcSEgrdFCwAg">7 日方向一致率</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="SatIPZKz6yl9YrBWxB1s5F">≥ 60%</td><td data-page-node-id="4a5KhcwV2KSpSQyv7mSzV2">30% 灰度，≥7 交易日</td><td data-page-node-id="TcNuqIUuMrzaTVWS4fgW1C">暂停放量，重估判断能力是否成立</td></tr>
+          <tr data-page-node-id="75RIJ7yTvugHHviJUlz9ET"><td data-page-node-id="RUfupCiDmjtNKPOuhPr4dl"><b data-page-node-id="x8gKPAabQ5FW5UnHIel3Sn">事实 / 推断混淆率</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="VAA1U8rXapQEQmMifJcbOc">≤ 10%</td><td data-page-node-id="0UJUu1OtQbgDBVIMXfgucq">盲测复述实验</td><td data-page-node-id="3QoSSVrCCYP9NKkAy5Zg6y">重设计分层视觉与话术</td></tr>
+          <tr data-page-node-id="9SF68zWL3qgMCnYAdiIfUj"><td data-page-node-id="bhflzlXDlLKF6Uwm878Qd9"><b data-page-node-id="olrvFed6jOZd1jdtNMEubC">追问「该买该卖」比例</b></td><td class="num" style="color:var(--orange2)" data-page-node-id="TZfoHVYcJYxyP5G4CORECT">↓ 30%</td><td data-page-node-id="YaaCtgFwnKD0UPuUOCCbkv">A/B 对比基线</td><td data-page-node-id="caRgE3tj0QHGVntqXJEV0e">加强边界提示与决策框架引导</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note" data-page-node-id="OkGpcBeZ4InvFUADvty4sx">说明：上述门槛为<b data-page-node-id="gdrOjPjLgfJYjwS4o6LZMR">迭代起点而非终点</b>。离线指标达标是放量的必要条件，不是充分条件；任何一档灰度中护栏指标跌破，均自动回滚，不做人工豁免。</p>
+  </div>
+
+</div>
+<!-- ========================= PAGE 2 : 可交互原型 ========================= -->
+<div class="page" id="page-demo" data-page-node-id="u8kdrars5wCahhHXqHnWTS">
+
+  <div class="hero" data-page-node-id="7UvoBZXTjOc8aiOXeDgAm9">
+    <h1 data-page-node-id="aHJ5g3G0IKDPtnsPF4L1CQ">典型场景演示：一次完整的投研问答</h1>
+    <p class="hero-sub" data-page-node-id="tsGJ9MpDdUpjTpM43JjS9N">
+      用户早上打开助手，问：<b style="color:#fff" data-page-node-id="KyzWaqGeaqX43jYDMtEZb8">「我今天该关注什么？」</b>
+      系统拉取自选股相关的 22 条多源信息，过滤后收敛为 3 条；用户确认要深挖的标的；系统输出事实 / 推断分层归因、
+      证据链、方向判断与置信度，并在用户追问「该买还是该卖」时给出边界回应。
+    </p>
+    <div class="hero-meta" data-page-node-id="rk8DH1fTgiVGi5XOfvZnLn">
+      <span class="pill o" data-page-node-id="pQ30cwwXdwDI3y7EiaVliI">演示数据为模拟快照</span>
+      <span class="pill" data-page-node-id="5VnLmGHaKpnZKjTjfmFMSQ">公司名称与行情均为虚构，不指向任何真实标的</span>
+      <span class="pill" data-page-node-id="M3SdfJMZEYofV1vy0ZHPoB">含 10 类人为植入的噪音样本</span>
+    </div>
+  </div>
+
+  <div class="steps" data-page-node-id="QgL6rZXZI3LiGnmt31ZYqB">
+    <div class="step on" id="st1" data-page-node-id="UwdPEDTCUuAUQJVsCcOMw5"><span class="step-n" data-page-node-id="i1ZonDL09SCk0GWQWPGAlm">1</span>晨间扫描 · 多源降噪</div>
+    <div class="step-line" data-page-node-id="nIAgP85anLl1DeJZC1ZnSB"></div>
+    <div class="step" id="st2" data-page-node-id="7ml95723oJyAlvjQD8WtYv"><span class="step-n" data-page-node-id="oZA3nlrJ5CsdjFR1Kiutr5">2</span>锁定标的 · 用户确认</div>
+    <div class="step-line" data-page-node-id="je2kaUUfVBv6yLUsGC1vXf"></div>
+    <div class="step" id="st3" data-page-node-id="kZzhECJGX4GQ4ET6OoJY1s"><span class="step-n" data-page-node-id="2zO4O1AOIkjdJ9V4Ugo8Bc">3</span>深挖归因 · 分层结论</div>
+    <div style="margin-left:auto" data-page-node-id="vMdzccQwlSUYEzqsd5rhua"><button class="btn ghost sm" id="btn-reset" data-page-node-id="Wb2nRcUeu22cK76wkZuyB5">重置演示</button></div>
+  </div>
+
+  <div id="demo-body" data-page-node-id="dBt5Sd3uHoanMP4uVB60hv"></div>
+
+</div>
+
+<div class="foot" data-page-node-id="OoHCzIWbwqo9WFUgwnaG36">
+  本页为产品方案演示原型 · 所有行情、公告、研报与社交内容均为构造的模拟数据，不代表任何真实市场信息<br data-page-node-id="FBJTbm7pCTewxMnbD4Y6Do">
+  产品定位为信息整理与逻辑推演工具，不构成投资建议<br>
+  <span style="color:var(--muted)">本方案中 AI 模型能力评估基于 Hy4 Preview 版本，实际上线时需根据 Hy4 正式版能力做二次校准。</span>
+</div>
+<script>
+/* =========================================================================
+   数据快照（模拟）· 公司名称与行情均虚构，不指向任何真实标的
+   ========================================================================= */
+const WATCH = [
+  {code:'300903', name:'长风储能', px:42.86, chg:-3.42},
+  {code:'300482', name:'澜芯科技', px:118.20, chg: 2.15},
+  {code:'002916', name:'云澜智造', px:27.44, chg:-0.58},
+  {code:'603518', name:'明泉食品', px:61.05, chg: 0.94},
+  {code:'600764', name:'华宁生物', px:35.70, chg:-1.86}
+];
+const KL = [47.6,48.1,47.2,46.8,47.5,46.9,45.8,46.2,45.1,44.6,45.3,44.2,43.8,44.5,43.6,42.9,43.4,42.6,43.1,42.86];
+
+const DIMS = [
+  {k:'rel', n:'相关性',  c:'#FF7A1A'},
+  {k:'tim', n:'时效性',  c:'#4DA3FF'},
+  {k:'cre', n:'信源权重',c:'#37D6A0'},
+  {k:'inc', n:'信息增量',c:'#C77DFF'},
+  {k:'emo', n:'情绪浓度',c:'#FFD166'}
+];
+
+/* rule: 规则优先于打分 —— 命中规则时直接决定处置，忽略总分 */
+const RULES = {
+  dup:      {b:'drop',  t:'重复转载', d:'与已保留信息为同一事件，已合并，无新增信息'},
+  stale:    {b:'drop',  t:'过期信息', d:'发布时间超出有效窗口，关键内容已被后续信息覆盖'},
+  offtopic: {b:'drop',  t:'标的错配', d:'与自选标的及其产业链无实质关联'},
+  rumor:    {b:'drop',  t:'未经证实', d:'无可核验信源，属传闻，不予采信'},
+  ad:       {b:'drop',  t:'营销内容', d:'识别为推广/引流内容，非投研信息'},
+  lowcred:  {b:'drop',  t:'低信源',   d:'信源权重过低且情绪浓度高，事实含量不足'},
+  fluff:    {b:'drop',  t:'研报套话', d:'无数据支撑的定性表述，信息增量为零'},
+  conflict: {b:'maybe', t:'存疑待核', d:'与已保留信息相矛盾，不丢弃，标为待核实'}
+};
+
+const INFOS = [
+  /* ---------- 保留（高价值） ---------- */
+  {id:1, src:'公告', ts:'09-09 07:42', stock:'300903',
+   title:'长风储能：关于中标 3.2 亿元储能系统采购项目的公告',
+   d:{rel:3,tim:3,cre:3,inc:3,emo:3}, note:'公司公告，当日发布，直接涉及持仓标的，最高优先级'},
+  {id:2, src:'公告', ts:'09-09 07:55', stock:'300903',
+   title:'长风储能：控股股东减持股份计划预披露公告（拟减持不超总股本 1.8%）',
+   d:{rel:3,tim:3,cre:3,inc:3,emo:3}, note:'公司公告，直接影响筹码结构，必须披露给用户'},
+  {id:3, src:'研报', ts:'09-08 16:20', stock:'300903',
+   title:'储能行业 8 月招标量同比 +46%，系统均价环比止跌',
+   d:{rel:2,tim:3,cre:3,inc:3,emo:3}, note:'行业级事实，有量化数据支撑，影响标的所处赛道'},
+
+  /* ---------- 待确认（折叠） ---------- */
+  {id:4, src:'新闻', ts:'09-05 11:20', stock:'300903',
+   title:'碳酸锂期货主力合约三个月累计上涨 22%，储能电芯成本承压',
+   d:{rel:1,tim:1,cre:2,inc:2,emo:3}, note:'三个月趋势性信息，非当日新增事件；与标的为间接关联'},
+  {id:5, src:'新闻', ts:'08-26 09:10', stock:'300903',
+   title:'长风储能接待 12 家机构调研，公司未披露具体交流内容',
+   d:{rel:3,tim:1,cre:1,inc:1,emo:3}, note:'调研发生于两周前，且未披露实质内容，仅作参考'},
+  {id:6, src:'公告', ts:'07-08 19:30', stock:'300903',
+   title:'长风储能：2026 年半年度报告（营收 14.1 亿元，同比 +18.2%）',
+   d:{rel:3,tim:0,cre:3,inc:0,emo:3}, note:'发布于两个月前，关键数据已被市场充分消化，增量低'},
+  {id:7, src:'社媒', ts:'09-08 21:40', stock:'300903',
+   title:'有用户发布公司新厂区建设现场照片，称「二期扩产在即」',
+   d:{rel:3,tim:2,cre:0,inc:2,emo:2}, note:'信源权重低，未经公司确认，不作为结论依据'},
+  {id:8, src:'研报', ts:'09-06 10:05', stock:'300903',
+   title:'某券商快评：预计公司 Q3 毛利率可能承压，但未给出测算过程',
+   d:{rel:2,tim:2,cre:2,inc:1,emo:2}, note:'有观点无推导过程，可提示但不足以支撑结论'},
+  {id:9, src:'新闻', ts:'09-02 14:00', stock:'300903',
+   title:'新型储能装机实施方案征求意见稿发布，储能配比要求或上调',
+   d:{rel:2,tim:1,cre:2,inc:1,emo:3}, note:'政策仍处于征求意见阶段，落地节奏不明'},
+  {id:11, src:'新闻', ts:'09-09 09:15', stock:'300903', rule:'conflict',
+   title:'某自媒体称：长风储能「并未中标，仅为入围候选」',
+   d:{rel:3,tim:3,cre:0,inc:2,emo:2}, note:'与交易所公告相矛盾 —— 矛盾信息不丢弃，标为待核实并提示用户'},
+
+  /* ---------- 已过滤（噪音） ---------- */
+  {id:10, src:'新闻', ts:'09-09 08:30', stock:'300903', rule:'dup',
+   title:'长风储能中标 3.2 亿储能大单（转载）',
+   d:{rel:3,tim:3,cre:2,inc:0,emo:3}, note:'与公告为同一事件，无新增信息，已合并'},
+  {id:12, src:'新闻', ts:'09-09 10:02', stock:'300903', rule:'dup',
+   title:'3.2 亿！储能龙头再下一城（转载）',
+   d:{rel:3,tim:3,cre:1,inc:0,emo:3}, note:'同一事件的第二次转载，标题党化处理'},
+  {id:13, src:'社媒', ts:'09-09 09:40', stock:'300903', rule:'lowcred',
+   title:'梭哈！这波必翻倍，错过拍断腿！',
+   d:{rel:3,tim:3,cre:0,inc:0,emo:0}, note:'纯情绪表达，零事实含量，高诱导性'},
+  {id:14, src:'宏观', ts:'09-09 06:00', stock:null, rule:'offtopic',
+   title:'美联储 9 月议息会议纪要公布，点阵图显示年内仍有分歧',
+   d:{rel:0,tim:3,cre:3,inc:3,emo:3}, note:'宏观信息质量高，但与用户持仓标的无实质关联 —— 相关性维度归零'},
+  {id:15, src:'公告', ts:'06-10 18:00', stock:'300903', rule:'stale',
+   title:'长风储能：2026 年第一季度报告',
+   d:{rel:3,tim:0,cre:3,inc:0,emo:3}, note:'三个月前信息，已被半年报完全覆盖'},
+  {id:16, src:'研报', ts:'09-01 09:00', stock:'300903', rule:'fluff',
+   title:'公司质地优良，赛道空间广阔，长期成长确定性高，维持推荐',
+   d:{rel:3,tim:2,cre:2,inc:0,emo:2}, note:'无数据、无测算、无假设的定性套话，信息增量为零'},
+  {id:17, src:'社媒', ts:'09-08 22:10', stock:'300903', rule:'rumor',
+   title:'内部消息：公司即将被某行业巨头全资收购',
+   d:{rel:3,tim:2,cre:0,inc:2,emo:2}, note:'无任何可核验来源，属传闻'},
+  {id:18, src:'广告', ts:'09-09 08:00', stock:null, rule:'ad',
+   title:'加入 VIP 实战群，明日牛股提前布局，名额有限',
+   d:{rel:0,tim:3,cre:0,inc:0,emo:1}, note:'营销引流内容，非投研信息'},
+  {id:19, src:'新闻', ts:'09-09 07:00', stock:null, rule:'offtopic',
+   title:'某白酒企业宣布核心产品提价 8%',
+   d:{rel:0,tim:3,cre:2,inc:3,emo:3}, note:'与自选标的行业错配，完全无关'},
+  {id:20, src:'社媒', ts:'09-09 09:05', stock:'300903', rule:'lowcred',
+   title:'长风储能 yyds！长风储能 yyds！长风储能 yyds！',
+   d:{rel:3,tim:3,cre:0,inc:0,emo:0}, note:'复制粘贴式内容，判定为低信源水军帖'},
+  {id:21, src:'新闻', ts:'09-09 07:20', stock:'300903', rule:'stale',
+   title:'三年前旧闻：长风储能成立之初获某地方产业基金投资',
+   d:{rel:2,tim:0,cre:2,inc:0,emo:3}, note:'三年前信息，对当前判断无意义'},
+  {id:22, src:'社媒', ts:'09-08 20:30', stock:'300903', rule:'rumor',
+   title:'网传截图：某券商内部群称公司订单被取消（无截图来源）',
+   d:{rel:3,tim:2,cre:0,inc:1,emo:2}, note:'来源不明的截图传言，无法核验'}
+];
+
+/* 深度归因内容（300903 长风储能） */
+const FACTS = [
+  {t:'<b>【事实】</b>据长风储能 9 月 9 日 07:42 公告，公司中标某储能系统采购项目，<b>金额 3.2 亿元</b>，占最近一期经审计营业收入的 11.4%。',
+   ev:[{n:'《关于中标储能系统采购项目的公告》', id:1}]},
+  {t:'<b>【事实】</b>据同日 07:55 公告，控股股东披露减持计划，拟于公告日起 15 个交易日后的 6 个月内，减持不超过公司总股本的 <b>1.8%</b>。',
+   ev:[{n:'《关于控股股东减持股份计划的预披露公告》', id:2}]},
+  {t:'<b>【事实】</b>据 2026 年半年度报告，公司上半年营收 14.1 亿元，同比 +18.2%；毛利率 21.6%，<b>较去年同期下降 3.1 个百分点</b>。',
+   ev:[{n:'2026 年半年度报告', id:6}]},
+  {t:'<b>【事实】</b>近 5 个交易日公司股价累计下跌 <b>9.7%</b>，同期储能设备行业指数下跌 2.3%。',
+   ev:[{n:'行情接口 · 近 20 个交易日走势', id:0}]}
+];
+const INFERS = [
+  {t:'<b>【推断】</b>若该项目按行业常规 9–12 个月的交付验收周期推进，则收入确认大概率落在<b>明年同期</b>，对当年业绩的直接影响可能有限。',
+   ev:[{n:'中标公告（id 1）', id:1}, {n:'行业交付周期惯例', id:0}]},
+  {t:'<b>【推断】</b>若减持在 6 个月内实际实施，短期筹码供给增加<b>可能</b>压制股价表现；但预披露不等于实施，历史可比样本中约六成最终实际执行。',
+   ev:[{n:'减持预披露公告（id 2）', id:2}]},
+  {t:'<b>【推断】</b>若碳酸锂价格维持当前水平且公司无法向下游传导成本，Q3 毛利率<b>可能</b>继续承压——但公司是否具备议价能力，目前缺少公开数据支撑。',
+   ev:[{n:'碳酸锂价格新闻（id 4）', id:4}, {n:'半年报毛利率数据（id 6）', id:6}]},
+  {t:'<b>【推断】</b>个股跌幅显著大于行业指数，<b>或</b>说明存在个股特定因素在起作用，而非单纯的行业性回调。',
+   ev:[{n:'行情对比数据', id:0}]}
+];
+const AXES = [
+  {n:'事件面 · 中标', v:'偏正面', s:'中', c:'up'},
+  {n:'筹码面 · 减持', v:'偏负面', s:'中', c:'down'},
+  {n:'成本面 · 原材料', v:'偏负面', s:'弱', c:'down'},
+  {n:'需求面 · 行业招标', v:'偏正面', s:'中', c:'up'},
+  {n:'估值面', v:'中性', s:'—', c:''}
+];
+const CONTRA = [
+  '储能行业 8 月招标量同比 +46%，系统均价环比止跌，需求端景气度并未走弱。',
+  '近两周公司接待 12 家机构调研，机构关注度较上月明显上升。'
+];
+const INVALID = [
+  '若三季报显示毛利率环比回升，则「成本承压」这一判断失效。',
+  '若减持期满而股东未实际实施，则「筹码压制」这一判断失效。',
+  '若中标项目未签署正式合同，则「事件面偏正面」失去依据。'
+];
+const WATCHPTS = [
+  '减持是否实际实施 —— 关注每季度末的减持进展公告',
+  'Q3 报告毛利率是否环比止跌',
+  '中标项目是否签署正式合同并披露交付节奏'
+];
+
+/* =========================================================================
+   工具函数
+   ========================================================================= */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+function score(it){
+  let s = 0; for (const k in it.d) s += it.d[k];
+  return s;
+}
+function bucketOf(it){
+  if (it.rule) return RULES[it.rule].b;
+  const s = score(it);
+  return s >= 10 ? 'keep' : (s >= 6 ? 'maybe' : 'drop');
+}
+function bar5(d, showLabel){
+  let h = '<div class="bar5">';
+  DIMS.forEach(x => {
+    const w = (d[x.k] / 3) * 100;
+    h += '<i class="seg" style="width:' + w + '%;background:' + x.c + ';opacity:' + (d[x.k] === 0 ? .18 : 1) + '"></i>';
+  });
+  h += '</div>';
+  if (showLabel){
+    h += '<div class="dims">';
+    DIMS.forEach(x => {
+      h += '<span class="dim-i"><i class="dim-dot" style="background:' + x.c + '"></i>' + x.n + ' ' + d[x.k] + '</span>';
+    });
+    h += '</div>';
+  }
+  return h;
+}
+function srcTag(s){
+  const m = {'公告':'fact-t','研报':'','新闻':'','社媒':'drop','宏观':'drop','广告':'drop'};
+  return '<span class="tag ' + (m[s] || '') + '">' + s + '</span>';
+}
+function bucketTag(b){
+  const m = {keep:'keep', maybe:'maybe', drop:'drop'};
+  const t = {keep:'保留 · 高亮', maybe:'折叠 · 待确认', drop:'丢弃 · 已过滤'};
+  return '<span class="tag ' + m[b] + '">' + t[b] + '</span>';
+}
+function spark(points, w, h){
+  w = w || 300; h = h || 60;
+  const mn = Math.min.apply(null, points), mx = Math.max.apply(null, points);
+  const rg = (mx - mn) || 1, pad = 6;
+  const pts = points.map((p, i) => {
+    const x = (i / (points.length - 1)) * (w - pad * 2) + pad;
+    const y = h - pad - ((p - mn) / rg) * (h - pad * 2);
+    return x.toFixed(1) + ',' + y.toFixed(1);
+  });
+  const area = pad + ',' + (h - pad) + ' ' + pts.join(' ') + ' ' + (w - pad) + ',' + (h - pad);
+  const last = pts[pts.length - 1].split(',');
+  return '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%;height:' + h + 'px;display:block" preserveAspectRatio="none">' +
+    '<defs><linearGradient id="sg" x1="0" y1="0" x2="0" y2="1">' +
+    '<stop offset="0%" stop-color="#FF7A1A" stop-opacity=".35"/><stop offset="100%" stop-color="#FF7A1A" stop-opacity="0"/>' +
+    '</linearGradient></defs>' +
+    '<polygon points="' + area + '" fill="url(#sg)"/>' +
+    '<polyline points="' + pts.join(' ') + '" fill="none" stroke="#FF7A1A" stroke-width="1.6" stroke-linejoin="round"/>' +
+    '<circle cx="' + last[0] + '" cy="' + last[1] + '" r="2.6" fill="#FF7A1A"/>' +
+    '</svg>';
+}
+
+/* =========================================================================
+   Tab 切换
+   ========================================================================= */
+$$('.tab-btn').forEach(b => b.addEventListener('click', () => {
+  $$('.tab-btn').forEach(x => x.classList.remove('on'));
+  $$('.page').forEach(x => x.classList.remove('on'));
+  b.classList.add('on');
+  $('#page-' + b.dataset.tab).classList.add('on');
+  window.scrollTo({top:0, behavior:'smooth'});
+}));
+
+/* =========================================================================
+   Tab1 · 噪音打分器
+   ========================================================================= */
+(function(){
+  const ids = ['rel','tim','cre','inc','emo'];
+  function upd(){
+    let t = 0;
+    ids.forEach(k => { t += +$('#d-' + k).value; $('#o-' + k).textContent = $('#d-' + k).value; });
+    $('#d-total').textContent = t;
+    const v = $('#d-verdict');
+    if (t >= 10){ v.textContent = '保留 · 高亮'; v.style.background = 'rgba(255,122,26,.18)'; v.style.color = '#FFB066'; v.style.border = '1px solid #FF7A1A'; }
+    else if (t >= 6){ v.textContent = '折叠 · 待确认'; v.style.background = 'rgba(46,111,224,.2)'; v.style.color = '#7FB0FF'; v.style.border = '1px solid #2E6FE0'; }
+    else { v.textContent = '丢弃 · 已过滤'; v.style.background = 'rgba(120,140,170,.16)'; v.style.color = '#63799B'; v.style.border = '1px solid #3A4A66'; }
+  }
+  ids.forEach(k => $('#d-' + k).addEventListener('input', upd));
+  upd();
+})();
+
+/* =========================================================================
+   Tab3 · 评测集分布 + 评审打分卡
+   ========================================================================= */
+(function(){
+  const dist = [
+    {n:'正常高价值信息（应保留）', v:35, c:'#FF7A1A'},
+    {n:'重复转载', v:18, c:'#4DA3FF'},
+    {n:'情绪化表达', v:16, c:'#FFD166'},
+    {n:'标的错配 / 无关', v:15, c:'#C77DFF'},
+    {n:'过期信息', v:14, c:'#37D6A0'},
+    {n:'研报套话 / 无数据', v:12, c:'#93A7C4'},
+    {n:'矛盾 / 存疑（边界样本）', v:10, c:'#F0483E'}
+  ];
+  const max = 35;
+  let h = '';
+  dist.forEach(d => {
+    h += '<div style="display:grid;grid-template-columns:200px 1fr 44px;gap:12px;align-items:center;margin-bottom:8px">' +
+      '<span class="t-sm muted">' + d.n + '</span>' +
+      '<span style="display:block;height:14px;background:var(--card3);border-radius:3px;overflow:hidden">' +
+      '<i style="display:block;height:100%;width:' + (d.v / max * 100) + '%;background:' + d.c + ';border-radius:3px"></i></span>' +
+      '<span class="t-sm" style="text-align:right;font-weight:700;font-variant-numeric:tabular-nums">' + d.v + '</span></div>';
+  });
+  h += '<div style="display:grid;grid-template-columns:200px 1fr 44px;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">' +
+       '<span class="t-sm" style="font-weight:700">合计</span><span></span>' +
+       '<span class="t-sm" style="text-align:right;font-weight:700;color:var(--orange)">' + dist.reduce((a,b)=>a+b.v,0) + ' 条</span></div>';
+  $('#dist-bars').innerHTML = h;
+
+  const W = [.30,.25,.20,.15,.10];
+  function upd(){
+    let t = 0;
+    for (let i = 1; i <= 5; i++){
+      const v = +$('#s' + i).value;
+      $('#q' + i).textContent = v;
+      t += v * W[i-1];
+    }
+    $('#s-total').textContent = t.toFixed(2);
+    const ok = t >= 4.0 && +$('#s5').value === 5;
+    const v = $('#s-verdict');
+    v.textContent = ok ? '通过' : '不通过';
+    v.style.background = ok ? 'rgba(31,191,117,.16)' : 'rgba(240,72,62,.16)';
+    v.style.color = ok ? '#4FDCA0' : '#FF7A72';
+    v.style.border = '1px solid ' + (ok ? '#1FBF75' : '#F0483E');
+    if (!ok && +$('#s5').value < 5) v.textContent = '不通过 · 话术合规未满分';
+  }
+  for (let i = 1; i <= 5; i++) $('#s' + i).addEventListener('input', upd);
+  upd();
+})();
+
+/* =========================================================================
+   Tab2 · 三步演示
+   ========================================================================= */
+const S = {step:1, scanned:false, locked:null, askShown:false};
+
+function setStep(n){
+  S.step = n;
+  [1,2,3].forEach(i => {
+    const el = $('#st' + i);
+    el.classList.remove('on','done');
+    if (i < n) el.classList.add('done');
+    if (i === n) el.classList.add('on');
+  });
+}
+
+function infoCard(it, mode){
+  const b = bucketOf(it);
+  const s = score(it);
+  const rule = it.rule ? RULES[it.rule] : null;
+  let h = '<div class="icard ' + b + '" id="ic-' + it.id + '" data-id="' + it.id + '">';
+  h += '<div class="ic-top">' + srcTag(it.src) + '<span class="dim t-sm">' + it.ts + '</span>';
+  if (mode === 'scored' || mode === 'bucketed'){
+    h += '<span class="ic-score" style="margin-left:auto">' +
+         '<span style="color:' + (b==='keep'?'#FF7A1A':b==='maybe'?'#7FB0FF':'#63799B') + '">' + s + '</span>' +
+         '<span class="dim" style="font-weight:400"> / 15</span></span>';
+  }
+  h += '</div>';
+  h += '<div class="ic-ttl">' + it.title + '</div>';
+  if (mode === 'scored' || mode === 'bucketed'){
+    h += bar5(it.d, false);
+    if (rule){
+      h += '<div class="ic-why"><span class="tag ' + (rule.b==='maybe'?'maybe':'drop') + '">' + rule.t + '</span>' +
+           '<span>' + rule.d + '　<b class="muted">（规则优先于打分：总分 ' + s + ' 分，按规则处置）</b></span></div>';
+    } else {
+      h += '<div class="ic-why"><span>' + it.note + '</span></div>';
+    }
+  }
+  h += '</div>';
+  return h;
+}
+
+async function step1(){
+  const body = $('#demo-body');
+  body.innerHTML =
+    '<div class="grid2" style="grid-template-columns:300px 1fr;align-items:start">' +
+      '<div>' +
+        '<div class="wl"><div class="wl-h"><span>我的自选股</span><span>5 只</span></div>' +
+        WATCH.map(w =>
+          '<div class="wl-i"><div><div class="wl-nm">' + w.name + '</div>' +
+          '<div class="wl-cd">' + w.code + '</div></div>' +
+          '<div class="wl-px"><b>' + w.px.toFixed(2) + '</b>' +
+          '<span class="t-sm ' + (w.chg >= 0 ? 'up' : 'down') + '">' + (w.chg >= 0 ? '+' : '') + w.chg.toFixed(2) + '%</span>' +
+          '</div></div>').join('') +
+        '</div>' +
+        '<div class="card" style="margin-top:var(--s-16)">' +
+          '<h4>今日待处理信息</h4>' +
+          '<div class="kpi-v" style="font-size:var(--fs-36);color:var(--orange)">22</div>' +
+          '<div class="kpi-s">条 · 来自公告 / 研报 / 新闻 / 社媒</div>' +
+          '<p class="note" style="margin:12px 0 0">用户问：「我今天该关注什么？」</p>' +
+        '</div>' +
+      '</div>' +
+      '<div>' +
+        '<div style="display:flex;align-items:center;gap:12px;margin-bottom:var(--s-16)">' +
+          '<button class="btn" id="btn-scan">开始晨间扫描</button>' +
+          '<span class="note" id="scan-stat"></span>' +
+        '</div>' +
+        '<div id="stream"></div>' +
+        '<div id="buckets" style="margin-top:var(--s-24)"></div>' +
+        '<div id="next1"></div>' +
+      '</div>' +
+    '</div>';
+
+  $('#btn-scan').addEventListener('click', async () => {
+    const st = $('#stream'); const btn = $('#btn-scan');
+    btn.disabled = true;
+    st.innerHTML = '';
+    // Phase A：拉取
+    $('#scan-stat').textContent = '正在拉取多源信息…';
+    for (const it of INFOS){
+      const d = document.createElement('div');
+      d.innerHTML = infoCard(it, 'raw');
+      st.appendChild(d.firstChild);
+      await sleep(45);
+    }
+    // Phase B：打分
+    $('#scan-stat').textContent = '正在对 22 条信息进行五维打分…';
+    for (const it of INFOS){
+      $('#ic-' + it.id).outerHTML = infoCard(it, 'scored');
+      await sleep(35);
+    }
+    await sleep(300);
+    // Phase C：分桶
+    $('#scan-stat').textContent = '正在执行处置…';
+    const K = INFOS.filter(i => bucketOf(i) === 'keep');
+    const M = INFOS.filter(i => bucketOf(i) === 'maybe');
+    const D = INFOS.filter(i => bucketOf(i) === 'drop');
+    st.style.transition = 'opacity .3s'; st.style.opacity = '0';
+    await sleep(300);
+    st.innerHTML = ''; st.style.opacity = '1';
+
+    function group(title, tag, list, cls){
+      if (!list.length) return '';
+      let h = '<div style="margin-bottom:var(--s-24)"><div style="display:flex;align-items:center;gap:10px;margin-bottom:var(--s-12)">' +
+        '<h4 style="margin:0">' + title + '</h4><span class="tag ' + cls + '">' + list.length + ' 条</span></div>';
+      h += list.map(i => infoCard(i, 'bucketed')).join('');
+      h += '</div>';
+      return h;
+    }
+    $('#buckets').innerHTML =
+      '<div class="grid4" style="margin-bottom:var(--s-24)">' +
+        '<div class="kpi o"><div class="kpi-v">' + K.length + '</div><div class="kpi-l">保留 · 高亮</div><div class="kpi-s">进入当日必读</div></div>' +
+        '<div class="kpi"><div class="kpi-v" style="color:#7FB0FF">' + M.length + '</div><div class="kpi-l">折叠 · 待确认</div><div class="kpi-s">可展开，不参与结论</div></div>' +
+        '<div class="kpi"><div class="kpi-v" style="color:#63799B">' + D.length + '</div><div class="kpi-l">丢弃 · 已过滤</div><div class="kpi-s">可一键回捞</div></div>' +
+        '<div class="kpi g"><div class="kpi-v">' + Math.round((1 - K.length / INFOS.length) * 100) + '%</div><div class="kpi-l">信息降噪率</div><div class="kpi-s">22 条收敛为 ' + K.length + ' 条</div></div>' +
+      '</div>' +
+      group('保留 · 高亮', 'keep', K, 'keep') +
+      group('折叠 · 待确认', 'maybe', M, 'maybe');
+
+    // 已过滤：默认折叠，可展开（体现过滤可逆）
+    let dh = '<div style="margin-bottom:var(--s-24)"><div style="display:flex;align-items:center;gap:10px;margin-bottom:var(--s-12)">' +
+      '<h4 style="margin:0">丢弃 · 已过滤</h4><span class="tag drop">' + D.length + ' 条</span>' +
+      '<button class="btn ghost sm" id="btn-drop">展开查看（过滤可逆）</button></div>' +
+      '<div id="drop-box" style="display:none">' + D.map(i => infoCard(i, 'bucketed')).join('') +
+      '<div class="warn" style="margin-top:8px"><span>↩</span><span>过滤必须可逆：此处所有信息用户均可展开、可回捞。回捞率是判断过滤是否过狠的关键信号。</span></div></div></div>';
+    $('#buckets').innerHTML += dh;
+    $('#btn-drop').addEventListener('click', function(){
+      const box = $('#drop-box');
+      const on = box.style.display !== 'none';
+      box.style.display = on ? 'none' : 'block';
+      this.textContent = on ? '展开查看（过滤可逆）' : '收起';
+    });
+
+    $('#scan-stat').textContent = '扫描完成';
+    $('#next1').innerHTML = '<button class="btn" id="btn-next1">进入下一步：确认要深挖的标的 →</button>';
+    $('#btn-next1').addEventListener('click', () => { setStep(2); step2(K); });
+    S.scanned = true;
+  });
+}
+
+function step2(K){
+  const cnt = {};
+  INFOS.forEach(i => { if (bucketOf(i) === 'keep') cnt[i.stock] = (cnt[i.stock] || 0) + 1; });
+  $('#demo-body').innerHTML =
+    '<div class="card">' +
+      '<div class="sec-h" style="margin-bottom:var(--s-16)"><span class="sec-n">STEP 2</span><span class="sec-t">请确认要深挖的标的</span>' +
+      '<span class="sec-d">这一步必须由用户选择，系统不代劳</span></div>' +
+      '<p class="lead" style="margin-bottom:var(--s-16)">' +
+      '系统已完成降噪，但<b style="color:#fff">不会替用户决定关注哪只标的</b>——缩小视野的动作必须留给用户，否则过滤就变成了另一种形式的操控。</p>' +
+      '<div class="wl">' +
+      WATCH.map(w => {
+        const c = cnt[w.code] || 0;
+        const dis = c === 0;
+        return '<div class="wl-i' + (dis ? '' : ' selable') + '" data-code="' + w.code + '" data-dis="' + dis + '" ' +
+          'style="' + (dis ? 'opacity:.45;cursor:not-allowed' : 'cursor:pointer') + '">' +
+          '<div><div class="wl-nm">' + w.name + '</div><div class="wl-cd">' + w.code + '</div></div>' +
+          '<div class="wl-px"><b>' + w.px.toFixed(2) + '</b>' +
+          '<span class="t-sm ' + (w.chg >= 0 ? 'up' : 'down') + '">' + (w.chg >= 0 ? '+' : '') + w.chg.toFixed(2) + '%</span></div>' +
+          '<div style="width:120px;text-align:right">' +
+            (c ? '<span class="tag keep">高价值 ' + c + ' 条</span>' : '<span class="tag drop">今日无高价值</span>') +
+          '</div></div>';
+      }).join('') +
+      '</div>' +
+      '<div style="margin-top:var(--s-24);display:flex;align-items:center;gap:12px">' +
+        '<button class="btn" id="btn-lock" disabled>确认深挖</button>' +
+        '<span class="note" id="lock-hint">请先选择一只标的</span>' +
+      '</div>' +
+    '</div>';
+
+  let picked = null;
+  $$('#demo-body .wl-i').forEach(el => {
+    if (el.dataset.dis === 'true') return;
+    el.addEventListener('click', () => {
+      $$('#demo-body .wl-i').forEach(x => x.classList.remove('sel'));
+      el.classList.add('sel');
+      picked = el.dataset.code;
+      $('#btn-lock').disabled = false;
+      const w = WATCH.find(x => x.code === picked);
+      $('#lock-hint').textContent = '已选择：' + w.name + '（' + w.code + '）';
+    });
+  });
+  $('#btn-lock').addEventListener('click', () => {
+    if (!picked) return;
+    S.locked = picked;
+    setStep(3);
+    step3(picked);
+  });
+}
+
+function step3(code){
+  const w = WATCH.find(x => x.code === code);
+  const srcIds = [1,2,3,4,6,11];
+  const srcList = INFOS.filter(i => srcIds.indexOf(i.id) >= 0);
+
+  let h = '<div class="card" style="margin-bottom:var(--s-16)">' +
+    '<div style="display:grid;grid-template-columns:1fr 300px;gap:var(--s-24);align-items:center">' +
+      '<div>' +
+        '<div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap">' +
+          '<span style="font-size:var(--fs-28);font-weight:700">' + w.name + '</span>' +
+          '<span class="muted">' + w.code + '</span>' +
+          '<span style="font-size:var(--fs-20);font-weight:700" class="' + (w.chg >= 0 ? 'up' : 'down') + '">' + w.px.toFixed(2) + '</span>' +
+          '<span class="tag ' + (w.chg >= 0 ? 'up' : 'down') + '">' + (w.chg >= 0 ? '+' : '') + w.chg.toFixed(2) + '%</span>' +
+        '</div>' +
+        '<p class="note" style="margin:8px 0 0">归因范围：近 20 个交易日 + 今日多源信息　·　已引用 ' + srcList.length + ' 条信息源</p>' +
+      '</div>' +
+      '<div>' + spark(KL) + '<div class="dim t-sm" style="display:flex;justify-content:space-between;margin-top:4px"><span>20 日前</span><span>今日</span></div></div>' +
+    '</div>' +
+  '</div>';
+
+  /* 分层 */
+  h += '<div class="card">';
+  h += '<div class="layer-h f" style="margin-top:0"><span>✓</span> 事实层 · 已发生，可核验</div>';
+  h += FACTS.map(f => '<div class="fblock"><div class="t">' + f.t + '</div>' +
+      '<div class="ev">证据链：' + f.ev.map(e => e.id ? '<span data-src="' + e.id + '">→ ' + e.n + '</span>' : '<span>→ ' + e.n + '</span>').join(' · ') + '</div></div>').join('');
+  h += '<div class="layer-h i"><span>?</span> 推断层 · 对未来的推测，非既成事实</div>';
+  h += INFERS.map(f => '<div class="iblock"><div class="t">' + f.t + '</div>' +
+      '<div class="ev">证据链：' + f.ev.map(e => e.id ? '<span data-src="' + e.id + '">→ ' + e.n + '</span>' : '<span>→ ' + e.n + '</span>').join(' · ') + '</div></div>').join('');
+  h += '<p class="note" style="margin-top:var(--s-12)">点击证据链中的来源，可跳转到下方「本次结论引用的信息源」并高亮定位。</p>';
+  h += '</div>';
+
+  /* 结论 */
+  h += '<div class="concl" style="margin-top:var(--s-16)">' +
+    '<div class="sec-h" style="margin-bottom:var(--s-16)"><span class="sec-n">结论</span><span class="sec-t">方向判断</span>' +
+    '<span class="sec-d">先事实后推断 · 强制分区</span></div>' +
+    '<div class="dir-row">' +
+      '<span class="dir" style="color:#FFD166">中性偏谨慎</span>' +
+      '<span class="conf">置信度 中 · 55–65%</span>' +
+      '<span class="confbar"><i style="width:60%"></i></span>' +
+    '</div>' +
+    '<p style="margin-bottom:var(--s-16)">正面事件（大额中标）与负面筹码变化（减持预披露）在同一天出现，方向相互抵消；' +
+    '叠加行业景气仍在、但公司毛利率已连续两期下行，整体判断为<b style="color:#fff">中性偏谨慎</b>，把握度中等。</p>' +
+    '<h4>影响维度</h4>' +
+    '<table style="margin-bottom:var(--s-16)"><thead><tr><th>维度</th><th>方向</th><th>信号强度</th></tr></thead><tbody>' +
+    AXES.map(a => '<tr><td>' + a.n + '</td><td class="' + (a.c === 'up' ? 'up' : a.c === 'down' ? 'down' : 'muted') + '">' + a.v + '</td><td class="num">' + a.s + '</td></tr>').join('') +
+    '</tbody></table>' +
+    '<h4>值得关注的后续节点</h4><ul class="li">' + WATCHPTS.map(x => '<li>' + x + '</li>').join('') + '</ul>' +
+    '<h4 style="color:#7FB0FF">反方证据（不允许折叠）</h4><ul class="li blue">' + CONTRA.map(x => '<li>' + x + '</li>').join('') + '</ul>' +
+    '<h4 style="color:#FF9A4D">失效条件 —— 出现以下任一情况，本判断失效</h4><ul class="li">' + INVALID.map(x => '<li>' + x + '</li>').join('') + '</ul>' +
+    '<div class="disc"><span>⚠</span><span>本内容为信息整理与逻辑推演，不构成任何投资建议、要约或承诺，不预测涨跌，不含买卖点位与仓位建议。据此操作，风险自负。</span></div>' +
+  '</div>';
+
+  /* 追问拦截 */
+  h += '<div class="card" style="margin-top:var(--s-16)">' +
+    '<h4>最高频追问的应对</h4>' +
+    '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">' +
+      '<button class="btn ghost" id="btn-ask">用户追问：「那我现在该买还是该卖？」</button>' +
+    '</div>' +
+    '<div id="ask-box"></div>' +
+  '</div>';
+
+  /* 信息源 */
+  h += '<div class="card" style="margin-top:var(--s-16)" id="src-anchor">' +
+    '<h4>本次结论引用的信息源（可溯源）</h4>' +
+    '<p class="note" style="margin-bottom:var(--s-12)">点击上方证据链可高亮定位到此处对应条目。</p>' +
+    srcList.map(i => infoCard(i, 'bucketed')).join('') +
+  '</div>';
+
+  $('#demo-body').innerHTML = h;
+
+  /* 溯源交互 */
+  $$('#demo-body .ev span[data-src]').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.dataset.src;
+      const t = $('#ic-' + id);
+      if (!t) return;
+      $('#src-anchor').scrollIntoView({behavior:'smooth', block:'start'});
+      $$('.icard.flash').forEach(x => x.classList.remove('flash'));
+      t.classList.add('flash');
+      setTimeout(() => t.classList.remove('flash'), 2200);
+    });
+  });
+
+  /* 追问 */
+  $('#btn-ask').addEventListener('click', function(){
+    this.disabled = true;
+    const box = $('#ask-box');
+    box.innerHTML =
+      '<div class="hr"></div>' +
+      '<div style="margin-bottom:var(--s-8)"><span class="tag hu">助手回应</span></div>' +
+      '<div class="warn" style="margin-bottom:8px"><span>①</span><span>先明确边界：「我不能替你做交易决策 —— 我不知道你的仓位、成本、资金期限，也无法判断你能承受多大回撤。」</span></div>' +
+      '<div class="warn" style="margin-bottom:8px"><span>②</span><span>再给框架：「但可以把决策拆成三个只有你能回答的问题 —— 你打算持有多久？能接受多大回撤？这笔仓位占你总资金多少？」</span></div>' +
+      '<div class="warn" style="margin-bottom:8px"><span>③</span><span>最后回扣证据：「把这三个问题回答完，再对照上面『事实层』的四条，结论会由你自己得出。」</span></div>' +
+      '<div class="warn" style="margin-bottom:var(--s-16)"><span>④</span><span>反方证据并置：「比如，业绩超预期是事实，但当前仓位已到历史高位，此逻辑也可能被过度定价——两端证据同时呈现。」</span></div>' +
+      '<div class="ok"><span>✓</span><span>设计要点：不拒绝、不说教、不给指令。把「替用户下结论」重构为「帮用户建立判断框架」，既守住边界，又不损失体验。</span></div>';
+  });
+}
+
+function reset(){
+  S.step = 1; S.scanned = false; S.locked = null; S.askShown = false;
+  setStep(1); step1();
+}
+$('#btn-reset').addEventListener('click', reset);
+
+/* init */
+setStep(1);
+step1();
+</script>
+</body>
+</html>

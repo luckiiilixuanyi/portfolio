@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="Ht9dB2K3iP9DmeyXwDOf6H">
+<head data-page-node-id="Y5G54UFXgyGNRJMbpDT2H4">
+<meta charset="UTF-8" data-page-node-id="86Co4AS5DvHLTxWD8TjcBL" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" data-page-node-id="raqE5f60LKE220doDnJC5O" />
+<meta name="theme-color" content="#0066FF" data-page-node-id="JvoYba9dHtR23obz8ttIyg" />
+<title>叮当出行 · 腾讯地图AI行程管家</title>
+<style>
+  :root{
+    --blue:#0066FF;
+    --blue-600:#0052CC;
+    --blue-400:#4D94FF;
+    --blue-50:#EAF2FF;
+    --blue-100:#D6E6FF;
+    --ink:#16203A;
+    --gray:#6B7686;
+    --gray-2:#98A2B3;
+    --line:#E7EDF7;
+    --card:#FFFFFF;
+    --bg:#F4F7FC;
+    --orange:#FF5A3C;
+    --green:#12B76A;
+    --radius:18px;
+    --shadow:0 6px 24px rgba(16,42,94,.07);
+    --shadow-lg:0 14px 40px rgba(0,102,255,.16);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(900px 420px at 12% -8%, #DCE9FF 0%, rgba(220,233,255,0) 60%),
+      radial-gradient(760px 380px at 96% 4%, #E4F0FF 0%, rgba(228,240,255,0) 58%),
+      var(--bg);
+    min-height:100vh;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:96px;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:26px 18px 40px}
+
+  /* ---------- Header ---------- */
+  .topbar{display:flex;align-items:center;gap:13px;margin-bottom:22px}
+  .logo{
+    width:46px;height:46px;flex:0 0 46px;border-radius:14px;
+    background:linear-gradient(140deg,#0066FF 0%,#4D94FF 100%);
+    box-shadow:0 8px 18px rgba(0,102,255,.32);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .logo svg{width:24px;height:24px}
+  .brand h1{font-size:20px;margin:0;letter-spacing:.2px;font-weight:700}
+  .brand p{margin:2px 0 0;font-size:12.5px;color:var(--gray)}
+  .skill-chip{
+    margin-left:auto;display:inline-flex;align-items:center;gap:6px;
+    background:rgba(255,255,255,.9);border:1px solid var(--blue-100);
+    color:var(--blue-600);font-size:11.5px;font-weight:600;
+    padding:6px 11px;border-radius:999px;white-space:nowrap;
+    box-shadow:0 2px 8px rgba(0,102,255,.08);
+  }
+  .dot-live{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(18,183,106,.18)}
+
+  /* ---------- Cards ---------- */
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    box-shadow:var(--shadow);padding:20px;margin-bottom:16px;
+  }
+  .hero-card{padding-top:22px}
+
+  .sec-label{
+    display:flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:700;color:var(--blue-600);margin-bottom:12px;
+    text-transform:none;letter-spacing:.2px;
+  }
+  .sec-label .bar{width:3px;height:14px;border-radius:2px;background:var(--blue);display:inline-block}
+
+  /* ---------- Input ---------- */
+  .input-shell{
+    display:flex;align-items:center;gap:10px;
+    border:1.5px solid var(--line);border-radius:14px;
+    padding:13px 14px;background:#FBFCFE;transition:.2s;
+  }
+  .input-shell:focus-within{border-color:var(--blue);background:#fff;box-shadow:0 0 0 4px rgba(0,102,255,.10)}
+  .input-shell.shake{animation:shake .38s}
+  .input-shell .lead{color:var(--blue);display:flex}
+  .input-shell .lead svg{width:18px;height:18px}
+  #need{
+    flex:1;border:0;outline:0;background:transparent;font-size:15.5px;color:var(--ink);
+    font-family:inherit;min-width:0;
+  }
+  #need::placeholder{color:#A9B4C6}
+  .clear-btn{
+    border:0;background:#EEF2F9;color:var(--gray);width:22px;height:22px;border-radius:50%;
+    cursor:pointer;font-size:13px;line-height:1;display:none;align-items:center;justify-content:center;padding:0;
+  }
+  .clear-btn.on{display:flex}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}
+  .chip{
+    border:1px solid var(--line);background:#fff;color:var(--gray);
+    font-size:12.5px;padding:6px 12px;border-radius:999px;cursor:pointer;
+    transition:.18s;font-family:inherit;
+  }
+  .chip:hover{border-color:var(--blue-400);color:var(--blue);background:var(--blue-50);transform:translateY(-1px)}
+
+  .btn-main{
+    width:100%;margin-top:16px;border:0;cursor:pointer;
+    background:linear-gradient(135deg,#0066FF 0%,#3B87FF 100%);
+    color:#fff;font-size:16px;font-weight:700;font-family:inherit;
+    padding:14px 18px;border-radius:14px;
+    display:flex;align-items:center;justify-content:center;gap:9px;
+    box-shadow:var(--shadow-lg);transition:.2s;letter-spacing:.5px;
+  }
+  .btn-main:hover{transform:translateY(-2px);box-shadow:0 18px 44px rgba(0,102,255,.26)}
+  .btn-main:active{transform:translateY(0)}
+  .btn-main[disabled]{opacity:.62;cursor:not-allowed;transform:none;box-shadow:var(--shadow)}
+  .btn-main svg{width:19px;height:19px}
+  .btn-main.running svg{animation:spin 1s linear infinite}
+  .hint{font-size:11.5px;color:var(--gray-2);text-align:center;margin-top:10px}
+
+  /* ---------- Thinking ---------- */
+  #think{display:none}
+  #think.on{display:block;animation:rise .35s ease both}
+  .think-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .think-avatar{
+    width:38px;height:38px;border-radius:12px;flex:0 0 38px;
+    background:linear-gradient(140deg,#0066FF,#66A6FF);
+    display:flex;align-items:center;justify-content:center;font-size:19px;
+    box-shadow:0 6px 14px rgba(0,102,255,.28);
+  }
+  .think-title{font-size:14.5px;font-weight:700}
+  .think-sub{font-size:11.5px;color:var(--gray-2)}
+  .steps{list-style:none;margin:0;padding:0;border-left:2px dashed var(--blue-100);margin-left:18px}
+  .steps li{
+    position:relative;padding:7px 0 7px 20px;font-size:13.5px;color:var(--gray);
+    animation:fadeIn .28s ease both;
+  }
+  .steps li::before{
+    content:"";position:absolute;left:-7px;top:15px;width:12px;height:12px;border-radius:50%;
+    background:#fff;border:2px solid var(--blue-100);
+  }
+  .steps li.active{color:var(--ink);font-weight:600}
+  .steps li.active::before{border-color:var(--blue);background:var(--blue);box-shadow:0 0 0 4px rgba(0,102,255,.14)}
+  .steps li.done{color:#3E4A5E}
+  .steps li.done::before{border-color:var(--green);background:var(--green)}
+  .progress{height:5px;border-radius:99px;background:#EDF2FA;overflow:hidden;margin-top:16px}
+  .progress i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#0066FF,#66A6FF);transition:width .3s ease}
+
+  /* ---------- Result ---------- */
+  #result{display:none}
+  #result.on{display:block;animation:rise .45s ease both}
+  .result-head{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+  .result-head h2{margin:0;font-size:19px;font-weight:800;letter-spacing:.2px}
+  .result-head .sub{font-size:12.5px;color:var(--gray);margin-top:3px}
+  .tag{
+    font-size:11.5px;font-weight:600;color:var(--blue-600);background:var(--blue-50);
+    border:1px solid var(--blue-100);padding:4px 10px;border-radius:999px;
+  }
+  .tag.warn{color:#B54708;background:#FFFAEB;border-color:#FEDF89}
+
+  .overview{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+  .ov{
+    background:linear-gradient(180deg,#F8FBFF,#F1F6FF);
+    border:1px solid var(--line);border-radius:14px;padding:12px 12px 11px;
+  }
+  .ov .k{font-size:11px;color:var(--gray-2);margin-bottom:4px;display:flex;align-items:center;gap:4px}
+  .ov .v{font-size:14.5px;font-weight:700;line-height:1.35;word-break:break-all}
+  .ov .v small{font-size:11.5px;font-weight:600;color:var(--gray);display:block;margin-top:2px}
+
+  .route-box{
+    background:var(--blue-50);border:1px solid var(--blue-100);border-radius:14px;padding:14px 15px;margin-bottom:16px;
+  }
+  .route-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:15px;font-weight:700;color:var(--blue-600)}
+  .route-line .arrow{color:var(--blue-400)}
+  .route-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .pill{
+    background:#fff;border:1px solid var(--blue-100);border-radius:999px;
+    font-size:12px;color:#2E3D55;padding:4px 11px;display:inline-flex;align-items:center;gap:5px;
+  }
+  .route-desc{font-size:12.5px;color:#4A586E;margin-top:9px;line-height:1.65}
+
+  .spot{display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed var(--line)}
+  .spot:last-child{border-bottom:0;padding-bottom:0}
+  .spot .no{
+    width:28px;height:28px;flex:0 0 28px;border-radius:9px;
+    background:var(--blue-50);border:1px solid var(--blue-100);color:var(--blue);
+    font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;margin-top:2px;
+  }
+  .spot .sn{font-size:14.5px;font-weight:700}
+  .spot .sd{font-size:12.5px;color:var(--gray);margin-top:2px}
+
+  .food-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .food{
+    border:1px solid var(--line);border-radius:14px;padding:13px 14px;background:#fff;
+    transition:.2s;
+  }
+  .food:hover{border-color:var(--blue-100);box-shadow:0 6px 18px rgba(0,102,255,.08);transform:translateY(-2px)}
+  .food .fn{font-size:14px;font-weight:700;display:flex;align-items:center;gap:6px}
+  .food .fd{font-size:12.5px;color:var(--gray);margin-top:4px}
+
+  .tips{background:#FFFBEB;border:1px solid #FDE9B8;border-radius:14px;padding:13px 15px}
+  .tips li{font-size:13px;color:#6B4A09;margin:5px 0}
+  .tips ul{margin:0;padding-left:18px}
+
+  .actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+  .btn-ghost{
+    flex:1;min-width:140px;border:1px solid var(--line);background:#fff;color:var(--blue-600);
+    font-size:13.5px;font-weight:600;font-family:inherit;padding:11px 14px;border-radius:12px;cursor:pointer;transition:.18s;
+  }
+  .btn-ghost:hover{border-color:var(--blue-400);background:var(--blue-50)}
+
+  /* ---------- Mini map ---------- */
+  .map-canvas{
+    position:relative;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;
+    background-color:#F1F5FC;
+    background-image:
+      linear-gradient(#E2EAF7 1px, transparent 1px),
+      linear-gradient(90deg,#E2EAF7 1px, transparent 1px);
+    background-size:34px 34px;
+    border:1px solid var(--line);
+  }
+  .map-canvas svg{position:absolute;inset:0;width:100%;height:100%}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:11px;font-size:11.5px;color:var(--gray)}
+  .legend span{display:inline-flex;align-items:center;gap:5px}
+  .lg{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .map-chip{
+    position:absolute;left:12px;bottom:12px;background:rgba(255,255,255,.94);
+    border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:11.5px;
+    font-weight:600;color:#2E3D55;box-shadow:0 4px 12px rgba(16,42,94,.08);
+  }
+  .map-scale{
+    position:absolute;right:12px;bottom:12px;background:rgba(255,255,255,.9);
+    border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:10.5px;color:var(--gray);
+  }
+
+  /* ---------- Voice assistant ---------- */
+  .voice{
+    position:fixed;right:22px;bottom:24px;z-index:60;
+    display:flex;flex-direction:column;align-items:flex-end;gap:10px;
+  }
+  .bubble{
+    max-width:250px;background:#fff;border:1px solid var(--line);border-radius:16px 16px 4px 16px;
+    padding:12px 14px;font-size:13.5px;color:#1F2A3D;box-shadow:0 10px 30px rgba(16,42,94,.14);
+    line-height:1.6;display:none;position:relative;animation:pop .28s cubic-bezier(.2,1.2,.4,1) both;
+  }
+  .bubble.on{display:block}
+  .bubble .who{font-size:11px;color:var(--blue);font-weight:700;margin-bottom:3px;display:block}
+  .voice-btn{
+    width:58px;height:58px;border-radius:50%;border:0;cursor:pointer;
+    background:linear-gradient(140deg,#0066FF,#4D94FF);
+    color:#fff;font-size:26px;line-height:1;
+    box-shadow:0 10px 26px rgba(0,102,255,.38);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;transition:.2s;
+  }
+  .voice-btn:hover{transform:translateY(-2px) scale(1.03)}
+  .voice-btn::after{
+    content:"";position:absolute;inset:-6px;border-radius:50%;
+    border:2px solid rgba(0,102,255,.45);animation:pulse 2.1s ease-out infinite;
+  }
+  .voice-btn.speaking{background:linear-gradient(140deg,#FF5A3C,#FF8A6B)}
+  .voice-btn.speaking::after{border-color:rgba(255,90,60,.5)}
+
+  footer{text-align:center;font-size:11.5px;color:#A2AEC0;margin-top:26px;line-height:1.8;padding:0 10px}
+
+  @keyframes pulse{0%{transform:scale(.9);opacity:.9}70%{transform:scale(1.35);opacity:0}100%{opacity:0}}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  @keyframes fadeIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{opacity:0;transform:translateY(10px) scale(.94)}to{opacity:1;transform:none}}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  @keyframes flow{to{stroke-dashoffset:-220}}
+
+  @media (max-width:640px){
+    .wrap{padding:18px 13px 40px}
+    .brand h1{font-size:17.5px}
+    .skill-chip{display:none}
+    .overview{grid-template-columns:1fr 1fr}
+    .food-grid{grid-template-columns:1fr}
+    .card{padding:16px;border-radius:16px}
+    .voice{right:14px;bottom:16px}
+    .voice-btn{width:52px;height:52px;font-size:23px}
+    .bubble{max-width:66vw}
+    .map-chip{font-size:10.5px;padding:4px 9px}
+  }
+</style>
+</head>
+<body data-page-node-id="64xjeLI1EyDE0RzUUlADCC">
+<div class="wrap" data-page-node-id="7mZuPTa6s2RMjlDS5c4HEs">
+
+  <!-- Header -->
+  <div class="topbar" data-page-node-id="DPZzsEg8yvGSWOgRj4SG9G">
+    <div class="logo" data-page-node-id="ao8YLhZh8Vy5g3HEjxL0Rh">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" data-page-node-id="iBjbLhJAEAX44DOaDM2r8f">
+        <path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z" fill="#fff" data-page-node-id="HPPLs4D986D66Dgdsk68kP"/>
+        <circle cx="12" cy="10" r="2.6" fill="#0066FF" data-page-node-id="x6vBBeyguDdUuoBMAEtStb"/>
+      </svg>
+    </div>
+    <div class="brand" data-page-node-id="DjiHYLw5GeYT1fhGR6T7Nm">
+      <h1 data-page-node-id="X4oM53pyFaCj7Ge4U6OsKQ">叮当出行 · 腾讯地图 AI 行程管家</h1>
+      <p data-page-node-id="oSn9hyl03HAjU9aLWWcdDp">一句话说出你的出行想法，叮当智能体帮你把路线、玩法、吃喝一次安排好</p>
+    </div>
+    <div class="skill-chip" data-page-node-id="d3d3H0RFtlJxcLRWt8swV5"><span class="dot-live" data-page-node-id="4SWRA8um8OeHVFCs9SuA3I"></span> 地图助手 Skill 已挂载</div>
+  </div>
+
+  <!-- Input -->
+  <div class="card hero-card" data-page-node-id="OOHiM91oRt5ZFwpCz1Fg9b">
+    <div class="sec-label" data-page-node-id="ftbtHzpJbYriHyCDhPmMNo"><span class="bar" data-page-node-id="OzO5CeajHQjw6h5E2fnRnI"></span>说出你的出行需求</div>
+    <div class="input-shell" id="shell" data-page-node-id="ahaE5sBlnvukbVCeeJ9yCC">
+      <span class="lead" data-page-node-id="d4CtSVP5mZs1jPTjmtlSlh">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="fzArapXjiNNEDFGPfqDCc3">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" data-page-node-id="kng63TPiCthuVmSK6bTFpE"/>
+        </svg>
+      </span>
+      <input id="need" type="text" autocomplete="off"
+        placeholder="例如：周末从深圳出发，想去惠州海边玩一天" data-page-node-id="EABH4C1RwtRBYI4eg8Qssu" />
+      <button class="clear-btn" id="clear" title="清空" data-page-node-id="qI7FEAuSeTbCOxOS05QtkR">✕</button>
+    </div>
+
+    <div class="chips" id="chips" data-page-node-id="TBTih8J7gOBuwSvUJU300h"></div>
+
+    <button class="btn-main" id="go" data-page-node-id="UOCRZHVv5FfHEAZARtaBeD">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" data-page-node-id="tEvReODy6oyDS5Kpkvomhu">
+        <path d="M12 3l1.9 4.6L18.5 9.5l-4.6 1.9L12 16l-1.9-4.6L5.5 9.5l4.6-1.9L12 3z" data-page-node-id="CPael3H12GNRQkWGNd9WbW"/>
+        <path d="M18 16.5l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z" data-page-node-id="H4P72xFADb1k4cRcBFGIHD"/>
+      </svg>
+      <span id="goTxt" data-page-node-id="2jKDzv0MxszpFAvWx9nPpa">AI 规划行程</span>
+    </button>
+    <div class="hint" data-page-node-id="EsG36EeoGeyTqLTZXGNfot">由「叮当智能体 + 地图助手 Skill」模拟生成，数据仅用于演示</div>
+  </div>
+
+  <!-- Thinking -->
+  <div class="card" id="think" data-page-node-id="tuFjGpdh0LdxQUFrr8Zex5">
+    <div class="think-head" data-page-node-id="Grrf3XBlgSVsKWH4i0qH9O">
+      <div class="think-avatar" data-page-node-id="gAElJl2KsHBmbCFjvz8k6d">🤖</div>
+      <div data-page-node-id="UqjlMj4lw1FbetJv8T8odY">
+        <div class="think-title" data-page-node-id="8TDgX2nZ9bsE24pkaTaAal">叮当智能体正在分析…</div>
+        <div class="think-sub" data-page-node-id="NBgYckYNBV7rk5n4VLNyas">正在调用地图助手 Skill：意图识别 · 路径规划 · POI 推荐</div>
+      </div>
+    </div>
+    <ul class="steps" id="steps" data-page-node-id="q93hBZjLq1HNHU0uIxr4Zr"></ul>
+    <div class="progress" data-page-node-id="tuVzqN0uHHmiwQOTtl3ABO"><i id="bar" data-page-node-id="PdkAb2usUEElkFIo1xq77d"></i></div>
+  </div>
+
+  <!-- Result -->
+  <div id="result" data-page-node-id="3Z8dg1XrHFxEZ0xq5CMe9s"></div>
+
+  <footer data-page-node-id="3vT38ckSi40oALiBQebuoo">
+    叮当出行 · 演示版 ｜ 所有行程数据为预设模拟内容，实际出行请以腾讯地图实时路况与官方信息为准
+  </footer>
+</div>
+
+<!-- Voice assistant -->
+<div class="voice" data-page-node-id="zBWo9fwe0vNhbO6oy0Tvop">
+  <div class="bubble" id="bubble" data-page-node-id="XOUYK5nFS35Lfs9DBQRq6p">
+    <span class="who" data-page-node-id="4Ona6rrCtn6sO8vbDCDJGU">叮当语音助手</span>
+    <span id="bubbleTxt" data-page-node-id="47qGoC9Fq9KKPLZwTlEWes">叮当在此，随时为您导航！</span>
+  </div>
+  <button class="voice-btn" id="voice" title="点击唤醒叮当" data-page-node-id="1JkpjIyqLPc6tm6GNGADGc">🤖</button>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============ 1. 预设目的地库 ============ */
+  // 坐标基于 640 x 360 的迷你地图画布，布局模板见 LAYOUTS
+  var LAYOUTS = [
+    {dest:[520,152], spots:[[168,236],[266,160],[360,246],[442,176]]},
+    {dest:[506,168], spots:[[150,196],[244,268],[342,176],[430,238]]},
+    {dest:[530,146], spots:[[186,258],[286,192],[376,272],[452,158]]},
+    {dest:[498,178], spots:[[162,220],[254,152],[350,206],[436,268]]}
+  ];
+  var ORIGIN = [70,292];
+
+  var DESTS = [
+    {
+      city:"惠州", short:"双月湾", title:"惠州 · 双月湾", terrain:"sea", water:"南海", layout:0,
+      tags:["惠州","双月湾","巽寮湾","惠东","海边","海","沙滩","滨海","赶海","看海","渔村"],
+      distance:"约 128 公里", drive:"约 1 小时 50 分钟", transport:"自驾",
+      routeText:"深圳 → 惠盐高速 → 沿海高速 → 稔平半岛 → 双月湾",
+      routeDetail:"全程约 128 公里，高速为主、路况良好；周末 10:00 后沿海高速易拥堵，建议早出发并留意惠州交警的实时管制。",
+      spots:[
+        {n:"双月湾观景台", d:"两条半月形海岸线在此交汇，日落时整片海湾被染成金色。"},
+        {n:"巽寮湾白沙滩", d:"沙细水浅的亲子海湾，退潮后可以赶海拾贝。"},
+        {n:"海龟湾自然保护区", d:"中国大陆唯一的海龟产卵地，栈道尽头是无敌海景。"},
+        {n:"平海古城", d:"六百年海防古城，骑楼老街里藏着地道渔家味。"}
+      ],
+      foods:[
+        {n:"巽寮湾海鲜大排档", d:"现捞现做，姜葱炒蟹与白灼海虾最鲜。"},
+        {n:"惠州盐焗鸡", d:"皮爽肉滑、咸香入骨的客家经典。"},
+        {n:"客家酿豆腐", d:"手工酿制，配一碗丝苗米饭刚刚好。"}
+      ],
+      tips:["海边紫外线强，务必带防晒霜、遮阳帽与沙滩鞋，注意涨潮时间。","海鲜大排档先看价目表再点单，节假日建议提前电话订位。"]
+    },
+    {
+      city:"珠海", short:"情侣路", title:"珠海 · 情侣路海岸线", terrain:"sea", water:"南海", layout:1,
+      tags:["珠海","情侣路","日月贝","外伶仃","海岛","海边","长隆","澳门"],
+      distance:"约 160 公里", drive:"约 2 小时 20 分钟", transport:"自驾 / 城际",
+      routeText:"广州 → 广珠西线高速 → 珠海大道 → 情侣路",
+      routeDetail:"广珠西线全程高速约 160 公里；情侣路沿线停车位紧张，建议把车停在日月贝停车场后骑行游览。",
+      spots:[
+        {n:"情侣路海滨栈道", d:"28 公里海岸线一路是景，骑行看海的最佳路线。"},
+        {n:"日月贝歌剧院", d:"中国唯一建在海岛上的歌剧院，白天像贝壳，夜里像星辰。"},
+        {n:"外伶仃岛", d:"海水能见度极高，浮潜与海钓爱好者的心头好。"},
+        {n:"圆明新园", d:"按 1:1 复刻的圆明园十八景，适合半日慢逛。"}
+      ],
+      foods:[
+        {n:"横琴蚝", d:"个大肉肥，炭烤或蒜蓉蒸都极鲜。"},
+        {n:"斗门重壳蟹", d:"蟹壳薄而蟹膏厚，秋季最肥美。"},
+        {n:"海鲜膏蟹粥", d:"砂锅慢熬，粥底绵密带海味。"}
+      ],
+      tips:["外伶仃岛船票需提前一天实名预订，风浪大时可能停航。","情侣路建议用共享单车接驳，比开车省心很多。"]
+    },
+    {
+      city:"广州", short:"广州", title:"广州 · 老城慢游", terrain:"city", water:"", layout:2,
+      tags:["广州","小蛮腰","广州塔","沙面","陈家祠","早茶","长隆","羊城"],
+      distance:"约 140 公里", drive:"约 1 小时 50 分钟", transport:"高铁 / 自驾",
+      routeText:"深圳 → 广深沿江高速 → 广州环城 → 珠江新城",
+      routeDetail:"高铁深圳北至广州南约 30 分钟更省心，落地后地铁覆盖绝大多数景点；老城区不建议开车。",
+      spots:[
+        {n:"沙面岛", d:"欧陆建筑群与榕树荫道，随手一拍就是复古大片。"},
+        {n:"广州塔 · 小蛮腰", d:"登塔俯瞰珠江，夜游灯火是广州的名片。"},
+        {n:"陈家祠", d:"岭南建筑艺术的集大成者，木雕砖雕看得人挪不开眼。"},
+        {n:"白云山", d:"城市绿肺，登摩星岭可俯瞰整座广州城。"}
+      ],
+      foods:[
+        {n:"广式早茶", d:"虾饺、烧卖、凤爪配一壶菊普，慢悠悠吃到中午。"},
+        {n:"煲仔饭", d:"腊味煲仔饭锅巴焦香，冬天来一锅最治愈。"},
+        {n:"白切鸡", d:"皮爽肉嫩骨带血，蘸姜葱蓉是关键。"}
+      ],
+      tips:["老城区景点集中在地铁 1/6 号线沿线，建议地铁 + 步行。","热门早茶店 9:30 后开始排队，可先线上取号再去逛。"]
+    },
+    {
+      city:"深圳", short:"大鹏所城", title:"深圳 · 大鹏半岛", terrain:"sea", water:"大鹏湾", layout:3,
+      tags:["深圳","大鹏","较场尾","杨梅坑","西涌","本地","周边","市内","海边","民宿"],
+      distance:"约 60 公里", drive:"约 1 小时 10 分钟", transport:"自驾 / 公交",
+      routeText:"深圳市区 → 盐坝高速 → 葵涌 → 大鹏所城",
+      routeDetail:"全程约 60 公里；节假日大鹏半岛实行预约通行，出发前需在「深圳交警」预约。",
+      spots:[
+        {n:"大鹏所城", d:"六百年海防军事古城，青石板巷里藏着将军第。"},
+        {n:"较场尾", d:"深圳的「小鼓浪屿」，民宿小镇紧邻一片浅沙滩。"},
+        {n:"杨梅坑 · 鹿嘴山庄", d:"《美人鱼》取景地，沿海公路骑车看海极爽。"},
+        {n:"西涌天文台", d:"一边是山一边是海，也是看星空的热门地点。"}
+      ],
+      foods:[
+        {n:"大鹏窑鸡", d:"荔枝木土窑焖烤，撕开瞬间香气扑鼻。"},
+        {n:"南澳海鲜街", d:"濑尿虾、花蟹现捞现做，价格比市区亲民。"},
+        {n:"肠粉 + 艇仔粥", d:"本地人的早餐标配，清淡落胃。"}
+      ],
+      tips:["节假日进入大鹏半岛需提前预约通行，未预约会被劝返。","下海玩水请认准有救生员值守的沙滩区域。"]
+    },
+    {
+      city:"厦门", short:"鼓浪屿", title:"厦门 · 海岛慢生活", terrain:"sea", water:"台湾海峡", layout:0,
+      tags:["厦门","鼓浪屿","曾厝垵","环岛路","厦大","海边","海岛","福建"],
+      distance:"约 620 公里", drive:"约 7 小时", transport:"高铁 / 飞机",
+      routeText:"深圳北 → 厦深高铁 → 厦门站 → 轮渡至鼓浪屿",
+      routeDetail:"高铁约 3.5 小时直达厦门站，落地后轮渡 20 分钟上岛；鼓浪屿船票需实名提前预约。",
+      spots:[
+        {n:"鼓浪屿", d:"万国建筑与钢琴声交织的小岛，适合漫无目的地走。"},
+        {n:"环岛路", d:"最美海岸公路，租一辆单车从白城骑到椰风寨。"},
+        {n:"曾厝垵", d:"文艺渔村改造的小吃街，夜晚最热闹。"},
+        {n:"南普陀寺 · 白城沙滩", d:"寺后五老峰可俯瞰厦大与大海。"}
+      ],
+      foods:[
+        {n:"沙茶面", d:"浓郁沙茶汤底，加虾、鱿鱼与豆干最地道。"},
+        {n:"海蛎煎", d:"地瓜粉与鲜蚝同煎，蘸甜辣酱一口下去外脆里嫩。"},
+        {n:"姜母鸭", d:"麻油老姜焖煮，温补又下饭。"}
+      ],
+      tips:["鼓浪屿上岛船票分时段实名制，旺季至少提前 2 天买。","环岛路骑行注意防晒与海风，建议选清晨或傍晚。"]
+    },
+    {
+      city:"桂林", short:"漓江", title:"桂林 · 漓江山水", terrain:"mountain", water:"", layout:1,
+      tags:["桂林","漓江","阳朔","遇龙河","龙脊","山水","竹筏","广西"],
+      distance:"约 520 公里", drive:"约 6 小时", transport:"高铁 / 自驾",
+      routeText:"深圳北 → 贵广高铁 → 桂林西 → 漓江杨堤码头",
+      routeDetail:"高铁约 3 小时到桂林西；漓江竹筏按段落售票，出发前务必确认上船码头。",
+      spots:[
+        {n:"漓江竹筏（杨堤—兴坪）", d:"20 元人民币背景图就在这段江面上。"},
+        {n:"遇龙河漂流", d:"比漓江更安静，人工撑筏缓缓穿过田园。"},
+        {n:"阳朔西街", d:"千年老街，白天喝咖啡、晚上听民谣。"},
+        {n:"龙脊梯田", d:"一层层曲线从山脚盘到云端，日出最震撼。"}
+      ],
+      foods:[
+        {n:"桂林米粉", d:"卤水拌粉配锅烧，先干拌后喝汤是本地吃法。"},
+        {n:"阳朔啤酒鱼", d:"漓江剑骨鱼加番茄啤酒焖煮，酸甜鲜辣。"},
+        {n:"荔浦扣肉", d:"芋头夹五花肉蒸到酥烂，入口即化。"}
+      ],
+      tips:["雨季江水上涨，竹筏可能临时停运，出发当天再确认一次。","龙脊梯田山路弯多，容易晕车者提前备好晕车贴。"]
+    },
+    {
+      city:"成都", short:"成都", title:"成都 · 巴适慢生活", terrain:"city", water:"", layout:2,
+      tags:["成都","熊猫","宽窄巷子","锦里","都江堰","火锅","四川","川西"],
+      distance:"约 1900 公里", drive:"约 21 小时", transport:"飞机",
+      routeText:"深圳宝安 → 双流 / 天府机场 → 地铁 10 号线 → 市区",
+      routeDetail:"飞行约 2 小时 40 分钟最划算；市区景点地铁基本可达，熊猫基地有直达地铁 3 号线。",
+      spots:[
+        {n:"大熊猫繁育研究基地", d:"开园就去，能看到熊猫最活跃的吃竹时间。"},
+        {n:"宽窄巷子", d:"清代胡同改造，掏耳朵、盖碗茶是标配。"},
+        {n:"锦里 · 武侯祠", d:"三国文化与川西民俗混在一起的热闹街区。"},
+        {n:"都江堰", d:"两千年仍在使用的水利工程，鱼嘴分江值得一看。"}
+      ],
+      foods:[
+        {n:"成都火锅", d:"牛油锅底配毛肚鸭肠，怕辣就先点鸳鸯锅。"},
+        {n:"串串香 / 冒菜", d:"一人也能吃的火锅，按签计价性价比高。"},
+        {n:"钟水饺 + 龙抄手", d:"红油蒜香的老字号小吃搭档。"}
+      ],
+      tips:["熊猫基地建议 07:30 开园即入场，10 点后熊猫基本在睡觉。","高原线路（川西）与市区温差大，注意分层穿衣。"]
+    },
+    {
+      city:"西安", short:"西安", title:"西安 · 长安十二时辰", terrain:"city", water:"", layout:3,
+      tags:["西安","兵马俑","城墙","大唐不夜城","回民街","长安","陕西","历史"],
+      distance:"约 1650 公里", drive:"约 19 小时", transport:"飞机 / 高铁",
+      routeText:"深圳北 → 高铁（约 8 小时）→ 西安北 → 地铁 2 号线 → 钟楼",
+      routeDetail:"建议飞机约 2 小时 50 分钟；市区以地铁 2 号线为中轴，去兵马俑可在火车站东广场乘游 5 路。",
+      spots:[
+        {n:"秦始皇兵马俑", d:"站在坑道前的震撼，照片传达不了十分之一。"},
+        {n:"西安城墙", d:"13.7 公里完整古城墙，傍晚骑行一圈最舒服。"},
+        {n:"大唐不夜城", d:"灯光与唐风建筑拉满，不倒翁表演要提前占位。"},
+        {n:"钟鼓楼 · 回民街", d:"登楼看城市中轴，下楼就扎进小吃江湖。"}
+      ],
+      foods:[
+        {n:"肉夹馍 + 凉皮", d:"腊汁肉剁碎夹进白吉馍，配一碗酸辣凉皮。"},
+        {n:"羊肉泡馍", d:"自己掰馍才正宗，掰得越小越入味。"},
+        {n:"biangbiang 面", d:"裤带般宽的手扯面，油泼辣子是灵魂。"}
+      ],
+      tips:["兵马俑强烈建议请讲解或租讲解器，自己看容易走马观花。","城墙骑行建议傍晚 17:00 后，正午暴晒且无遮挡。"]
+    },
+    {
+      city:"杭州", short:"西湖", title:"杭州 · 西湖山水", terrain:"city", water:"", layout:0,
+      tags:["杭州","西湖","灵隐","龙井","西溪","断桥","苏堤","浙江"],
+      distance:"约 1400 公里", drive:"约 15 小时", transport:"飞机 / 高铁",
+      routeText:"深圳北 → 高铁（约 7 小时）→ 杭州东 → 地铁 1 号线 → 龙翔桥",
+      routeDetail:"高铁直达杭州东，西湖周边周末单双号限行且停车贵，地铁 + 共享单车是更优解。",
+      spots:[
+        {n:"西湖 · 断桥苏堤", d:"环湖一圈约 15 公里，骑车或坐船都值得。"},
+        {n:"灵隐寺", d:"千年古刹藏在飞来峰下，清晨最清幽。"},
+        {n:"龙井村 · 九溪十八涧", d:"茶园梯田与溪水小径，走完正好喝杯明前茶。"},
+        {n:"西溪湿地", d:"摇橹船穿行芦苇荡，城市里难得的野趣。"}
+      ],
+      foods:[
+        {n:"片儿川", d:"雪菜笋片肉丝面，杭州人的日常一碗。"},
+        {n:"西湖醋鱼", d:"酸甜芡汁裹着嫩鱼肉，口味偏清爽。"},
+        {n:"东坡肉", d:"焖到颤巍巍的方块肉，配荷叶饼解腻。"}
+      ],
+      tips:["西湖周末人流极大，建议 08:00 前环湖或改走杨公堤。","龙井村买茶认准「明前」，散客尽量在正规茶庄试喝后购买。"]
+    },
+    {
+      city:"三亚", short:"亚龙湾", title:"三亚 · 热带海岸", terrain:"sea", water:"南海", layout:1,
+      tags:["三亚","亚龙湾","蜈支洲","海南","海岛","冲浪","潜水","热带","海边"],
+      distance:"约 900 公里", drive:"约 11 小时（含轮渡）", transport:"飞机",
+      routeText:"深圳 → 直飞三亚凤凰机场 → 亚龙湾",
+      routeDetail:"飞行约 1 小时 40 分钟；环岛高铁也很方便，亚龙湾站打车 20 分钟到海滩。",
+      spots:[
+        {n:"亚龙湾", d:"「天下第一湾」，白沙滩与渐变海水最适合躺平。"},
+        {n:"蜈支洲岛", d:"能见度极高的潜水胜地，水上项目最全。"},
+        {n:"椰梦长廊", d:"20 公里海岸椰林，日落时分整条路都是金色。"},
+        {n:"后海村", d:"冲浪新手的乐园，村里全是板与浪的故事。"}
+      ],
+      foods:[
+        {n:"清补凉", d:"椰奶打底加十几种配料，热天续命神器。"},
+        {n:"文昌鸡", d:"白切后蘸金桔酱，皮爽肉嫩。"},
+        {n:"第一市场海鲜加工", d:"自采海鲜交给加工店，先谈好加工费。"}
+      ],
+      tips:["海岛项目建议提前一天预订，出发前查看天气与船票是否受风浪影响。","热带紫外线极强，防晒霜、保湿和电解质水都要备足。"]
+    },
+    {
+      city:"大理", short:"洱海", title:"大理 · 风花雪月", terrain:"mountain", water:"", layout:2,
+      tags:["大理","洱海","苍山","古城","喜洲","云南","骑行","丽江"],
+      distance:"约 1700 公里", drive:"约 20 小时", transport:"飞机",
+      routeText:"深圳 → 直飞大理 / 昆明转高铁 → 大理站 → 洱海生态廊道",
+      routeDetail:"直飞大理约 3 小时；无直飞时飞昆明转高铁 2 小时也很顺。环洱海约 130 公里。",
+      spots:[
+        {n:"洱海生态廊道", d:"贴着湖面骑行，一路是芦苇、湿地与苍山倒影。"},
+        {n:"大理古城", d:"人民路与洋人街，慢节奏是这里的唯一规矩。"},
+        {n:"崇圣寺三塔", d:"南诏国皇家寺院，三塔倒影公园是最佳机位。"},
+        {n:"喜洲古镇", d:"白族民居与金黄稻田，转角楼一定要合影。"}
+      ],
+      foods:[
+        {n:"酸辣鱼", d:"洱海鲫鱼配木瓜酸汤，酸辣开胃。"},
+        {n:"乳扇", d:"牛奶炸成扇形薄片，玫瑰酱是灵魂。"},
+        {n:"饵丝 / 破酥粑粑", d:"本地人从早吃到晚的主食组合。"}
+      ],
+      tips:["高原紫外线强，环洱海骑行务必防晒并带足水。","古城石板路拖行李箱很吃力，建议订古城外或安排接送。"]
+    },
+    {
+      city:"青岛", short:"八大关", title:"青岛 · 红瓦碧海", terrain:"sea", water:"黄海", layout:3,
+      tags:["青岛","栈桥","八大关","崂山","啤酒","金沙滩","山东","海边"],
+      distance:"约 1900 公里", drive:"约 21 小时", transport:"飞机 / 高铁",
+      routeText:"深圳 → 直飞青岛胶东机场 → 地铁 8 号线 → 栈桥",
+      routeDetail:"飞行约 3 小时；老城区景点集中在沿海一线，步行 + 地铁即可覆盖。",
+      spots:[
+        {n:"栈桥 · 回澜阁", d:"百年海上长桥，是青岛的城市logo。"},
+        {n:"八大关", d:"十条以关隘命名的老街，万国建筑与林荫道。"},
+        {n:"崂山", d:"海上第一名山，仰口线山海相连最出片。"},
+        {n:"小麦岛", d:"草坪、木栈道与整片海，看日落的绝佳位置。"}
+      ],
+      foods:[
+        {n:"原浆啤酒 + 辣炒蛤蜊", d:"塑料袋装原浆是本地仪式感，配蛤蜊绝了。"},
+        {n:"鲅鱼饺子", d:"个大馅足，一口咬开满嘴鲜。"},
+        {n:"排骨米饭", d:"酱香排骨配大碗米饭，青岛人的工作餐。"}
+      ],
+      tips:["海边风大、早晚温差明显，薄外套一定要带。","喝原浆就别开车，青岛查酒驾很严格。"]
+    },
+    {
+      city:"重庆", short:"洪崖洞", title:"重庆 · 8D 魔幻山城", terrain:"city", water:"", layout:0,
+      tags:["重庆","洪崖洞","解放碑","李子坝","磁器口","火锅","山城","长江索道"],
+      distance:"约 1450 公里", drive:"约 17 小时", transport:"飞机 / 高铁",
+      routeText:"深圳北 → 高铁（约 7.5 小时）→ 重庆北 → 轨道 6 号线 → 解放碑",
+      routeDetail:"高铁或飞机均可；轻轨是重庆最好用的交通工具，导航请认准「出口编号」。",
+      spots:[
+        {n:"洪崖洞", d:"11 层吊脚楼依崖而建，夜晚灯光像《千与千寻》。"},
+        {n:"长江索道", d:"横跨长江的空中公交，5 分钟穿越两岸。"},
+        {n:"李子坝轻轨穿楼", d:"轻轨从居民楼里穿出来，观景平台看最清楚。"},
+        {n:"磁器口古镇", d:"嘉陵江边老码头，麻花与茶馆一路飘香。"}
+      ],
+      foods:[
+        {n:"重庆小面", d:"麻辣干香，按两计价，一定说清辣度。"},
+        {n:"九宫格火锅", d:"牛油翻滚，毛肚七上八下最脆嫩。"},
+        {n:"酸辣粉", d:"红薯粉滑弹，酸辣汤底一口上头。"}
+      ],
+      tips:["立体城市导航容易「迷路」，同一坐标可能在 1 楼也可能在 11 楼，多问本地人。","坡道与台阶极多，务必穿舒适的平底鞋。"]
+    },
+    {
+      city:"长沙", short:"橘子洲", title:"长沙 · 烟火星城", terrain:"city", water:"", layout:1,
+      tags:["长沙","橘子洲","岳麓山","五一广场","太平街","臭豆腐","湖南","口味虾"],
+      distance:"约 800 公里", drive:"约 9 小时", transport:"高铁",
+      routeText:"深圳北 → 京广高铁（约 2 小时 40 分）→ 长沙南 → 地铁 2 号线 → 橘子洲",
+      routeDetail:"高铁是性价比之王；地铁 2 号线串联橘子洲、五一广场，几乎不用打车。",
+      spots:[
+        {n:"橘子洲", d:"湘江江心洲，青年毛泽东雕像必打卡。"},
+        {n:"岳麓山 · 爱晚亭", d:"「停车坐爱枫林晚」，秋天红叶最出名。"},
+        {n:"太平老街 · 五一广场", d:"小吃密度全城第一，晚上越夜越热闹。"},
+        {n:"湖南博物院", d:"马王堆汉墓陈列，辛追夫人的故事很震撼。"}
+      ],
+      foods:[
+        {n:"臭豆腐", d:"外黑里嫩，灌上蒜蓉辣汁才算完整。"},
+        {n:"口味虾", d:"小龙虾配紫苏，夏夜宵夜的绝对主角。"},
+        {n:"糖油粑粑 / 嗦粉", d:"甜糯解辣，与一碗肉丝粉最搭。"}
+      ],
+      tips:["夏季炎热且潮湿，建议把行程排在清晨与傍晚。","热门奶茶可用小程序提前下单，能省下大把排队时间。"]
+    },
+    {
+      city:"张家界", short:"张家界", title:"张家界 · 奇峰三千", terrain:"mountain", water:"", layout:2,
+      tags:["张家界","天门山","袁家界","凤凰古城","玻璃栈道","湖南","阿凡达","金鞭溪"],
+      distance:"约 1100 公里", drive:"约 12 小时", transport:"飞机 / 高铁",
+      routeText:"深圳 → 飞张家界荷花机场（约 2 小时）→ 武陵源门票站",
+      routeDetail:"直飞最省时；张家界西站高铁也可达。景区内必须换乘环保车，建议住在武陵源门口。",
+      spots:[
+        {n:"袁家界 · 天下第一桥", d:"《阿凡达》悬浮山的原型，云雾天如置仙境。"},
+        {n:"天门山玻璃栈道", d:"99 道弯盘山公路 + 悬空栈道，胆量考验。"},
+        {n:"金鞭溪", d:"沿溪谷步行 7 公里，两侧全是石峰与野猴。"},
+        {n:"凤凰古城", d:"沱江吊脚楼夜景，适合作为行程最后一站。"}
+      ],
+      foods:[
+        {n:"三下锅", d:"腊肉、豆腐、萝卜一锅炖，湘西山里味。"},
+        {n:"岩耳炖鸡", d:"岩耳生长在悬崖上，炖汤清鲜滋补。"},
+        {n:"腊味合蒸", d:"柴火腊肉腊鱼同蒸，配米饭能吃三碗。"}
+      ],
+      tips:["山区天气多变，薄外套与轻便雨具随身带。","景区换乘环保车排队久，尽量在开园第一时间进山。"]
+    },
+    {
+      city:"北京", short:"故宫", title:"北京 · 皇城根儿", terrain:"city", water:"", layout:3,
+      tags:["北京","故宫","长城","颐和园","南锣鼓巷","什刹海","首都","胡同"],
+      distance:"约 2150 公里", drive:"约 24 小时", transport:"飞机 / 高铁",
+      routeText:"深圳 → 飞北京（约 3 小时 20 分）→ 地铁 1 号线 → 天安门东",
+      routeDetail:"飞机最实用；市内景点地铁几乎全覆盖，早晚高峰不建议打车穿过二环。",
+      spots:[
+        {n:"故宫博物院", d:"中轴线一路走进去，红墙金瓦的尺度感极强。"},
+        {n:"八达岭长城", d:"不到长城非好汉，风大记得穿防风外套。"},
+        {n:"颐和园", d:"长廊、十七孔桥与昆明湖，皇家园林的范本。"},
+        {n:"什刹海 · 南锣鼓巷", d:"胡同、酒吧与老北京烟火气混在一起。"}
+      ],
+      foods:[
+        {n:"北京烤鸭", d:"果木挂炉，皮蘸白糖、肉卷荷叶饼。"},
+        {n:"炸酱面", d:"菜码七碟八碗，拌开就是家常味。"},
+        {n:"豆汁儿焦圈", d:"本地人的早餐挑战，敢试才是真勇士。"}
+      ],
+      tips:["故宫需提前 7 天实名预约，周一闭馆，务必先抢票再定行程。","长城风大温差大，防风外套与舒适鞋必备。"]
+    }
+  ];
+
+  var CITY_ALIAS = ["深圳","广州","东莞","佛山","珠海","中山","惠州","汕头","上海","北京","成都","杭州","西安","长沙","重庆","南京","武汉","苏州","天津","青岛","厦门","三亚","桂林","大理","丽江","张家界","黄山","福州","昆明","贵阳","南昌","合肥","郑州","济南"];
+
+  var WEEK = ["周日","周一","周二","周三","周四","周五","周六"];
+  var CHIPS = [
+    "周末从深圳出发，想去惠州海边玩一天",
+    "三天时间，去成都吃火锅看熊猫",
+    "想去西安看兵马俑",
+    "情侣两人，厦门鼓浪屿慢游两天",
+    "带娃去珠海长隆和海边",
+    "下周想去杭州西湖逛逛"
+  ];
+
+  /* ============ 2. DOM ============ */
+  var $ = function(id){ return document.getElementById(id); };
+  var need = $("need"), shell = $("shell"), clearBtn = $("clear"), goBtn = $("go"), goTxt = $("goTxt");
+  var think = $("think"), steps = $("steps"), bar = $("bar"), result = $("result");
+  var voice = $("voice"), bubble = $("bubble"), bubbleTxt = $("bubbleTxt");
+
+  var rotate = 0; // 「换一批」轮转
+  var lastContext = null;
+
+  // 示例 chips
+  (function initChips(){
+    var box = $("chips");
+    CHIPS.forEach(function(t){
+      var b = document.createElement("button");
+      b.className = "chip"; b.type = "button"; b.textContent = t;
+      b.addEventListener("click", function(){
+        need.value = t; toggleClear(); need.focus();
+      });
+      box.appendChild(b);
+    });
+  })();
+
+  function toggleClear(){ clearBtn.classList.toggle("on", need.value.length > 0); }
+  need.addEventListener("input", toggleClear);
+  clearBtn.addEventListener("click", function(){ need.value=""; toggleClear(); need.focus(); });
+  need.addEventListener("keydown", function(e){ if(e.key === "Enter"){ e.preventDefault(); goBtn.click(); } });
+
+  /* ============ 3. 意图解析 ============ */
+  function matchDest(text){
+    var t = text || "";
+    var best = null, bestScore = 0;
+    DESTS.forEach(function(d){
+      var s = 0;
+      d.tags.forEach(function(tag){
+        if(t.indexOf(tag) !== -1){
+          s += (tag === d.city) ? 10 : (tag.length >= 3 ? 5 : 3);
+        }
+      });
+      if(s > bestScore){ bestScore = s; best = d; }
+    });
+    return {dest: best, score: bestScore};
+  }
+
+  function detectOrigin(text, dest){
+    var t = text || "";
+    var m = t.match(/(?:从|自)\s*([\u4e00-\u9fa5]{2,4})\s*(?:出发|动身|走)/);
+    if(m) return m[1];
+    var found = [];
+    CITY_ALIAS.forEach(function(c){
+      if(t.indexOf(c) !== -1 && found.indexOf(c) === -1) found.push(c);
+    });
+    if(found.length){
+      var others = found.filter(function(c){ return !dest || c !== dest.city; });
+      if(others.length) return others[0];
+      return found[0];
+    }
+    return null;
+  }
+
+  function planDate(text){
+    var t = text || "", d = new Date();
+    if(/后天/.test(t)) d.setDate(d.getDate()+2);
+    else if(/明天|明儿|明日/.test(t)) d.setDate(d.getDate()+1);
+    else if(/今天|今日|现在/.test(t)) { /* 今天 */ }
+    else {
+      var add = (6 - d.getDay() + 7) % 7;      // 最近的周六
+      if(/(下{1}周|下个?星期)/.test(t)) add += 7;
+      d.setDate(d.getDate()+add);
+    }
+    return (d.getMonth()+1) + "月" + d.getDate() + "日 · " + WEEK[d.getDay()];
+  }
+
+  function planDays(text, dest){
+    var t = text || "";
+    var m = t.match(/([0-9一二三四五六七八两]|半)\s*天/);
+    if(m){
+      var map = {"1":1,"2":2,"3":3,"4":4,"5":5,"6":6,"7":7,"8":8,"一":1,"二":2,"两":2,"三":3,"四":4,"五":5,"六":6,"七":7,"八":8,"半":0.5};
+      var v = map[m[1]];
+      if(v) return (v === 0.5) ? "半日" : v + " 天";
+    }
+    if(/一日|一天/.test(t)) return "1 天";
+    if(/周|星期/.test(t)) return "2 天";
+    return (dest && dest.city === "深圳") ? "1 天" : "2 天 1 晚";
+  }
+
+  function pick(arr, n, offset){
+    var out = [], len = arr.length;
+    for(var i=0;i<n;i++) out.push(arr[(i + offset) % len]);
+    return out;
+  }
+
+  /* ============ 4. 思考过程 ============ */
+  function sleep(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+
+  async function runThinking(dest, text, origin){
+    think.classList.add("on");
+    steps.innerHTML = ""; bar.style.width = "0%";
+    var list = [
+      "正在解析出行意图：「" + (text.length > 22 ? text.slice(0,22) + "…" : text) + "」",
+      "识别到目的地：" + dest.title + "，匹配到 " + dest.tags.length + " 个语义标签",
+      "正在规划最优路线" + (origin ? "（" + origin + " → " + dest.city + "）" : "") + "，预估耗时与里程…",
+      "正在调用 POI 推荐，筛选周边景点与本地特色美食…",
+      "正在生成出行贴士并绘制迷你足迹地图…"
+    ];
+    var per = 460;
+    for(var i=0;i<list.length;i++){
+      var li = document.createElement("li");
+      li.className = "active";
+      li.textContent = list[i];
+      steps.appendChild(li);
+      bar.style.width = Math.round(((i+0.5)/list.length)*100) + "%";
+      await sleep(per);
+      li.className = "done";
+      bar.style.width = Math.round(((i+1)/list.length)*100) + "%";
+    }
+    await sleep(240);
+    think.classList.remove("on");
+  }
+
+  /* ============ 5. 迷你足迹地图 ============ */
+  function smoothPath(pts){
+    if(pts.length < 2) return "";
+    var d = "M " + pts[0][0] + " " + pts[0][1];
+    for(var i=1;i<pts.length-1;i++){
+      var mx = (pts[i][0] + pts[i+1][0]) / 2;
+      var my = (pts[i][1] + pts[i+1][1]) / 2;
+      d += " Q " + pts[i][0] + " " + pts[i][1] + " " + mx + " " + my;
+    }
+    var last = pts[pts.length-1];
+    d += " L " + last[0] + " " + last[1];
+    return d;
+  }
+
+  function terrainSVG(kind, label){
+    if(kind === "sea"){
+      return '<path d="M0 0 H640 V92 Q 500 148 340 108 Q 180 66 0 112 Z" fill="#D9EAFF" stroke="#BFDCFF" stroke-width="1.5"/>' +
+             '<path d="M0 18 Q 60 6 118 18 T 236 18 T 354 18 T 472 18 T 590 18" fill="none" stroke="#FFFFFF" stroke-width="3" opacity=".75"/>' +
+             '<text x="20" y="34" font-size="12" fill="#5B8BD0" font-weight="600">' + label + '</text>';
+    }
+    if(kind === "mountain"){
+      return '<path d="M40 104 L128 26 L214 104 Z" fill="#DFF3E6" stroke="#BFE6CD" stroke-width="1.5"/>' +
+             '<path d="M170 104 L262 12 L354 104 Z" fill="#D2EDDD" stroke="#B2DFC6" stroke-width="1.5"/>' +
+             '<path d="M300 104 L392 34 L484 104 Z" fill="#E4F5EA" stroke="#C4E8D3" stroke-width="1.5"/>' +
+             '<text x="24" y="128" font-size="12" fill="#4F9A72" font-weight="600">山地景区</text>';
+    }
+    return '<g opacity=".9">' +
+             '<rect x="24" y="20" width="132" height="74" rx="8" fill="#EDF1F7" stroke="#DDE4EF"/>' +
+             '<rect x="176" y="42" width="108" height="52" rx="8" fill="#EDF1F7" stroke="#DDE4EF"/>' +
+             '<rect x="304" y="16" width="128" height="70" rx="8" fill="#EDF1F7" stroke="#DDE4EF"/>' +
+             '<rect x="452" y="46" width="150" height="46" rx="8" fill="#E4F3E9" stroke="#CDE9D8"/>' +
+             '<text x="470" y="74" font-size="11.5" fill="#4F9A72" font-weight="600">城市公园</text>' +
+             '<text x="24" y="118" font-size="12" fill="#8794A8" font-weight="600">城区道路</text>' +
+           '</g>';
+  }
+
+  function buildMap(dest, spots, originName){
+    var L = LAYOUTS[dest.layout || 0];
+    var pts = [ORIGIN];
+    spots.forEach(function(s, i){ pts.push(L.spots[i] || L.spots[0]); });
+    pts.push(L.dest);
+    var d = smoothPath(pts);
+
+    var svg = '<svg viewBox="0 0 640 360" preserveAspectRatio="xMidYMid meet" role="img" aria-label="迷你足迹地图">';
+    svg += '<defs>' +
+             '<filter id="sh" x="-30%" y="-30%" width="160%" height="160%">' +
+               '<feDropShadow dx="0" dy="1.5" stdDeviation="1.6" flood-color="#16305F" flood-opacity=".22"/>' +
+             '</filter>' +
+           '</defs>';
+
+    // 装饰道路
+    svg += '<g stroke="#E6ECF6" stroke-width="7" stroke-linecap="round" fill="none">' +
+             '<path d="M0 300 H640"/><path d="M590 0 V360"/><path d="M0 176 H640"/>' +
+           '</g>';
+
+    svg += terrainSVG(dest.terrain, dest.water || "海域");
+
+    // 路线
+    svg += '<path d="' + d + '" fill="none" stroke="#FFFFFF" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>';
+    svg += '<path d="' + d + '" fill="none" stroke="#0066FF" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>';
+    svg += '<path d="' + d + '" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 20" style="animation:flow 5s linear infinite"/>';
+
+    // 景点
+    spots.forEach(function(s, i){
+      var p = L.spots[i] || L.spots[0];
+      var anchor = p[0] > 430 ? "end" : "middle";
+      var tx = p[0] > 430 ? p[0] - 18 : p[0];
+      svg += '<g filter="url(#sh)"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="14" fill="#FFFFFF" stroke="#0066FF" stroke-width="2.5"/></g>';
+      svg += '<text x="' + p[0] + '" y="' + (p[1] + 4.5) + '" text-anchor="middle" font-size="12" font-weight="700" fill="#0066FF">' + (i+1) + '</text>';
+      svg += '<text x="' + tx + '" y="' + (p[1] + 32) + '" text-anchor="' + anchor + '" font-size="12.5" fill="#2E3D55" stroke="#FFFFFF" stroke-width="3.2" paint-order="stroke" font-weight="600">' + esc(s.n) + '</text>';
+    });
+
+    // 出发地
+    svg += '<g filter="url(#sh)"><circle cx="' + ORIGIN[0] + '" cy="' + ORIGIN[1] + '" r="11" fill="#FFFFFF" stroke="#0066FF" stroke-width="3.5"/></g>';
+    svg += '<circle cx="' + ORIGIN[0] + '" cy="' + ORIGIN[1] + '" r="4.5" fill="#0066FF"/>';
+    svg += '<text x="' + ORIGIN[0] + '" y="' + (ORIGIN[1] + 30) + '" text-anchor="middle" font-size="12.5" fill="#2E3D55" stroke="#FFFFFF" stroke-width="3.2" paint-order="stroke" font-weight="700">' + esc(originName) + '</text>';
+
+    // 目的地
+    svg += '<g filter="url(#sh)"><circle cx="' + L.dest[0] + '" cy="' + L.dest[1] + '" r="13" fill="#FF5A3C" stroke="#FFFFFF" stroke-width="3.5"/></g>';
+    svg += '<circle cx="' + L.dest[0] + '" cy="' + L.dest[1] + '" r="4.5" fill="#FFFFFF"/>';
+    svg += '<text x="' + L.dest[0] + '" y="' + (L.dest[1] + 32) + '" text-anchor="middle" font-size="12.5" fill="#C43A1F" stroke="#FFFFFF" stroke-width="3.2" paint-order="stroke" font-weight="700">' + esc(dest.short) + '</text>';
+
+    svg += '</svg>';
+    return svg;
+  }
+
+  function esc(s){
+    return String(s).replace(/[&<>"]/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];
+    });
+  }
+
+  /* ============ 6. 渲染行程 ============ */
+  function render(ctx){
+    var dest = ctx.dest, spots = ctx.spots, foods = ctx.foods;
+
+    var html = "";
+    html += '<div class="card">';
+
+    // 头部
+    html += '<div class="result-head">' +
+              '<div style="flex:1;min-width:200px">' +
+                '<h2>' + esc(dest.title) + ' · AI 行程方案</h2>' +
+                '<div class="sub">出行日期 ' + ctx.date + ' ｜ 同行建议：' + ctx.people + ' ｜ 由叮当智能体生成</div>' +
+              '</div>' +
+              '<span class="tag">🤖 叮当智能体</span>' +
+              (ctx.fallback ? '<span class="tag warn">未识别明确目的地 · 热门推荐</span>' : '') +
+            '</div>';
+
+    // 概览
+    html += '<div class="sec-label"><span class="bar"></span>行程概览</div>';
+    html += '<div class="overview">' +
+              ov("📍", "目的地", dest.city, dest.short) +
+              ov("📅", "出行日期", ctx.date.split(" · ")[0], ctx.date.split(" · ")[1]) +
+              ov("⏱", "建议时长", ctx.days, "可按需增删") +
+              ov("🚗", "出行方式", dest.transport, dest.drive) +
+            '</div>';
+
+    // 路线
+    html += '<div class="sec-label"><span class="bar"></span>推荐路线</div>';
+    html += '<div class="route-box">' +
+              '<div class="route-line">' + esc(ctx.origin) + ' <span class="arrow">➜</span> ' + esc(dest.city) + '</div>' +
+              '<div class="route-meta">' +
+                '<span class="pill">🛣 ' + esc(dest.distance) + '</span>' +
+                '<span class="pill">⏱ 预计 ' + esc(dest.drive) + '</span>' +
+                '<span class="pill">🚦 实时路况：畅通</span>' +
+                '<span class="pill">🎯 途经 ' + spots.length + ' 个打卡点</span>' +
+              '</div>' +
+              '<div class="route-desc">' + esc(dest.routeText) + '<br>' + esc(dest.routeDetail) + '</div>' +
+            '</div>';
+
+    // 景点
+    html += '<div class="sec-label"><span class="bar"></span>景点推荐</div>';
+    spots.forEach(function(s, i){
+      html += '<div class="spot"><div class="no">' + (i+1) + '</div><div>' +
+                '<div class="sn">' + esc(s.n) + '</div>' +
+                '<div class="sd">' + esc(s.d) + '</div>' +
+              '</div></div>';
+    });
+
+    html += '</div>'; // end card
+
+    // 美食 + 贴士
+    html += '<div class="card">';
+    html += '<div class="sec-label"><span class="bar"></span>美食推荐</div>';
+    html += '<div class="food-grid">';
+    foods.forEach(function(f){
+      html += '<div class="food"><div class="fn">🍜 ' + esc(f.n) + '</div><div class="fd">' + esc(f.d) + '</div></div>';
+    });
+    html += '</div>';
+
+    html += '<div class="sec-label" style="margin-top:18px"><span class="bar"></span>实用贴士</div>';
+    html += '<div class="tips"><ul>';
+    dest.tips.forEach(function(t){ html += '<li>' + esc(t) + '</li>'; });
+    html += '</ul></div>';
+
+    html += '<div class="actions">' +
+              '<button class="btn-ghost" id="reshuffle">🔄 换一批推荐</button>' +
+              '<button class="btn-ghost" id="restart">✏️ 换个需求重新规划</button>' +
+            '</div>';
+    html += '</div>';
+
+    // 迷你地图
+    html += '<div class="card">';
+    html += '<div class="sec-label"><span class="bar"></span>迷你足迹地图</div>';
+    html += '<div class="map-canvas">' + buildMap(dest, spots, ctx.origin) +
+              '<div class="map-chip">🚗 ' + esc(ctx.origin) + ' → ' + esc(dest.city) + ' · ' + esc(dest.distance) + ' · ' + esc(dest.drive) + '</div>' +
+              '<div class="map-scale">示意地图 · 非真实比例尺</div>' +
+            '</div>';
+    html += '<div class="legend">' +
+              '<span><i class="lg" style="background:#0066FF"></i> 出发地</span>' +
+              '<span><i class="lg" style="background:#FF5A3C"></i> 目的地</span>' +
+              '<span><i class="lg" style="background:#fff;border:2px solid #0066FF"></i> 推荐打卡点</span>' +
+              '<span><i class="lg" style="background:#EAF2FF;border:1px solid #D6E6FF"></i> 景点序号</span>' +
+            '</div>';
+    html += '</div>';
+
+    result.innerHTML = html;
+    result.classList.add("on");
+
+    var rs = $("reshuffle");
+    if(rs) rs.addEventListener("click", function(){
+      rotate += 1;
+      var c = buildContext(lastContext.text, true);
+      render(c);
+      result.scrollIntoView({behavior:"smooth", block:"start"});
+      speak("已为你换一批推荐，看看这一版合不合心意？");
+    });
+    var rt = $("restart");
+    if(rt) rt.addEventListener("click", function(){
+      result.classList.remove("on");
+      result.innerHTML = "";
+      need.focus();
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+  }
+
+  function ov(icon, k, v, sub){
+    return '<div class="ov"><div class="k">' + icon + ' ' + k + '</div>' +
+           '<div class="v">' + esc(v) + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</div></div>';
+  }
+
+  /* ============ 7. 组装上下文 ============ */
+  function buildContext(text, keepDest){
+    var m = matchDest(text);
+    var dest = m.dest, fallback = false;
+    if(!dest || m.score === 0){
+      fallback = true;
+      dest = DESTS[(rotate) % DESTS.length];
+    }
+    var origin = detectOrigin(text, dest) || (dest.city === "深圳" ? "深圳市区" : "深圳");
+    if(origin === dest.city) origin = dest.city + "市区";
+    var people = /带娃|亲子|孩子|小孩|宝宝/.test(text) ? "亲子家庭"
+              : /情侣|两人|女朋友|男朋友|闺蜜/.test(text) ? "情侣 / 好友"
+              : /父母|爸妈|老人|长辈/.test(text) ? "带长辈出行"
+              : /一个人|独自|独行/.test(text) ? "单人出行"
+              : "朋友结伴";
+
+    var ctx = {
+      text: text,
+      dest: dest,
+      fallback: fallback,
+      origin: origin,
+      date: planDate(text),
+      days: planDays(text, dest),
+      people: people,
+      spots: pick(dest.spots, 3, rotate),
+      foods: pick(dest.foods, 2, rotate)
+    };
+    lastContext = ctx;
+    return ctx;
+  }
+
+  /* ============ 8. 主流程 ============ */
+  goBtn.addEventListener("click", async function(){
+    var text = (need.value || "").trim();
+    if(!text){
+      shell.classList.add("shake");
+      setTimeout(function(){ shell.classList.remove("shake"); }, 420);
+      need.placeholder = "先说一句你的出行想法吧，比如「周末去惠州看海」";
+      need.focus();
+      return;
+    }
+    var ctx = buildContext(text);
+    goBtn.disabled = true;
+    goBtn.classList.add("running");
+    goTxt.textContent = "叮当正在规划…";
+    result.classList.remove("on");
+    result.innerHTML = "";
+
+    await runThinking(ctx.dest, text, ctx.origin);
+
+    render(ctx);
+    goBtn.disabled = false;
+    goBtn.classList.remove("running");
+    goTxt.textContent = "AI 规划行程";
+    result.scrollIntoView({behavior:"smooth", block:"start"});
+    speak("路线已规划，祝您旅途愉快！");
+  });
+
+  /* ============ 9. 叮当语音彩蛋 ============ */
+  var LINES = [
+    "叮当在此，随时为您导航！",
+    "路线已规划，祝您旅途愉快！",
+    "前方 500 米，请保持直行～",
+    "已为您避开拥堵路段，安心出发！",
+    "叮～当～，行程管家已就位！",
+    "需要我重新规划路线吗？说一句话就行。",
+    "当前路况畅通，预计准点到达。"
+  ];
+  var li = 0;
+  var hideTimer = null;
+
+  function speak(txt){
+    bubbleTxt.textContent = txt;
+    bubble.classList.add("on");
+    voice.classList.add("speaking");
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(function(){
+      bubble.classList.remove("on");
+      voice.classList.remove("speaking");
+    }, 4200);
+    try{
+      if(window.speechSynthesis && window.SpeechSynthesisUtterance){
+        window.speechSynthesis.cancel();
+        var u = new SpeechSynthesisUtterance(txt);
+        u.lang = "zh-CN"; u.rate = 1.05; u.pitch = 1.05;
+        window.speechSynthesis.speak(u);
+      }
+    }catch(e){}
+  }
+
+  voice.addEventListener("click", function(){
+    if(bubble.classList.contains("on")){
+      bubble.classList.remove("on");
+      voice.classList.remove("speaking");
+      clearTimeout(hideTimer);
+      try{ if(window.speechSynthesis) window.speechSynthesis.cancel(); }catch(e){}
+      return;
+    }
+    li = (li + 1) % LINES.length;
+    speak(LINES[li]);
+  });
+
+  document.addEventListener("click", function(e){
+    if(!e.target.closest(".voice")){
+      bubble.classList.remove("on");
+      voice.classList.remove("speaking");
+    }
+  });
+
+  // 首屏欢迎
+  setTimeout(function(){ speak("叮当在此，随时为您导航！"); }, 900);
+})();
+</script>
+</body>
+</html>
