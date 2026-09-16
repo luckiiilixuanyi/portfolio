@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="1ABKQQHdNmARdCbwVePpO7">
+<head data-page-node-id="Xpf3QrH3Hf4CDUSyyrn8UD">
+<meta charset="UTF-8" data-page-node-id="67oUAgMzosdsuAwBIGfdHE">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="suKzTqVhA9dec4G8nY5GeF">
+<title>随手记账本</title>
+<style>
+  :root {
+    --blue-50:  #f2f8fd;
+    --blue-100: #e2f0fa;
+    --blue-200: #c3e0f5;
+    --blue-400: #5bb3e8;
+    --blue-500: #3a9ddd;
+    --blue-600: #2b86c4;
+    --mint-100: #dff5ec;
+    --mint-300: #8fdcc2;
+    --mint-400: #5fccaa;
+    --mint-500: #3fb894;
+    --ink-900: #1e2b33;
+    --ink-700: #40535f;
+    --ink-500: #6b8290;
+    --ink-300: #a8bac5;
+    --line:    #e6eef4;
+    --white:   #ffffff;
+    --danger:  #e8837b;
+    --shadow:  0 2px 10px rgba(58, 157, 221, .07);
+    --shadow-lg: 0 6px 24px rgba(58, 157, 221, .12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+                 "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: linear-gradient(160deg, var(--blue-50) 0%, #f7fcfa 55%, var(--mint-100) 100%);
+    min-height: 100vh;
+    color: var(--ink-900);
+    padding: 28px 16px 60px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 620px; margin: 0 auto; }
+
+  header { text-align: center; margin-bottom: 22px; }
+  header h1 {
+    font-size: 24px; font-weight: 700; letter-spacing: 1px;
+    color: var(--ink-900);
+    display: inline-flex; align-items: center; gap: 9px;
+  }
+  header h1 .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--mint-400); display: inline-block;
+  }
+  header p { color: var(--ink-500); font-size: 13px; margin-top: 7px; }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 18px;
+  }
+  .card-title {
+    font-size: 13px; font-weight: 600; color: var(--ink-500);
+    letter-spacing: .5px; margin-bottom: 14px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  /* ---------- 概览 ---------- */
+  .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 18px; }
+  .stat {
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: 16px; padding: 18px 20px; box-shadow: var(--shadow);
+    position: relative; overflow: hidden;
+  }
+  .stat::after {
+    content: ""; position: absolute; right: -22px; top: -22px;
+    width: 78px; height: 78px; border-radius: 50%; opacity: .35;
+  }
+  .stat.today::after { background: var(--blue-100); }
+  .stat.month::after { background: var(--mint-100); }
+  .stat .label { font-size: 12px; color: var(--ink-500); margin-bottom: 8px; position: relative; }
+  .stat .value {
+    font-size: 27px; font-weight: 700; letter-spacing: -.5px;
+    font-variant-numeric: tabular-nums; position: relative;
+  }
+  .stat.today .value { color: var(--blue-600); }
+  .stat.month .value { color: var(--mint-500); }
+  .stat .value .yen { font-size: 16px; font-weight: 600; margin-right: 3px; opacity: .8; }
+  .stat .sub { font-size: 11px; color: var(--ink-300); margin-top: 6px; position: relative; }
+
+  /* ---------- 表单 ---------- */
+  .field { margin-bottom: 13px; }
+  .field label {
+    display: block; font-size: 12px; color: var(--ink-700);
+    margin-bottom: 6px; font-weight: 500;
+  }
+  .field label .req { color: var(--danger); margin-left: 2px; }
+  input[type="text"], input[type="number"] {
+    width: 100%; padding: 11px 13px;
+    border: 1px solid var(--line); border-radius: 10px;
+    background: #fbfdfe; font-size: 15px; color: var(--ink-900);
+    font-family: inherit; transition: border-color .15s, box-shadow .15s, background .15s;
+    -moz-appearance: textfield;
+  }
+  input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input:focus {
+    outline: none; border-color: var(--blue-400); background: var(--white);
+    box-shadow: 0 0 0 3px rgba(91, 179, 232, .15);
+  }
+  input::placeholder { color: var(--ink-300); }
+  input.invalid { border-color: var(--danger); box-shadow: 0 0 0 3px rgba(232,131,123,.13); }
+
+  .cats { display: flex; flex-wrap: wrap; gap: 8px; }
+  .cat-btn {
+    padding: 8px 15px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--line); background: #fbfdfe;
+    font-size: 13px; color: var(--ink-700); font-family: inherit;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all .15s ease; user-select: none;
+  }
+  .cat-btn:hover { border-color: var(--blue-200); background: var(--blue-50); }
+  .cat-btn .chip { width: 8px; height: 8px; border-radius: 50%; }
+  .cat-btn.active {
+    background: var(--blue-500); border-color: var(--blue-500);
+    color: #fff; font-weight: 600; box-shadow: 0 3px 10px rgba(58,157,221,.28);
+  }
+
+  .btn-save {
+    width: 100%; margin-top: 6px; padding: 12px;
+    background: linear-gradient(135deg, var(--blue-500), var(--mint-400));
+    color: #fff; border: none; border-radius: 11px;
+    font-size: 15px; font-weight: 600; font-family: inherit;
+    cursor: pointer; letter-spacing: 1px;
+    box-shadow: 0 4px 14px rgba(58,157,221,.25);
+    transition: transform .12s, box-shadow .15s, opacity .15s;
+  }
+  .btn-save:hover { box-shadow: 0 6px 18px rgba(58,157,221,.34); }
+  .btn-save:active { transform: translateY(1px); }
+
+  /* ---------- 分布 ---------- */
+  .bar {
+    display: flex; height: 14px; border-radius: 7px; overflow: hidden;
+    background: #f0f5f8; margin-bottom: 16px;
+  }
+  .bar span { transition: width .4s ease; }
+  .legend { display: flex; flex-direction: column; gap: 9px; }
+  .legend-row { display: flex; align-items: center; gap: 10px; font-size: 13px; }
+  .legend-row .chip { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+  .legend-row .name { width: 40px; color: var(--ink-700); flex: none; }
+  .legend-row .track {
+    flex: 1; height: 7px; background: #f0f5f8; border-radius: 4px; overflow: hidden;
+  }
+  .legend-row .track i { display: block; height: 100%; border-radius: 4px; transition: width .4s ease; }
+  .legend-row .amt {
+    width: 88px; text-align: right; color: var(--ink-900);
+    font-variant-numeric: tabular-nums; flex: none;
+  }
+  .legend-row .pct {
+    width: 46px; text-align: right; color: var(--ink-300);
+    font-size: 12px; font-variant-numeric: tabular-nums; flex: none;
+  }
+  .empty { text-align: center; color: var(--ink-300); font-size: 13px; padding: 20px 0; }
+
+  /* ---------- 列表 ---------- */
+  .list { display: flex; flex-direction: column; }
+  .item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 4px; border-bottom: 1px solid var(--line);
+  }
+  .item:last-child { border-bottom: none; }
+  .item .icon {
+    width: 34px; height: 34px; border-radius: 10px; flex: none;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; color: #fff;
+  }
+  .item .mid { flex: 1; min-width: 0; }
+  .item .c1 {
+    font-size: 14px; color: var(--ink-900); font-weight: 500;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .item .c1 .tag {
+    font-size: 11px; font-weight: 500; padding: 1px 7px;
+    border-radius: 5px; background: #f0f5f8; color: var(--ink-500);
+  }
+  .item .c2 {
+    font-size: 11.5px; color: var(--ink-300); margin-top: 3px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .item .amt {
+    font-size: 15.5px; font-weight: 600; color: var(--ink-900);
+    font-variant-numeric: tabular-nums; flex: none;
+  }
+  .item .del {
+    width: 26px; height: 26px; border-radius: 7px; flex: none;
+    border: none; background: transparent; cursor: pointer;
+    color: var(--ink-300); font-size: 17px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    transition: all .15s; font-family: inherit;
+  }
+  .item .del:hover { background: #fdeeed; color: var(--danger); }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 34px; transform: translate(-50%, 14px);
+    background: var(--ink-900); color: #fff; padding: 10px 20px;
+    border-radius: 10px; font-size: 13.5px; opacity: 0;
+    pointer-events: none; transition: all .25s ease; z-index: 99;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (max-width: 480px) {
+    .stats { grid-template-columns: 1fr; }
+    .item .amt { font-size: 15px; }
+  }
+</style>
+</head>
+<body data-page-node-id="gZT9c8c05BCL8PI4sqxMd8">
+<div class="wrap" data-page-node-id="ACzkdMI2eoUoK5TJhHRovD">
+
+  <header data-page-node-id="IBbkldaFfFxt5ViKW1Gclq">
+    <h1 data-page-node-id="KaYcam7wVzX96iuCADDPdp"><span class="dot" data-page-node-id="uavuue7UYGvjz3lFLK3Ncn"></span>随手记账本</h1>
+    <p data-page-node-id="afHDPRz0uPrDySuVkK7v0w">记一笔，心里有数</p>
+  </header>
+
+  <!-- 概览 -->
+  <div class="stats" data-page-node-id="SZRz53QqezB2FvoN8kQO4I">
+    <div class="stat today" data-page-node-id="glMO82Qfx1c4AhBnEHLaDI">
+      <div class="label" data-page-node-id="Ow4itHAFKQbPidnrO7jnJo">今日支出</div>
+      <div class="value" data-page-node-id="Ht8wmcstoYfWUkKZl7JLj3"><span class="yen" data-page-node-id="EnKfrk35GUkmvzEz5U2rG9">¥</span><span id="todayTotal" data-page-node-id="EvgTSVbT1eABFzjAK1JTUW">0.00</span></div>
+      <div class="sub" id="todaySub" data-page-node-id="W2U66hEB3S3l1jzFsrdhC0">今天还没有记录</div>
+    </div>
+    <div class="stat month" data-page-node-id="I4J24FXbXR5kLYG8KVsipB">
+      <div class="label" data-page-node-id="a47zvnf8ebz2wwmgRD3Cmy">本月支出</div>
+      <div class="value" data-page-node-id="oiprWrROvv8b24ADUfHg4q"><span class="yen" data-page-node-id="A1lN9mNYWF1wCSATilnsIQ">¥</span><span id="monthTotal" data-page-node-id="WAFJAjbTWruJGQWHhFWN9s">0.00</span></div>
+      <div class="sub" id="monthSub" data-page-node-id="uOD3sj6U9FXHRsCCUlk0hF">本月共 0 笔</div>
+    </div>
+  </div>
+
+  <!-- 记一笔 -->
+  <div class="card" data-page-node-id="ngYU0EWoFSuCsHTYOgulDm">
+    <div class="card-title" data-page-node-id="FhSannVGjsGeFzrfOjlCaN">记一笔</div>
+    <div class="field" data-page-node-id="jHUm5JUS9s6bPMfX43CKyi">
+      <label for="amount" data-page-node-id="I4KD9RUp8v7xbcfsssYBnf">金额<span class="req" data-page-node-id="t3YmCF4Y9atZBH1PkiZCyy">*</span></label>
+      <input type="number" id="amount" placeholder="0.00" step="0.01" min="0" inputmode="decimal" data-page-node-id="HFbbh9MPh8fcrH0hya457W">
+    </div>
+    <div class="field" data-page-node-id="4dXMIDVBbfMqlJihYpjqpP">
+      <label data-page-node-id="a51q8kXuwPn4VfWoAjqNwi">类别</label>
+      <div class="cats" id="cats" data-page-node-id="zHG1RuVHCXYd9HL5eUQrEm"></div>
+    </div>
+    <div class="field" data-page-node-id="iHO2vqdTK29iCEYqs1X3w5">
+      <label for="note" data-page-node-id="Oh5tW30WbgpI4UWMQ41zEr">备注（可选）</label>
+      <input type="text" id="note" placeholder="比如：午饭、打车回家…" maxlength="40" data-page-node-id="JczvPrMR19BTZT0L4xwytB">
+    </div>
+    <button class="btn-save" id="saveBtn" data-page-node-id="QKIyfSkYOcMD2g1DqTfSoM">保存记录</button>
+  </div>
+
+  <!-- 本月分布 -->
+  <div class="card" data-page-node-id="6T98XPn207zifBAP6TAQXD">
+    <div class="card-title" data-page-node-id="eGG8VJ66B0cRqlJGtRfjf3"><span data-page-node-id="yN4Jb9CxBT56D843GY31fo">本月支出分布</span><span id="distTotal" style="color:var(--ink-300)" data-page-node-id="D0uGtN7zcVHPduGB7aSoMr"></span></div>
+    <div class="bar" id="bar" data-page-node-id="gPDiPUYLXkUYxwqDe936Es"></div>
+    <div class="legend" id="legend" data-page-node-id="8tTQMTZcDooSlIpUtpmkaq"></div>
+  </div>
+
+  <!-- 最近记录 -->
+  <div class="card" data-page-node-id="pIGL0PgZMxEg7kuDRJyZr4">
+    <div class="card-title" data-page-node-id="d6KjJTuqQA3PZQRXADHno6">最近 10 条记录</div>
+    <div class="list" id="list" data-page-node-id="xagfLhP5mksX4jXY3xHTIT"></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast" data-page-node-id="vmQY1sN0PtD85cGk6EWrlP"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORE_KEY = "ledger.records.v1";
+
+  var CATS = [
+    { key: "food",    name: "餐饮", icon: "饭", color: "#5bb3e8" },
+    { key: "traffic", name: "交通", icon: "行", color: "#5fccaa" },
+    { key: "shop",    name: "购物", icon: "购", color: "#7fc8e0" },
+    { key: "fun",     name: "娱乐", icon: "乐", color: "#9ad8bf" },
+    { key: "other",   name: "其他", icon: "他", color: "#b9cbd8" }
+  ];
+  var CAT_MAP = {};
+  CATS.forEach(function (c) { CAT_MAP[c.key] = c; });
+
+  var records = [];
+  var currentCat = "food";
+
+  /* ---------- 存储 ---------- */
+  function load() {
+    try {
+      var raw = localStorage.getItem(STORE_KEY);
+      var arr = raw ? JSON.parse(raw) : [];
+      records = Array.isArray(arr) ? arr.filter(function (r) {
+        return r && typeof r.amount === "number" && isFinite(r.amount);
+      }) : [];
+    } catch (e) {
+      records = [];
+    }
+  }
+  function save() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(records)); }
+    catch (e) { toast("本地存储写入失败"); }
+  }
+
+  /* ---------- 工具 ---------- */
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+  function ymd(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function money(n) {
+    return n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+  function timeLabel(ts) {
+    var d = new Date(ts), now = new Date();
+    var hm = pad(d.getHours()) + ":" + pad(d.getMinutes());
+    if (ymd(d) === ymd(now)) return "今天 " + hm;
+    var y = new Date(now.getTime() - 86400000);
+    if (ymd(d) === ymd(y)) return "昨天 " + hm;
+    return (d.getMonth() + 1) + "月" + d.getDate() + "日 " + hm;
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  var toastTimer;
+  function toast(msg) {
+    var el = document.getElementById("toast");
+    el.textContent = msg;
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove("show"); }, 1800);
+  }
+
+  /* ---------- 渲染 ---------- */
+  function renderStats() {
+    var now = new Date(), tKey = ymd(now), mKey = ymd(now).slice(0, 7);
+    var today = 0, month = 0, tCount = 0, mCount = 0;
+    records.forEach(function (r) {
+      var k = ymd(new Date(r.time));
+      if (k === tKey) { today += r.amount; tCount++; }
+      if (k.slice(0, 7) === mKey) { month += r.amount; mCount++; }
+    });
+    document.getElementById("todayTotal").textContent = money(today);
+    document.getElementById("monthTotal").textContent = money(month);
+    document.getElementById("todaySub").textContent = tCount ? "今天共 " + tCount + " 笔" : "今天还没有记录";
+    document.getElementById("monthSub").textContent = mCount ? "本月共 " + mCount + " 笔" : "本月还没有记录";
+  }
+
+  function renderDist() {
+    var mKey = ymd(new Date()).slice(0, 7);
+    var sums = {};
+    CATS.forEach(function (c) { sums[c.key] = 0; });
+    var total = 0;
+    records.forEach(function (r) {
+      if (ymd(new Date(r.time)).slice(0, 7) !== mKey) return;
+      if (sums[r.category] === undefined) sums[r.category] = 0;
+      sums[r.category] += r.amount;
+      total += r.amount;
+    });
+
+    var bar = document.getElementById("bar");
+    var legend = document.getElementById("legend");
+    document.getElementById("distTotal").textContent = total ? "合计 ¥" + money(total) : "";
+
+    if (!total) {
+      bar.innerHTML = "";
+      legend.innerHTML = '<div class="empty">本月还没有支出记录</div>';
+      return;
+    }
+
+    var rows = CATS.filter(function (c) { return sums[c.key] > 0; })
+                   .sort(function (a, b) { return sums[b.key] - sums[a.key]; });
+
+    var barHtml = rows.map(function (c) {
+      var p = sums[c.key] / total * 100;
+      return '<span style="width:' + p + '%;background:' + c.color + '"></span>';
+    }).join("");
+    bar.innerHTML = barHtml;
+
+    legend.innerHTML = rows.map(function (c) {
+      var p = sums[c.key] / total * 100;
+      return '<div class="legend-row">' +
+               '<span class="chip" style="background:' + c.color + '"></span>' +
+               '<span class="name">' + c.name + '</span>' +
+               '<span class="track"><i style="width:' + p + '%;background:' + c.color + '"></i></span>' +
+               '<span class="amt">¥' + money(sums[c.key]) + '</span>' +
+               '<span class="pct">' + p.toFixed(0) + '%</span>' +
+             '</div>';
+    }).join("");
+  }
+
+  function renderList() {
+    var box = document.getElementById("list");
+    var recent = records.slice().sort(function (a, b) { return b.time - a.time; }).slice(0, 10);
+
+    if (!recent.length) {
+      box.innerHTML = '<div class="empty">还没有记录，从上面记第一笔吧</div>';
+      return;
+    }
+
+    box.innerHTML = recent.map(function (r) {
+      var c = CAT_MAP[r.category] || CAT_MAP.other;
+      return '<div class="item">' +
+               '<span class="icon" style="background:' + c.color + '">' + c.icon + '</span>' +
+               '<div class="mid">' +
+                 '<div class="c1">' + (r.note ? esc(r.note) : c.name) +
+                   '<span class="tag">' + c.name + '</span>' +
+                 '</div>' +
+                 '<div class="c2">' + timeLabel(r.time) + '</div>' +
+               '</div>' +
+               '<span class="amt">¥' + money(r.amount) + '</span>' +
+               '<button class="del" data-id="' + r.id + '" title="删除">×</button>' +
+             '</div>';
+    }).join("");
+  }
+
+  function renderAll() { renderStats(); renderDist(); renderList(); }
+
+  /* ---------- 交互 ---------- */
+  function renderCatBtns() {
+    document.getElementById("cats").innerHTML = CATS.map(function (c) {
+      return '<button type="button" class="cat-btn' + (c.key === currentCat ? " active" : "") +
+             '" data-key="' + c.key + '">' +
+             '<span class="chip" style="background:' + (c.key === currentCat ? "#fff" : c.color) + '"></span>' +
+             c.name + '</button>';
+    }).join("");
+  }
+
+  document.getElementById("cats").addEventListener("click", function (e) {
+    var btn = e.target.closest(".cat-btn");
+    if (!btn) return;
+    currentCat = btn.dataset.key;
+    renderCatBtns();
+  });
+
+  function add() {
+    var amountEl = document.getElementById("amount");
+    var v = parseFloat(amountEl.value);
+    if (!isFinite(v) || v <= 0) {
+      amountEl.classList.add("invalid");
+      amountEl.focus();
+      toast("请输入大于 0 的金额");
+      return;
+    }
+    amountEl.classList.remove("invalid");
+    records.push({
+      id: Date.now() + "" + Math.random().toString(36).slice(2, 7),
+      amount: Math.round(v * 100) / 100,
+      category: currentCat,
+      note: document.getElementById("note").value.trim(),
+      time: Date.now()
+    });
+    save();
+    renderAll();
+    amountEl.value = "";
+    document.getElementById("note").value = "";
+    amountEl.focus();
+    toast("已记录 ¥" + money(Math.round(v * 100) / 100));
+  }
+
+  document.getElementById("saveBtn").addEventListener("click", add);
+  document.getElementById("amount").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") add();
+  });
+  document.getElementById("note").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") add();
+  });
+  document.getElementById("amount").addEventListener("input", function () {
+    this.classList.remove("invalid");
+  });
+
+  document.getElementById("list").addEventListener("click", function (e) {
+    var btn = e.target.closest(".del");
+    if (!btn) return;
+    var id = btn.dataset.id;
+    records = records.filter(function (r) { return r.id !== id; });
+    save();
+    renderAll();
+    toast("已删除");
+  });
+
+  /* ---------- 启动 ---------- */
+  load();
+  renderCatBtns();
+  renderAll();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="k74notBFiC4WZNE1vecmpY">
+<head data-page-node-id="o6nYeO21hXIoSd93wTmWBo">
+<meta charset="UTF-8" data-page-node-id="IKN1VR7euH2jUAUdO0BLyL">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" data-page-node-id="EBYwa6DQ98tCpb0T8ssfl7">
+<title>ima 知识号 · 智能知识卡片生成器</title>
+<style>
+  :root{
+    --ima-blue:#0066FF;
+    --ima-blue-dark:#0052CC;
+    --ima-blue-soft:#E8F1FF;
+    --ima-blue-mid:#F2F7FF;
+    --ink:#12161F;
+    --ink-2:#3D4453;
+    --ink-3:#767E8C;
+    --ink-4:#A6ADB9;
+    --line:#E8EAF0;
+    --line-2:#F0F2F6;
+    --bg:#F5F7FA;
+    --white:#FFFFFF;
+    --green:#00B578;
+    --radius:16px;
+    --shadow-sm:0 1px 2px rgba(18,22,31,.05);
+    --shadow-md:0 4px 16px rgba(18,22,31,.06);
+    --shadow-lg:0 12px 40px rgba(0,102,255,.14);
+  }
+
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    font-size:15px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    padding-bottom:96px;
+  }
+
+  /* ============ 顶部品牌区 ============ */
+  .topbar{
+    background:var(--white);
+    border-bottom:1px solid var(--line);
+    position:sticky;
+    top:0;
+    z-index:50;
+  }
+  .topbar-inner{
+    max-width:860px;margin:0 auto;padding:14px 20px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .logo{
+    width:34px;height:34px;border-radius:10px;
+    background:linear-gradient(135deg,#0066FF,#3D8BFF);
+    color:#fff;font-weight:700;font-size:15px;letter-spacing:-.5px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 4px 12px rgba(0,102,255,.28);
+    flex:none;
+  }
+  .brand-txt{display:flex;flex-direction:column;line-height:1.25;min-width:0;}
+  .brand-txt b{font-size:16px;font-weight:650;letter-spacing:-.2px;}
+  .brand-txt span{font-size:12px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .topbar-tag{
+    margin-left:auto;flex:none;
+    font-size:11px;color:var(--ima-blue);
+    background:var(--ima-blue-soft);
+    padding:5px 10px;border-radius:20px;font-weight:600;
+    white-space:nowrap;
+  }
+
+  .wrap{max-width:860px;margin:0 auto;padding:20px;}
+
+  /* ============ 通用卡片 ============ */
+  .panel{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow-sm);
+    padding:20px;
+    margin-bottom:16px;
+  }
+  .panel-title{
+    display:flex;align-items:center;gap:8px;
+    font-size:14px;font-weight:650;margin:0 0 4px;
+  }
+  .panel-title .idx{
+    width:20px;height:20px;border-radius:6px;
+    background:var(--ima-blue-soft);color:var(--ima-blue);
+    font-size:12px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;flex:none;
+  }
+  .panel-hint{font-size:12.5px;color:var(--ink-3);margin:0 0 14px;padding-left:28px;}
+
+  /* ============ 输入区 ============ */
+  .input-box{
+    border:1px solid var(--line);
+    border-radius:12px;
+    background:var(--ima-blue-mid);
+    transition:border-color .18s, box-shadow .18s, background .18s;
+    overflow:hidden;
+  }
+  .input-box:focus-within{
+    border-color:var(--ima-blue);
+    background:var(--white);
+    box-shadow:0 0 0 3px rgba(0,102,255,.10);
+  }
+  textarea{
+    width:100%;border:0;outline:0;resize:none;
+    background:transparent;
+    padding:14px 14px 6px;
+    font-family:inherit;font-size:15px;line-height:1.7;color:var(--ink);
+    min-height:104px;display:block;
+  }
+  textarea::placeholder{color:var(--ink-4);}
+  .input-foot{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:6px 12px 10px;gap:10px;
+  }
+  .counter{font-size:11.5px;color:var(--ink-4);font-variant-numeric:tabular-nums;}
+  .quick-row{display:flex;gap:6px;flex-wrap:wrap;}
+  .quick{
+    font-size:11.5px;color:var(--ink-3);
+    background:var(--white);border:1px solid var(--line);
+    padding:4px 9px;border-radius:20px;cursor:pointer;
+    transition:all .15s;white-space:nowrap;
+  }
+  .quick:hover{color:var(--ima-blue);border-color:#B8D3FF;background:var(--ima-blue-soft);}
+
+  /* ============ 领域标签 ============ */
+  .domains{display:flex;flex-wrap:wrap;gap:8px;}
+  .domain{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:8px 14px;border-radius:10px;
+    border:1px solid var(--line);
+    background:var(--white);
+    font-size:14px;color:var(--ink-2);cursor:pointer;
+    transition:all .16s ease;user-select:none;
+  }
+  .domain .emo{font-size:15px;line-height:1;}
+  .domain:hover{border-color:#C6DAFF;background:var(--ima-blue-mid);transform:translateY(-1px);}
+  .domain.on{
+    border-color:var(--ima-blue);
+    background:var(--ima-blue-soft);
+    color:var(--ima-blue-dark);
+    font-weight:600;
+    box-shadow:0 2px 8px rgba(0,102,255,.12);
+  }
+  .domain.on .dot{
+    width:6px;height:6px;border-radius:50%;background:var(--ima-blue);
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.8);}}
+
+  /* ============ 生成按钮 ============ */
+  .gen-wrap{margin-top:18px;}
+  .gen-btn{
+    width:100%;border:0;cursor:pointer;
+    padding:15px 20px;border-radius:12px;
+    background:linear-gradient(135deg,#0066FF,#2B82FF);
+    color:#fff;font-size:16px;font-weight:650;font-family:inherit;
+    letter-spacing:.3px;
+    box-shadow:0 6px 20px rgba(0,102,255,.28);
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    transition:transform .14s, box-shadow .2s, opacity .2s;
+  }
+  .gen-btn:hover{transform:translateY(-1px);box-shadow:0 10px 28px rgba(0,102,255,.34);}
+  .gen-btn:active{transform:translateY(0) scale(.99);}
+  .gen-btn:disabled{
+    background:#C8D3E4;box-shadow:none;cursor:not-allowed;transform:none;
+  }
+  .gen-sub{
+    text-align:center;font-size:11.5px;color:var(--ink-4);margin-top:10px;
+  }
+  .spin{
+    width:15px;height:15px;border-radius:50%;
+    border:2px solid rgba(255,255,255,.35);border-top-color:#fff;
+    animation:spin .7s linear infinite;display:none;
+  }
+  .gen-btn.loading .spin{display:block;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* ============ 思考过程 ============ */
+  .think{padding:18px 20px;}
+  .think-head{
+    display:flex;align-items:center;gap:9px;
+    font-size:13.5px;font-weight:650;color:var(--ink);
+    padding-bottom:14px;border-bottom:1px dashed var(--line);margin-bottom:14px;
+  }
+  .think-head .avatar{
+    width:24px;height:24px;border-radius:8px;
+    background:linear-gradient(135deg,#0066FF,#54A0FF);
+    display:flex;align-items:center;justify-content:center;
+    font-size:13px;flex:none;
+  }
+  .think-head .live{
+    margin-left:auto;font-size:11px;color:var(--ima-blue);
+    background:var(--ima-blue-soft);padding:3px 9px;border-radius:20px;font-weight:600;
+  }
+  .steps{display:flex;flex-direction:column;gap:11px;}
+  .step{
+    display:flex;align-items:flex-start;gap:10px;
+    font-size:13.5px;color:var(--ink-4);
+    opacity:0;transform:translateY(6px);
+    transition:opacity .3s ease, transform .3s ease, color .3s;
+  }
+  .step.show{opacity:1;transform:translateY(0);color:var(--ink-2);}
+  .step.done{color:var(--ink-2);}
+  .step .mark{
+    width:17px;height:17px;border-radius:50%;flex:none;margin-top:2px;
+    border:2px solid var(--line);background:var(--white);
+    display:flex;align-items:center;justify-content:center;
+    font-size:10px;color:#fff;transition:all .25s;
+  }
+  .step.active .mark{border-color:var(--ima-blue);background:var(--ima-blue);}
+  .step.done .mark{border-color:var(--green);background:var(--green);}
+  .step .txt{line-height:1.5;}
+  .step .tail{color:var(--ink-4);font-size:12px;}
+  .bar{
+    height:3px;border-radius:3px;background:var(--line-2);margin-top:16px;overflow:hidden;
+  }
+  .bar i{
+    display:block;height:100%;width:0;border-radius:3px;
+    background:linear-gradient(90deg,#0066FF,#5CADFF);
+    transition:width .35s ease;
+  }
+
+  /* ============ 知识卡片 ============ */
+  .kc-wrap{animation:rise .45s cubic-bezier(.2,.8,.3,1) both;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+  .kc{
+    border-radius:var(--radius);overflow:hidden;
+    background:var(--white);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow-lg);
+  }
+  .kc-head{
+    padding:22px 22px 18px;
+    background:linear-gradient(135deg,#0066FF 0%,#3D8BFF 55%,#6BA6FF 100%);
+    color:#fff;position:relative;overflow:hidden;
+  }
+  .kc-head::after{
+    content:"";position:absolute;right:-40px;top:-60px;
+    width:180px;height:180px;border-radius:50%;
+    background:rgba(255,255,255,.10);
+  }
+  .kc-head::before{
+    content:"";position:absolute;right:48px;bottom:-70px;
+    width:120px;height:120px;border-radius:50%;
+    background:rgba(255,255,255,.08);
+  }
+  .kc-badge{
+    display:inline-flex;align-items:center;gap:5px;
+    font-size:11px;font-weight:600;letter-spacing:.4px;
+    background:rgba(255,255,255,.20);
+    padding:4px 10px;border-radius:20px;margin-bottom:12px;
+    position:relative;z-index:1;
+  }
+  .kc-title{
+    font-size:20px;font-weight:700;line-height:1.4;margin:0;
+    position:relative;z-index:1;letter-spacing:-.2px;
+  }
+  .kc-origin{
+    font-size:12px;color:rgba(255,255,255,.78);margin:10px 0 0;
+    position:relative;z-index:1;line-height:1.5;
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  }
+  .kc-origin b{font-weight:600;color:#fff;}
+
+  .kc-body{padding:20px 22px 22px;}
+  .sec{margin-bottom:20px;}
+  .sec:last-child{margin-bottom:0;}
+  .sec-t{
+    display:flex;align-items:center;gap:7px;
+    font-size:12px;font-weight:700;color:var(--ink-3);
+    letter-spacing:.6px;margin-bottom:11px;
+  }
+  .sec-t i{
+    width:3px;height:12px;border-radius:2px;background:var(--ima-blue);
+    display:block;flex:none;
+  }
+  .points{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:11px;}
+  .points li{
+    display:flex;gap:10px;font-size:14.5px;color:var(--ink-2);line-height:1.68;
+  }
+  .points li .bd{
+    width:6px;height:6px;border-radius:50%;background:var(--ima-blue);
+    flex:none;margin-top:9px;
+  }
+  .points li b{color:var(--ink);font-weight:600;}
+
+  .scen{
+    background:var(--ima-blue-mid);
+    border:1px solid #DCE9FF;
+    border-radius:12px;padding:13px 15px;
+  }
+  .scen p{margin:0;font-size:14px;color:var(--ink-2);line-height:1.7;}
+  .scen-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .scen-tag{
+    font-size:12px;color:var(--ima-blue-dark);
+    background:var(--white);border:1px solid #CFE2FF;
+    padding:3px 9px;border-radius:6px;
+  }
+
+  .tag-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+  .ktag{
+    font-size:12.5px;color:var(--ima-blue-dark);
+    background:var(--ima-blue-soft);
+    border:1px solid #CFE2FF;
+    padding:5px 11px;border-radius:20px;font-weight:500;
+  }
+  .ktag.grey{color:var(--ink-3);background:#F3F5F8;border-color:var(--line);font-weight:400;}
+
+  .kc-foot{
+    padding:14px 22px;border-top:1px solid var(--line-2);
+    background:#FAFBFD;
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .save-btn{
+    flex:1;min-width:170px;
+    border:0;cursor:pointer;font-family:inherit;
+    padding:12px 18px;border-radius:10px;
+    background:var(--ima-blue);color:#fff;
+    font-size:14.5px;font-weight:650;
+    display:flex;align-items:center;justify-content:center;gap:7px;
+    transition:all .18s;box-shadow:0 4px 14px rgba(0,102,255,.22);
+  }
+  .save-btn:hover{background:var(--ima-blue-dark);transform:translateY(-1px);}
+  .save-btn.saved{background:var(--green);box-shadow:0 4px 14px rgba(0,181,120,.24);}
+  .icon-btn{
+    border:1px solid var(--line);background:var(--white);
+    width:44px;height:44px;border-radius:10px;cursor:pointer;
+    font-size:16px;display:flex;align-items:center;justify-content:center;
+    transition:all .16s;flex:none;
+  }
+  .icon-btn:hover{border-color:#C6DAFF;background:var(--ima-blue-mid);}
+  .kc-meta{
+    font-size:11.5px;color:var(--ink-4);width:100%;text-align:center;margin-top:2px;
+  }
+
+  /* 已存知识库列表 */
+  .lib{
+    background:var(--white);border:1px solid var(--line);
+    border-radius:var(--radius);box-shadow:var(--shadow-sm);
+    padding:14px 18px;margin-bottom:16px;
+  }
+  .lib-head{
+    display:flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:650;margin-bottom:10px;
+  }
+  .lib-head .n{
+    font-size:11px;color:var(--ima-blue);background:var(--ima-blue-soft);
+    padding:2px 8px;border-radius:20px;font-weight:700;
+  }
+  .lib-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px;}
+  .lib-list li{
+    display:flex;align-items:center;gap:8px;
+    font-size:13px;color:var(--ink-2);
+    padding:7px 10px;background:#FAFBFD;border-radius:8px;
+  }
+  .lib-list li .t{
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;
+  }
+  .lib-list li .d{font-size:11px;color:var(--ink-4);flex:none;}
+
+  /* ============ Skill 广场悬浮按钮 ============ */
+  .skill-fab{
+    position:fixed;right:20px;bottom:24px;z-index:60;
+    width:56px;height:56px;border-radius:50%;border:0;cursor:pointer;
+    background:linear-gradient(135deg,#0066FF,#4C93FF);
+    color:#fff;font-size:23px;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 24px rgba(0,102,255,.36);
+    transition:transform .2s, box-shadow .2s;
+  }
+  .skill-fab:hover{transform:translateY(-2px) scale(1.04);box-shadow:0 12px 30px rgba(0,102,255,.44);}
+  .skill-fab .tip{
+    position:absolute;right:64px;top:50%;transform:translateY(-50%);
+    background:var(--ink);color:#fff;font-size:12px;padding:5px 10px;
+    border-radius:6px;white-space:nowrap;opacity:0;pointer-events:none;
+    transition:opacity .2s;font-weight:500;
+  }
+  .skill-fab:hover .tip{opacity:1;}
+  .skill-fab .badge{
+    position:absolute;top:-2px;right:-2px;
+    width:18px;height:18px;border-radius:50%;background:#FF5B4A;
+    color:#fff;font-size:10px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+    border:2px solid var(--bg);
+  }
+
+  /* ============ 弹窗 ============ */
+  .mask{
+    position:fixed;inset:0;background:rgba(10,16,28,.45);
+    backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+    z-index:100;display:flex;align-items:center;justify-content:center;
+    padding:20px;opacity:0;pointer-events:none;transition:opacity .22s;
+  }
+  .mask.on{opacity:1;pointer-events:auto;}
+  .modal{
+    width:100%;max-width:440px;max-height:86vh;overflow:auto;
+    background:var(--white);border-radius:18px;
+    box-shadow:0 24px 60px rgba(0,0,0,.24);
+    transform:translateY(16px) scale(.97);transition:transform .26s cubic-bezier(.2,.8,.3,1);
+  }
+  .mask.on .modal{transform:translateY(0) scale(1);}
+  .modal-head{
+    padding:20px 20px 14px;
+    background:linear-gradient(135deg,#0066FF,#5CADFF);
+    color:#fff;border-radius:18px 18px 0 0;
+    display:flex;align-items:center;gap:10px;position:relative;
+  }
+  .modal-head .ic{
+    width:36px;height:36px;border-radius:11px;
+    background:rgba(255,255,255,.20);
+    display:flex;align-items:center;justify-content:center;font-size:19px;flex:none;
+  }
+  .modal-head b{font-size:16.5px;display:block;line-height:1.3;}
+  .modal-head span{font-size:11.5px;opacity:.85;}
+  .modal-close{
+    position:absolute;right:14px;top:14px;
+    width:28px;height:28px;border-radius:50%;border:0;cursor:pointer;
+    background:rgba(255,255,255,.18);color:#fff;font-size:15px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .modal-close:hover{background:rgba(255,255,255,.32);}
+  .modal-body{padding:14px;}
+  .skill{
+    display:flex;gap:12px;align-items:flex-start;
+    padding:13px;border:1px solid var(--line);border-radius:12px;
+    margin-bottom:10px;transition:all .16s;
+  }
+  .skill:hover{border-color:#C6DAFF;background:var(--ima-blue-mid);}
+  .skill .s-ic{
+    width:40px;height:40px;border-radius:11px;flex:none;
+    display:flex;align-items:center;justify-content:center;font-size:20px;
+    background:var(--ima-blue-soft);
+  }
+  .skill .s-main{flex:1;min-width:0;}
+  .skill .s-name{
+    font-size:14.5px;font-weight:650;display:flex;align-items:center;gap:6px;flex-wrap:wrap;
+  }
+  .skill .s-name em{
+    font-style:normal;font-size:10.5px;font-weight:600;
+    background:var(--ima-blue-soft);color:var(--ima-blue);
+    padding:2px 6px;border-radius:4px;
+  }
+  .skill .s-desc{
+    font-size:12.5px;color:var(--ink-3);line-height:1.6;margin-top:3px;
+  }
+  .skill .s-foot{
+    display:flex;gap:12px;margin-top:7px;font-size:11px;color:var(--ink-4);
+  }
+  .skill .s-get{
+    border:1px solid var(--ima-blue);background:var(--white);color:var(--ima-blue);
+    font-size:12px;font-weight:600;padding:6px 12px;border-radius:8px;
+    cursor:pointer;font-family:inherit;flex:none;align-self:center;
+    transition:all .15s;
+  }
+  .skill .s-get:hover{background:var(--ima-blue);color:#fff;}
+  .skill .s-get.got{background:var(--green);border-color:var(--green);color:#fff;}
+  .modal-foot{
+    padding:4px 14px 18px;text-align:center;
+    font-size:11.5px;color:var(--ink-4);line-height:1.6;
+  }
+
+  /* ============ Toast ============ */
+  .toast{
+    position:fixed;left:50%;bottom:40px;transform:translate(-50%,20px);
+    background:rgba(18,24,36,.94);color:#fff;
+    padding:11px 20px;border-radius:10px;font-size:13.5px;
+    z-index:200;opacity:0;pointer-events:none;transition:all .26s;
+    display:flex;align-items:center;gap:8px;max-width:88vw;
+    box-shadow:0 8px 24px rgba(0,0,0,.24);
+  }
+  .toast.on{opacity:1;transform:translate(-50%,0);}
+
+  .foot-note{
+    text-align:center;font-size:11.5px;color:var(--ink-4);
+    padding:6px 20px 0;line-height:1.8;
+  }
+
+  /* ============ 移动端 ============ */
+  @media (max-width:600px){
+    body{font-size:14.5px;padding-bottom:88px;}
+    .wrap{padding:14px;}
+    .topbar-inner{padding:11px 14px;}
+    .brand-txt b{font-size:15px;}
+    .topbar-tag{display:none;}
+    .panel{padding:16px;border-radius:14px;}
+    .panel-hint{padding-left:0;margin-bottom:12px;}
+    .quick-row{display:none;}
+    .domain{padding:7px 12px;font-size:13.5px;}
+    .gen-btn{padding:14px;font-size:15.5px;}
+    .kc-head{padding:18px 18px 16px;}
+    .kc-title{font-size:18px;}
+    .kc-body{padding:16px 18px 18px;}
+    .points li{font-size:14px;}
+    .kc-foot{padding:12px 18px;}
+    .save-btn{min-width:100%;}
+    .icon-btn{width:calc(50% - 5px);flex:1;}
+    .skill-fab{right:14px;bottom:18px;width:50px;height:50px;font-size:21px;}
+    .skill-fab .tip{display:none;}
+    .modal{max-height:80vh;}
+  }
+</style>
+</head>
+<body data-page-node-id="uPW39jH8ztWi5C69BKkQEX">
+
+<!-- 顶部品牌 -->
+<div class="topbar" data-page-node-id="DLk35LWxUtGrFm29lyofnu">
+  <div class="topbar-inner" data-page-node-id="tIv6bAjEAjy8XdZRzJhyAQ">
+    <div class="logo" data-page-node-id="elNdyN3aBC1IhhRdASCGf4">ima</div>
+    <div class="brand-txt" data-page-node-id="54P3JI1fv7GBvJj0KSFLuj">
+      <b data-page-node-id="NBuM017zICCDmag1frwz9H">ima 知识号 · 智能知识卡片生成器</b>
+      <span data-page-node-id="WX0WveIK0XmeiNc4pV5yeK">让知识从「存下来」到「用起来」</span>
+    </div>
+    <div class="topbar-tag" data-page-node-id="qAoRbmVhPZ9Hirls6xduhl">已覆盖 20+ 行业</div>
+  </div>
+</div>
+
+<div class="wrap" data-page-node-id="ez51MPHL4z51B9ZY2qKaYL">
+
+  <!-- 知识输入 -->
+  <div class="panel" data-page-node-id="xt9UDpUSxIboPI898zCQKW">
+    <h3 class="panel-title" data-page-node-id="FqKSgwo4AR93McY1lF1ljY"><span class="idx" data-page-node-id="jgaz6g3kO98eBaYibS9OZM">1</span>输入你想整理的专业知识</h3>
+    <p class="panel-hint" data-page-node-id="RyBoCc597dWmWrV8BnBLTw">一段话、一个问题、一条经验都可以，copilot 会帮你提炼成结构化卡片</p>
+    <div class="input-box" data-page-node-id="fF9IOkrE7NWTRROMrB4OjR">
+      <textarea id="raw" placeholder="例如：解释什么是 RAG 架构，以及它如何应用于知识库" maxlength="500"></textarea>
+      <div class="input-foot" data-page-node-id="SDFe0DjGq5byU6MKEpj8wI">
+        <div class="quick-row" data-page-node-id="uXD6RUZdN4R525rVrrVawt">
+          <span class="quick" data-q="解释什么是RAG架构，以及它如何应用于知识库" data-page-node-id="YGDOkpu7aiJrgnavDs4idV">RAG 架构</span>
+          <span class="quick" data-q="如何做一份清晰有力的周汇报" data-page-node-id="lsOKDbUVcvWTGXEOPrUz4Q">职场汇报</span>
+          <span class="quick" data-q="个人投资者如何做资产配置" data-page-node-id="Y8yO5ttYs6Bl5QfxHuukQL">资产配置</span>
+        </div>
+        <span class="counter" data-page-node-id="pIuKFPDD476hgkf1k46B7c"><span id="cnt" data-page-node-id="I16lKV8Xs2S5R13FiAYwyl">0</span>/500</span>
+      </div>
+    </div>
+
+    <!-- 领域选择 -->
+    <h3 class="panel-title" style="margin-top:22px;" data-page-node-id="c8bgAFszd1Zh20q73zkvRg"><span class="idx" data-page-node-id="1GXTULCc3FscA7Lf3FFjlu">2</span>选择知识所属领域 <span style="font-weight:400;color:var(--ink-4);font-size:12px;" data-page-node-id="qi6yFrfEBKEOylwploWkn7">（可多选）</span></h3>
+    <p class="panel-hint" data-page-node-id="ZY1kFvpilNqtxuZXvG8NnK">ima 知识号已沉淀金融、法律、医疗、教育、科技、职场等 20 余个行业的专业知识</p>
+    <div class="domains" id="domains" data-page-node-id="K16C0HfslF2pQ7phATmCve"></div>
+
+    <div class="gen-wrap" data-page-node-id="Hx9IWHDDAdxPcBZFUZnXEu">
+      <button class="gen-btn" id="genBtn" data-page-node-id="e2MQEPLWTGRNS2iUphtDVk">
+        <span class="spin" data-page-node-id="flFn0lDvkbkgsCpJ02oxxP"></span>
+        <span id="genTxt" data-page-node-id="b4CzcOFHYhGsQcVTeez8iL">🧠 生成知识卡片</span>
+      </button>
+      <p class="gen-sub" data-page-node-id="5Y9vDACqJusNFc2MyfBZAY">ima copilot 将完成：解析结构 → 提炼观点 → 生成卡片 → 记入知识库</p>
+    </div>
+  </div>
+
+  <!-- 思考过程 -->
+  <div class="panel" id="thinkPanel" style="display:none;" data-page-node-id="FPiJ06HrTm2HFXX4DjyZ71">
+    <div class="think" data-page-node-id="wcOEv19flBeiNRgLEHSZ4s">
+      <div class="think-head" data-page-node-id="IB7gkTFbL2fRn1URIZP8sG">
+        <span class="avatar" data-page-node-id="QCBL15hmJuFZaCQauAnO8r">🧠</span>
+        <span data-page-node-id="MR8NeUqIils0OVGYJkBfIq">ima copilot 正在思考</span>
+        <span class="live" id="liveTxt" data-page-node-id="1Bt3Iqya0SyB2xxQWAD9Xd">思考中…</span>
+      </div>
+      <div class="steps" id="steps" data-page-node-id="dEzkQJwObPBFA9LsR2RRq7"></div>
+      <div class="bar" data-page-node-id="FoZMz63Ntl1Y5aJfCffzYa"><i id="bar" data-page-node-id="NNgAATG8LWUZw7zfbHxsDN"></i></div>
+    </div>
+  </div>
+
+  <!-- 卡片结果容器 -->
+  <div id="result" data-page-node-id="XsS4oljt2khKiwgpJs9XnL"></div>
+
+  <!-- 我的知识库 -->
+  <div class="lib" id="lib" style="display:none;" data-page-node-id="BcnR3lpGn4r1i8lOgi959z">
+    <div class="lib-head" data-page-node-id="rEJzmDEb76TMOP1IdNJQgC">📚 我的 ima 知识库 <span class="n" id="libN" data-page-node-id="a7RIrKxlSCVyBnsj8mIVYg">0</span></div>
+    <ul class="lib-list" id="libList" data-page-node-id="zj2vtSk81n59W21XhxxIFr"></ul>
+  </div>
+
+  <p class="foot-note" data-page-node-id="Zud7RnexZqBDJca9iKfsWu">
+    本页为 ima 知识号生态的概念演示 · 内容由本地模板库匹配生成<br data-page-node-id="9VEl3WmaZHCwfKGR5P3crl">
+    「存储知识 → 加工知识 → 运用知识 → 分享知识」
+  </p>
+</div>
+
+<!-- Skill 广场入口 -->
+<button class="skill-fab" id="fab" data-page-node-id="Pk7iqhEsXDnizlspgy9MsV">
+  🧩<span class="badge" data-page-node-id="VPGHz4OF2fJS0zdT64cBaJ">4</span><span class="tip" data-page-node-id="V0w9HHBMrR7R9gfokXtLcO">Skill 广场</span>
+</button>
+
+<!-- Skill 广场弹窗 -->
+<div class="mask" id="mask" data-page-node-id="dt7rsTvnKibc0eIG8orOJT">
+  <div class="modal" data-page-node-id="nfH3HncEcgEDjEwmjr6PFw">
+    <div class="modal-head" data-page-node-id="BIP8r4K4Yy3TcmJK0sEEOA">
+      <div class="ic" data-page-node-id="GZ0Kfjm8nhZLTSV3ZdmDzk">🧩</div>
+      <div data-page-node-id="ThXDR3HNmc5sLjQ8cFoBTD">
+        <b data-page-node-id="2GFNuVfZW2OG7kNPGQ8TjG">Skill 广场</b>
+        <span data-page-node-id="VXbjA1YNxwmaZawvbNnU9O">社区创作者发布 · 一键装进你的 ima</span>
+      </div>
+      <button class="modal-close" id="mClose" data-page-node-id="lnwuNe9z0S49hE8QL8U532">✕</button>
+    </div>
+    <div class="modal-body" id="skillList" data-page-node-id="aqCnmuLXwwC5Q0ssWaf06P"></div>
+    <div class="modal-foot" data-page-node-id="ug4rKhRDi8RFagdnQwSXrU">
+      你也可以把自己的知识卡片打包成 Skill 发布到广场<br data-page-node-id="wHHKvkurtrTtC6vGEz7EMc">让一份知识，服务更多需要它的人
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" data-page-node-id="OsP2E4vlWdKxHPEXFfWxA3"><span id="toastTxt" data-page-node-id="QaPYSZE5Dj48YgBXkWs4re"></span></div>
+
+<script>
+/* ================= 领域 ================= */
+const DOMAINS = [
+  {id:'finance', name:'金融', emo:'💰'},
+  {id:'law',     name:'法律', emo:'⚖️'},
+  {id:'medical', name:'医疗', emo:'🩺'},
+  {id:'edu',     name:'教育', emo:'🎓'},
+  {id:'tech',    name:'科技', emo:'💻'},
+  {id:'career',  name:'职场', emo:'💼'}
+];
+const selected = new Set();
+
+const domBox = document.getElementById('domains');
+DOMAINS.forEach(d=>{
+  const el = document.createElement('div');
+  el.className = 'domain';
+  el.dataset.id = d.id;
+  el.innerHTML = '<span class="emo">'+d.emo+'</span><span>'+d.name+'</span>';
+  el.onclick = ()=>{
+    const dot = el.querySelector('.dot');
+    if(selected.has(d.id)){
+      selected.delete(d.id);
+      el.classList.remove('on');
+      if(dot) dot.remove();
+    } else {
+      selected.add(d.id);
+      el.classList.add('on');
+      if(!dot){
+        const nd = document.createElement('span');
+        nd.className = 'dot';
+        el.insertBefore(nd, el.children[1]);
+      }
+    }
+  };
+  domBox.appendChild(el);
+});
+
+/* ================= 知识模板库 ================= */
+const KB = [
+  {
+    keys:['rag','检索增强','向量','vector','embedding','召回','知识库','语义搜索','语义检索'],
+    title:'RAG 检索增强生成架构',
+    tags:['RAG','知识库','大模型应用'],
+    points:[
+      '<b>先检索，再生成：</b>先从知识库取回与问题相关的原文片段，再让大模型基于这些片段作答，从源头压低「幻觉」',
+      '<b>两段式流水线：</b>离线做文档切分 → 向量化 → 建索引；在线做召回 → 重排 → 拼接上下文 → 生成',
+      '<b>知识可热更新：</b>不必重新训练模型，更新文档就等于更新知识，成本远低于微调',
+      '<b>效果取决于三件事：</b>切片粒度是否合理、向量模型是否懂你的领域、召回与重排策略是否到位',
+      '<b>清醒看局限：</b>检索不到就一定答不准，且必须做好权限过滤与来源引用，否则不可上生产'
+    ],
+    scen:'企业知识库问答、产品帮助中心智能客服、内部制度与合同检索、个人笔记的语义搜索',
+    scenTags:['企业知识库','智能客服','文档问答','个人笔记']
+  },
+  {
+    keys:['大模型','llm','gpt','transformer','提示词','prompt','微调','预训练','token'],
+    title:'大语言模型的能力版图与边界',
+    tags:['大模型','AI 基础','技术选型'],
+    points:[
+      '<b>本质很朴素：</b>在海量语料上训练的自回归模型，做的事情就是预测下一个 token',
+      '<b>能力来自「压缩过的世界知识」，</b>但知识有截止日期，也不保证每句都真',
+      '<b>上下文窗口是硬约束：</b>它决定模型一次能「看见」多少信息，也是提示工程的物理天花板',
+      '<b>三条增强路径：</b>提示工程（改说法）、RAG（给资料）、微调（改行为），成本与门槛依次升高',
+      '<b>评估要拆开看：</b>事实准确性、指令遵循度、输出稳定性、单次成本，四项缺一不可'
+    ],
+    scen:'技术团队做 AI 方案选型、业务方评估 AI 可行性、内部 AI 工具的能力边界沟通',
+    scenTags:['技术选型','方案评估','AI 落地']
+  },
+  {
+    keys:['agent','智能体','工作流','自动化','copilot','编排','多智能体'],
+    title:'AI Agent：从「会回答」到「会干活」',
+    tags:['Agent','自动化','效率工具'],
+    points:[
+      '<b>最小结构：</b>大模型（大脑）+ 工具集（手脚）+ 记忆（经验）+ 规划（步骤拆解）',
+      '<b>关键差异：</b> chatbot 输出答案，Agent 输出「完成的任务」，闭环能力才是分水岭',
+      '<b>可靠性靠工程补齐：</b>任务拆解、步骤校验、失败重试、结果回看，缺一项就易翻车',
+      '<b>先窄后宽：</b>把一个高频、规则清晰、可验收的小流程跑通，比一上来做通用 Agent 现实得多',
+      '<b>人在回路：</b>高风险动作（付款、外发、删除）必须留人工确认节点'
+    ],
+    scen:'重复性办公流程自动化、数据收集与整理、定时报告生成、跨系统信息串联',
+    scenTags:['流程自动化','办公提效','定时任务']
+  },
+  {
+    keys:['知识管理','笔记','第二大脑','沉淀','整理','复盘','归档','ima'],
+    title:'个人知识管理：从收藏到调用',
+    tags:['知识管理','方法论','个人成长'],
+    points:[
+      '<b>收藏不等于掌握：</b>未经加工的信息，只会在收藏夹里安静地贬值',
+      '<b>最小闭环四步：</b>收集 → 提炼 → 关联 → 复用，缺了「复用」就只是囤积',
+      '<b>用自己的话重述：</b>一句话讲不清的知识点，说明还没有真正被消化',
+      '<b>按问题组织，而非按来源组织：</b>用「我要解决什么」建索引，取用速度最快',
+      '<b>留出遗忘的时间：</b>定期复盘旧笔记，让知识与新经验重新碰撞'
+    ],
+    scen:'个人笔记体系搭建、团队经验沉淀、项目复盘归档、学习资料整理',
+    scenTags:['笔记方法','经验沉淀','项目复盘']
+  },
+  {
+    keys:['基金','股票','投资','资产配置','复利','估值','财报','a股','理财','风险','仓位','定投'],
+    title:'资产配置的底层逻辑',
+    tags:['投资','资产配置','风险管理'],
+    points:[
+      '<b>先定风险，再谈收益：</b>能承受多大回撤，决定了你的组合长什么样',
+      '<b>分散是为了活下来：</b>跨资产、跨市场、跨时间（定投）三层分散，比押中单一标的更可控',
+      '<b>成本是确定的损耗：</b>费率、税费、频繁交易带来的摩擦，长期会吃掉相当一部分收益',
+      '<b>纪律战胜预测：</b>再平衡规则写下来并执行，比每次临场判断更可靠',
+      '<b>不懂不投：</b>超出能力圈的标的，波动一来你大概率拿不住'
+    ],
+    scen:'个人与家庭资产规划、投资新手建立框架、组合再平衡决策、投资复盘纪要',
+    scenTags:['家庭理财','投资框架','风险控制']
+  },
+  {
+    keys:['合同','法务','合规','条款','劳动法','侵权','知识产权','诉讼','违约','协议'],
+    title:'合同审查的关键检查项',
+    tags:['合同审查','风险控制','实务清单'],
+    points:[
+      '<b>主体先行：</b>签约主体是否适格、是否有权签署、资质与授权文件是否齐全',
+      '<b>标的与对价要唯一确定：</b>数量、质量、金额、币种、税率、支付节点，含糊一处即埋一处雷',
+      '<b>违约责任必须可执行：</b>写清触发条件、计算方式、上限，避免「赔偿一切损失」这类无法落地的表述',
+      '<b>重点盯三个条款：</b>解除与终止、知识产权归属、争议解决方式（管辖地成本差异很大）',
+      '<b>留痕意识：</b>变更、补充、通知尽量书面化，口头承诺在争议中几乎无效力'
+    ],
+    scen:'商务合同签署前自查、法务培训材料、采购与销售模板修订、纠纷复盘',
+    scenTags:['商务合同','法务自查','模板修订']
+  },
+  {
+    keys:['医疗','健康','疾病','用药','临床','诊断','体检','症状','治疗','慢病'],
+    title:'读懂一份健康信息的四个维度',
+    tags:['健康素养','信息甄别','科普'],
+    points:[
+      '<b>看来源：</b>优先权威机构指南、同行评议文献与正规医疗机构发布的口径',
+      '<b>看适用人群：</b>年龄、基础疾病、用药情况不同，结论可能完全相反',
+      '<b>看证据等级：</b>个案分享 ≠ 临床证据，相关性 ≠ 因果性',
+      '<b>看时间：</b>医学结论会更新，五年前的「常识」今天可能已被推翻',
+      '<b>落到行动：</b>任何健康决策都应以执业医师的面诊意见为准，科普内容只用于沟通准备'
+    ],
+    scen:'健康科普内容创作、患者教育材料、体检报告解读前的准备、家庭健康档案',
+    scenTags:['健康科普','患者教育','信息甄别']
+  },
+  {
+    keys:['学习','教学','课程','教育','记忆','考试','培训','课堂','学生','刷题'],
+    title:'高效学习：让知识真正留下来',
+    tags:['学习方法','认知科学','教学设计'],
+    points:[
+      '<b>主动回忆优于反复阅读：</b>合上书复述一遍，比多读三遍记得更牢',
+      '<b>间隔复习对抗遗忘：</b>1 天 / 3 天 / 1 周 / 1 月的节奏，远优于集中突击',
+      '<b>交错练习建立辨别力：</b>混着练不同题型，才能学会「什么时候用什么方法」',
+      '<b>费曼技巧检验理解：</b>讲给完全不懂的人听，卡住的地方就是没懂的地方',
+      '<b>先搭骨架再填肉：</b>建立知识框架后再补细节，新信息才有地方挂靠'
+    ],
+    scen:'课程设计与讲义编写、学生自学计划制定、企业内训体系搭建、备考规划',
+    scenTags:['课程设计','自学方法','企业内训']
+  },
+  {
+    keys:['职场','汇报','沟通','管理','面试','简历','周报','会议','项目','协作','升职','绩效'],
+    title:'结构化沟通：把事情一次说清楚',
+    tags:['职场沟通','表达方法','协作'],
+    points:[
+      '<b>结论先行：</b>先给判断和结果，再给论据，让对方在前 15 秒拿到重点',
+      '<b>分清「事实 / 判断 / 建议」：</b>混在一起讲，是多数低效会议的根源',
+      '<b>向上沟通带方案：</b>带着问题去，也带着 2-3 个可选方案和你的推荐理由回来',
+      '<b>对齐预期而非汇报进度：</b>说清「完成了什么、卡在哪里、需要什么支持」',
+      '<b>重要结论留书面：</b>会议纪要、决策记录、负责人与时间点，一次写清省十次追问'
+    ],
+    scen:'工作汇报与述职、跨部门协作、会议组织与纪要、面试表达与简历撰写',
+    scenTags:['向上沟通','会议效率','述职汇报']
+  },
+  {
+    keys:['代码','编程','架构','微服务','接口','api','数据库','前端','重构','性能','技术债','部署'],
+    title:'技术架构决策的取舍原则',
+    tags:['架构设计','工程实践','技术决策'],
+    points:[
+      '<b>没有最优解，只有最合适：</b>团队规模、业务阶段、运维能力决定架构形态',
+      '<b>复杂度是最大的成本：</b>每引入一个中间件，都要有人为它的故障买单',
+      '<b>先解耦，后拆分：</b>模块边界没划清就上微服务，只会把单体问题变成分布式问题',
+      '<b>可观测性优先于优化：</b>没有监控、日志、链路追踪，性能优化就是盲猜',
+      '<b>技术债要登记：</b>记下来、排优先级、定期还，否则它只会以故障的形式到期'
+    ],
+    scen:'系统重构评估、技术方案评审、新项目架构选型、技术债盘点',
+    scenTags:['方案评审','系统设计','技术债']
+  },
+  {
+    keys:['产品','运营','增长','用户','需求','转化','留存','指标','漏斗','a/b','ab测试'],
+    title:'从需求到增长的验证路径',
+    tags:['产品方法','增长','数据分析'],
+    points:[
+      '<b>先问「为谁解决什么」：</b>说不清用户与场景的需求，都不该排进迭代',
+      '<b>区分问题与方案：</b>用户提的往往是方案，要多问一层「你想解决什么」',
+      '<b>用最小成本验证：</b>假门、人工兜底、小流量实验，都比完整开发便宜得多',
+      '<b>只盯一个北极星指标：</b>关注过多，团队就无法判断什么算「变好了」',
+      '<b>看清留存再谈增长：</b>漏桶里灌水，拉新越快，流失越贵'
+    ],
+    scen:'需求评审与优先级排序、增长实验设计、产品复盘、运营活动策划',
+    scenTags:['需求评审','增长实验','产品复盘']
+  },
+  {
+    keys:['数据','分析','报表','bi','可视化','看板','埋点','归因'],
+    title:'数据分析：从数字到决策',
+    tags:['数据分析','决策支持','指标体系'],
+    points:[
+      '<b>先定义问题，再取数：</b>没有假设的取数，只会产出更多看不懂的表',
+      '<b>指标口径先对齐：</b>「日活」怎么算，往往比数值本身更值得争论',
+      '<b>警惕幸存者偏差与辛普森悖论：</b>分组看和整体看结论相反时，通常是分层没做对',
+      '<b>区分相关与因果：</b>要证明因果，得靠实验或严谨的准实验设计',
+      '<b>结论要落到动作：</b>分析报告的终点是「下一步做什么」，不是「数据是这样的」'
+    ],
+    scen:'经营分析会、产品数据复盘、指标体系建设、AB 实验结论产出',
+    scenTags:['经营分析','指标体系','实验结论']
+  }
+];
+
+/* 领域兜底模板 */
+const DOMAIN_FALLBACK = {
+  finance:{title:'金融领域知识速览',tags:['金融','行业认知'],
+    points:['<b>风险与收益同源：</b>任意一类资产的预期收益，都对应着你必须承受的波动与不确定性','<b>时间是普通投资者最大的杠杆：</b>长期持有优质资产，靠复利而非择时积累收益','<b>流动性常被低估：</b>急用钱时无法变现的资产，账面收益再高也是纸面数字','<b>规则先于操作：</b>理解产品条款、费率结构与监管要求，是入场前的必修课'],
+    scen:'理财方案沟通、客户教育材料、行业研究报告、内部投研培训',scenTags:['客户沟通','投研','合规']},
+  law:{title:'法律实务要点速览',tags:['法律','实务'],
+    points:['<b>时效优先：</b>很多权利过期即消灭，先确认时效再谈实体问题','<b>证据为王：</b>主张能否成立，最终取决于能否拿出合法有效的证据','<b>程序与实体并重：</b>程序瑕疵可能导致实体权利无法实现','<b>书面留痕：</b>关键沟通尽量以书面形式固定，降低日后举证成本'],
+    scen:'纠纷预防培训、法务知识科普、合同模板评审、合规自查',scenTags:['合规','纠纷预防','法务培训']},
+  medical:{title:'医疗健康知识速览',tags:['医疗','健康'],
+    points:['<b>循证优先：</b>以权威临床指南与高质量研究为依据，而非个案经验','<b>个体差异显著：</b>同一方案在不同人群中的获益风险比可能完全不同','<b>预防成本最低：</b>筛查与生活方式干预，往往是最经济的健康投入','<b>专业决策不可替：</b>科普用于沟通准备，诊疗请以执业医师意见为准'],
+    scen:'健康科普创作、患者教育、体检报告解读准备、家庭健康档案',scenTags:['科普','患者教育','健康档案']},
+  edu:{title:'教育教学知识速览',tags:['教育','教学'],
+    points:['<b>以学定教：</b>从学习者已有的认知结构出发，而非从知识体系出发','<b>目标要可观测：</b>「理解」不如「能用自己的话复述并举例」可执行','<b>及时反馈：</b>反馈越靠近学习行为，纠正效果越强','<b>分层设计：</b>同一课堂内兼顾不同起点，是教学设计的基本功'],
+    scen:'课程设计与教案编写、教师培训、学习方案制定、教学效果评估',scenTags:['教学设计','教师培训','效果评估']},
+  tech:{title:'科技领域知识速览',tags:['科技','技术趋势'],
+    points:['<b>区分技术与产品：</b>技术领先不必然带来商业成功，场景匹配才是关键','<b>关注成熟度曲线：</b>判断一项技术是处在泡沫期还是落地期，决定投入节奏','<b>基础设施变化最值钱：</b>成本下降一个数量级，才会催生真正的新应用','<b>保持可迁移能力：</b>工具会过时，底层原理与工程思维不会'],
+    scen:'技术趋势分享、团队技术周会、方案选型讨论、对外技术布道',scenTags:['技术趋势','选型讨论','技术分享']},
+  career:{title:'职场进阶知识速览',tags:['职场','个人发展'],
+    points:['<b>结果导向：</b>价值最终以「解决了什么问题」来计量，而不是投入了多少时间','<b>向上对齐：</b>与上级在目标与优先级上保持一致，是高效工作的前提','<b>可复制的经验：</b>把做过的事沉淀成方法，个人能力才会转化为团队资产','<b>长期主义：</b>能力与口碑的积累是慢变量，但决定了职业天花板的高度'],
+    scen:'个人成长规划、团队内部分享、新人入职培训、绩效复盘',scenTags:['职业规划','团队分享','新人培训']}
+};
+
+const GENERIC = {
+  title:'通用知识结构化方法',
+  tags:['知识整理','通用方法'],
+  points:[
+    '<b>先抓主干：</b>任何领域先弄清「三到五个核心概念」，剩下的都是枝叶',
+    '<b>建立联系：</b>孤立的事实容易忘，能把新知识与已知挂上钩才算学会',
+    '<b>明确边界：</b>知道一个方法「什么时候不适用」，比知道它怎么用更重要',
+    '<b>输出倒逼输入：</b>试着讲给别人听，理解漏洞会立刻暴露'
+  ],
+  scen:'任意领域的知识入门、资料整理、团队分享准备',
+  scenTags:['知识整理','入门学习','分享准备']
+};
+
+/* ================= 匹配逻辑 ================= */
+function extractTitle(raw){
+  if(!raw) return '';
+  let t = raw.replace(/^(请|帮我|我想|想要|麻烦|能否|可以|能不能|如何|怎么|怎样|什么是|解释一下|讲一下|说说|介绍一下)/g,'')
+             .replace(/[，。！？、；：,.!?;:]$/g,'')
+             .replace(/^(解释|说明|分析|总结|梳理|介绍|讲讲|聊聊)/g,'')
+             .trim();
+  // 取第一个标点前的片段作为主题
+  const m = t.split(/[，,。；;？?！!]/)[0].trim();
+  return (m || t).slice(0,26);
+}
+
+function matchTemplate(raw, doms){
+  const text = (raw||'').toLowerCase();
+  let best = null, bestScore = 0;
+  KB.forEach(t=>{
+    let s = 0;
+    t.keys.forEach(k=>{ if(text.includes(k)) s += k.length; });
+    if(s > bestScore){ bestScore = s; best = t; }
+  });
+  if(best) return {tpl:best, hit:bestScore>0};
+  const d = doms[0];
+  if(d && DOMAIN_FALLBACK[d]) return {tpl:DOMAIN_FALLBACK[d], hit:false};
+  return {tpl:GENERIC, hit:false};
+}
+
+function buildCard(raw, doms){
+  const {tpl, hit} = matchTemplate(raw, doms);
+  const domNames = doms.map(id=>(DOMAINS.find(x=>x.id===id)||{}).name).filter(Boolean);
+  const q = extractTitle(raw);
+
+  // 命中模板时用模板标题；未命中时用用户输入提炼出的主题
+  let title = (hit || !q) ? tpl.title : q;
+
+  const tags = [...new Set([...(tpl.tags||[]), ...domNames])].slice(0,6);
+  const autoTags = [];
+  if(!domNames.length) autoTags.push('未分类');
+
+  return {title, points:tpl.points, scen:tpl.scen, scenTags:tpl.scenTags||[], tags:[...tags,...autoTags], raw:raw};
+}
+
+/* ================= 思考步骤 ================= */
+const STEPS = [
+  {ic:'🔍', txt:'正在解析知识结构…'},
+  {ic:'📚', txt:'正在检索 ima 知识库与领域语料…'},
+  {ic:'📝', txt:'正在提炼核心观点…'},
+  {ic:'🎯', txt:'正在匹配适用场景与关联标签…'},
+  {ic:'📇', txt:'正在生成知识卡片…'}
+];
+
+const thinkPanel = document.getElementById('thinkPanel');
+const stepsBox   = document.getElementById('steps');
+const bar        = document.getElementById('bar');
+const liveTxt    = document.getElementById('liveTxt');
+const resultBox  = document.getElementById('result');
+const genBtn     = document.getElementById('genBtn');
+const genTxt     = document.getElementById('genTxt');
+const rawEl      = document.getElementById('raw');
+const cntEl      = document.getElementById('cnt');
+
+let running = false;
+
+rawEl.addEventListener('input', ()=>{ cntEl.textContent = rawEl.value.length; });
+document.querySelectorAll('.quick').forEach(q=>{
+  q.onclick = ()=>{ rawEl.value = q.dataset.q; cntEl.textContent = rawEl.value.length; rawEl.focus(); };
+});
+
+function renderSteps(){
+  stepsBox.innerHTML = '';
+  STEPS.forEach((s,i)=>{
+    const d = document.createElement('div');
+    d.className = 'step';
+    d.id = 'st'+i;
+    d.innerHTML = '<span class="mark"></span><span class="txt">'+s.ic+' '+s.txt+'</span>';
+    stepsBox.appendChild(d);
+  });
+}
+
+function sleep(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+async function generate(){
+  if(running) return;
+  const raw = rawEl.value.trim();
+  if(!raw){
+    toast('⚠️ 先输入你想整理的知识内容');
+    rawEl.focus();
+    return;
+  }
+  running = true;
+  genBtn.disabled = true;
+  genBtn.classList.add('loading');
+  genTxt.textContent = '正在生成中…';
+  resultBox.innerHTML = '';
+  thinkPanel.style.display = 'block';
+  liveTxt.textContent = '思考中…';
+  renderSteps();
+
+  for(let i=0;i<STEPS.length;i++){
+    const el = document.getElementById('st'+i);
+    el.classList.add('show','active');
+    await sleep(360);
+    el.classList.remove('active');
+    el.classList.add('done');
+    el.querySelector('.mark').textContent = '✓';
+    bar.style.width = ((i+1)/STEPS.length*100)+'%';
+  }
+  liveTxt.textContent = '已完成';
+  await sleep(180);
+
+  const card = buildCard(raw, [...selected]);
+  renderCard(card);
+
+  await sleep(120);
+  thinkPanel.style.display = 'none';
+  bar.style.width = '0';
+  genBtn.disabled = false;
+  genBtn.classList.remove('loading');
+  genTxt.textContent = '🧠 重新生成知识卡片';
+  running = false;
+  toast('✨ 知识卡片已生成，可一键记入知识库');
+}
+
+function renderCard(c){
+  const wrap = document.createElement('div');
+  wrap.className = 'kc-wrap';
+  wrap.innerHTML =
+    '<div class="kc">'+
+      '<div class="kc-head">'+
+        '<div class="kc-badge">📇 KNOWLEDGE CARD · ima 知识号</div>'+
+        '<h2 class="kc-title">'+esc(c.title)+'</h2>'+
+        (c.raw ? '<p class="kc-origin"><b>原始输入：</b>'+esc(c.raw)+'</p>' : '')+
+      '</div>'+
+      '<div class="kc-body">'+
+        '<div class="sec">'+
+          '<div class="sec-t"><i></i>核心观点</div>'+
+          '<ul class="points">'+ c.points.map(p=>'<li><span class="bd"></span><span>'+p+'</span></li>').join('') +'</ul>'+
+        '</div>'+
+        '<div class="sec">'+
+          '<div class="sec-t"><i></i>适用场景</div>'+
+          '<div class="scen"><p>'+esc(c.scen)+'</p>'+
+            '<div class="scen-tags">'+ (c.scenTags||[]).map(t=>'<span class="scen-tag">'+esc(t)+'</span>').join('') +'</div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="sec">'+
+          '<div class="sec-t"><i></i>关联标签</div>'+
+          '<div class="tag-row">'+ c.tags.map((t,i)=>'<span class="ktag'+(i>=c.tags.length-0 && false?' grey':'')+'">#'+esc(t)+'</span>').join('') +
+            '<span class="ktag grey">由 ima copilot 提炼</span>'+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="kc-foot">'+
+        '<button class="save-btn" id="saveBtn">📥 加入知识库</button>'+
+        '<button class="icon-btn" id="copyBtn" title="复制卡片">📋</button>'+
+        '<button class="icon-btn" id="shareBtn" title="分享">🔗</button>'+
+        '<div class="kc-meta">生成时间 '+stamp()+' · 由本地模板库匹配生成</div>'+
+      '</div>'+
+    '</div>';
+  resultBox.innerHTML = '';
+  resultBox.appendChild(wrap);
+
+  document.getElementById('saveBtn').onclick = function(){
+    if(this.classList.contains('saved')) return;
+    this.classList.add('saved');
+    this.textContent = '✓ 已记入 ima 知识库';
+    addToLib(c.title);
+    toast('📥 已一键记入你的 ima 知识库');
+  };
+  document.getElementById('copyBtn').onclick = ()=>{ copyCard(c); toast('📋 卡片内容已复制到剪贴板'); };
+  document.getElementById('shareBtn').onclick = ()=>{ toast('🔗 分享链接已生成，可发送给同事或社群'); };
+}
+
+function esc(s){
+  return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function stamp(){
+  const d = new Date();
+  const p = n=>String(n).padStart(2,'0');
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes());
+}
+
+function copyCard(c){
+  const txt = '【'+c.title+'】\n\n核心观点：\n'+
+    c.points.map((p,i)=>(i+1)+'. '+p.replace(/<[^>]+>/g,'')).join('\n')+
+    '\n\n适用场景：'+c.scen+
+    '\n\n关联标签：'+c.tags.map(t=>'#'+t).join(' ')+
+    '\n\n—— 由 ima 知识号 · 智能知识卡片生成器 生成';
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(txt).catch(()=>fallbackCopy(txt));
+  } else fallbackCopy(txt);
+}
+function fallbackCopy(t){
+  const ta = document.createElement('textarea');
+  ta.value = t; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
+}
+
+/* ================= 我的知识库 ================= */
+const libBox = document.getElementById('lib');
+const libList = document.getElementById('libList');
+const libN = document.getElementById('libN');
+let libCount = 0;
+function addToLib(title){
+  libCount++;
+  libBox.style.display='block';
+  libN.textContent = libCount;
+  const li = document.createElement('li');
+  li.innerHTML = '<span>📄</span><span class="t">'+esc(title)+'</span><span class="d">'+stamp().slice(5,16)+'</span>';
+  libList.insertBefore(li, libList.firstChild);
+}
+
+/* ================= Skill 广场 ================= */
+const SKILLS = [
+  {ic:'📚', name:'微信读书助手', tag:'热门', desc:'同步读书笔记与划线，自动生成章节摘要与书评草稿', use:'12.4k 次使用', auth:'@阅读研究所'},
+  {ic:'💼', name:'腾讯招聘助手', tag:'官方', desc:'解析岗位 JD，匹配简历亮点，产出针对性面试准备清单', use:'8.7k 次使用', auth:'@腾讯招聘'},
+  {ic:'📊', name:'周报自动生成器', tag:'效率', desc:'汇总本周工作记录，按「进展-风险-下周计划」结构成稿', use:'23.1k 次使用', auth:'@效率实验室'},
+  {ic:'🗒️', name:'会议纪要整理师', tag:'协作', desc:'从会议录音转写中提取决议、待办与负责人，一键分发', use:'15.6k 次使用', auth:'@协同小队'}
+];
+const mask = document.getElementById('mask');
+const skillList = document.getElementById('skillList');
+SKILLS.forEach(s=>{
+  const el = document.createElement('div');
+  el.className='skill';
+  el.innerHTML =
+    '<div class="s-ic">'+s.ic+'</div>'+
+    '<div class="s-main">'+
+      '<div class="s-name">'+s.name+'<em>'+s.tag+'</em></div>'+
+      '<div class="s-desc">'+s.desc+'</div>'+
+      '<div class="s-foot"><span>🔥 '+s.use+'</span><span>发布 '+s.auth+'</span></div>'+
+    '</div>'+
+    '<button class="s-get">获取</button>';
+  el.querySelector('.s-get').onclick = function(){
+    if(this.classList.contains('got')) return;
+    this.classList.add('got');
+    this.textContent='已添加';
+    toast('🧩 「'+s.name+'」已添加到你的 ima');
+  };
+  skillList.appendChild(el);
+});
+document.getElementById('fab').onclick = ()=> mask.classList.add('on');
+document.getElementById('mClose').onclick = ()=> mask.classList.remove('on');
+mask.addEventListener('click', e=>{ if(e.target===mask) mask.classList.remove('on'); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') mask.classList.remove('on'); });
+
+/* ================= Toast ================= */
+const toastEl = document.getElementById('toast');
+const toastTxt = document.getElementById('toastTxt');
+let toastTimer;
+function toast(msg){
+  toastTxt.textContent = msg;
+  toastEl.classList.add('on');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toastEl.classList.remove('on'), 2200);
+}
+
+genBtn.onclick = generate;
+rawEl.addEventListener('keydown', e=>{
+  if((e.metaKey||e.ctrlKey) && e.key==='Enter') generate();
+});
+</script>
+</body>
+</html>

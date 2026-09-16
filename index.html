@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  个人 AI Agent 作品集导航页  |  index.html
+  ----------------------------------------------------------------------------
+  数据驱动：页面所有内容都来自下方 script 标签里的 PROJECTS 数组，
+           统计数字（项目总数 / 分类数）由代码自动计算，无需手动修改 HTML。
+
+  ★ 如何新增一个项目 ★
+    在 PROJECTS 数组中按同样格式追加一个对象即可，顺序即展示顺序：
+
+      { cat: '工具效率', name: '新工具', file: 'xxx.html',
+        desc: '一句话描述', tags: ['工具', '效率'] },
+
+    · cat  ：必须是下方 CATEGORIES 中已存在的分类名（否则会新建分组，
+             但仍需自己在顶部注释维护语义一致）
+    · file ：与本文件同目录下的相对路径，新标签页打开
+    · tags ：标签数组，建议 2 个，渲染为卡片底部的橙色小胶囊
+    新增后：顶部统计、分类数、每组的「N 个项目」全部自动更新。
+
+  ★ 如何删除一个项目 ★
+    直接删掉数组中对应的那一行对象即可；若某分类因此变空，
+    该分组会自动消失，顶部统计也会同步减少。
+
+  ★ 如何新增 / 修改分类 ★
+    修改 CATEGORIES 数组即可（可追加中文名），
+    项目的 cat 字段与之对应；分类的展示顺序 = CATEGORIES 的数组顺序。
+  ============================================================================
+-->
+<html lang="zh-CN" data-page-node-id="vFzzNVyeZmjopZGvNrBJyT">
+<head data-page-node-id="0lvC4q8XYfWzL8CMrv8jvQ">
+<meta charset="UTF-8" data-page-node-id="x5swYBl1Bk6LkXLJtlBSMi">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="o4qH2aQ3F2n8OXYYd6GwnB">
+<title>个人 AI Agent 作品集导航页</title>
+<style>
+  :root {
+    --navy:        #0A1428;
+    --navy-card:   #101E38;
+    --navy-line:   #1D2D4A;
+    --orange:      #FF7A1A;
+    --orange-soft: rgba(255, 122, 26, 0.12);
+    --text:        #E8EDF5;
+    --text-sub:    #94A3B8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+                 "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(900px 500px at 15% -10%, rgba(255,122,26,.14), transparent 60%),
+      radial-gradient(700px 400px at 100% 0%, rgba(58,110,220,.14), transparent 60%);
+    background-repeat: no-repeat;
+  }
+
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px 72px; }
+
+  /* ---------- Hero ---------- */
+  header { padding: 76px 0 44px; }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 13px; letter-spacing: .08em; color: var(--orange);
+    background: var(--orange-soft);
+    border: 1px solid rgba(255,122,26,.28);
+    padding: 6px 14px; border-radius: 999px;
+    margin-bottom: 22px;
+  }
+  .eyebrow .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 0 4px rgba(255,122,26,.18);
+  }
+
+  h1 {
+    font-size: 42px; font-weight: 800; line-height: 1.25;
+    letter-spacing: -.5px; margin-bottom: 14px;
+  }
+  h1 .accent {
+    background: linear-gradient(96deg, #FF9A4D, var(--orange));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle { font-size: 17px; color: var(--text-sub); }
+
+  .stats {
+    display: inline-flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    margin-top: 26px; padding: 10px 20px;
+    background: rgba(255,255,255,.035);
+    border: 1px solid var(--navy-line);
+    border-radius: 12px;
+    font-size: 15px; font-weight: 600; color: var(--text);
+  }
+  .stats .num { color: var(--orange); font-size: 18px; font-weight: 800; }
+  .stats .sep { color: var(--navy-line); }
+
+  /* ---------- Section ---------- */
+  .group { margin-top: 46px; }
+
+  .group-head {
+    display: flex; align-items: baseline; gap: 12px;
+    padding-bottom: 14px; margin-bottom: 22px;
+    border-bottom: 1px solid var(--navy-line);
+  }
+  .group-head .bar {
+    width: 4px; height: 20px; border-radius: 2px;
+    background: var(--orange); flex: none; transform: translateY(3px);
+  }
+  .group-head h2 { font-size: 20px; font-weight: 700; letter-spacing: .01em; }
+  .group-head .count {
+    font-size: 13px; color: var(--text-sub); font-weight: 500;
+    border: 1px solid var(--navy-line); padding: 2px 10px; border-radius: 999px;
+  }
+
+  .grid {
+    display: grid; gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(288px, 1fr));
+  }
+
+  /* ---------- Card ---------- */
+  .card {
+    display: flex; flex-direction: column;
+    background: var(--navy-card);
+    border: 1px solid var(--navy-line);
+    border-radius: 14px; padding: 22px 22px 18px;
+    text-decoration: none; color: inherit;
+    position: relative; overflow: hidden;
+    transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+  }
+  .card::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+    background: var(--orange); transform: scaleY(0); transform-origin: top;
+    transition: transform .25s ease;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    border-color: rgba(255,122,26,.45);
+    box-shadow: 0 14px 34px rgba(0,0,0,.38);
+  }
+  .card:hover::before { transform: scaleY(1); }
+
+  .card h3 {
+    font-size: 17px; font-weight: 700; margin-bottom: 8px;
+    transition: color .2s ease;
+  }
+  .card:hover h3 { color: var(--orange); }
+
+  .card .desc {
+    font-size: 14px; color: var(--text-sub);
+    margin-bottom: 16px; flex: 1;
+  }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 18px; }
+  .tag {
+    font-size: 12px; color: var(--orange);
+    background: var(--orange-soft);
+    border: 1px solid rgba(255,122,26,.2);
+    padding: 3px 9px; border-radius: 6px;
+  }
+
+  .go {
+    align-self: flex-start;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 600; color: var(--orange);
+    border: 1px solid rgba(255,122,26,.35);
+    background: transparent;
+    padding: 7px 14px; border-radius: 8px;
+    transition: background .2s ease, color .2s ease;
+  }
+  .card:hover .go { background: var(--orange); color: #0A1428; }
+  .go .arrow { font-size: 14px; line-height: 1; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    margin-top: 64px; padding-top: 24px;
+    border-top: 1px solid var(--navy-line);
+    font-size: 13px; color: var(--text-sub);
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 640px) {
+    .wrap { padding: 0 16px 56px; }
+    header { padding: 48px 0 32px; }
+    h1 { font-size: 29px; }
+    .subtitle { font-size: 15px; }
+    .stats { font-size: 14px; padding: 9px 16px; gap: 10px; }
+    .stats .num { font-size: 16px; }
+    .grid { grid-template-columns: 1fr; gap: 14px; }
+    .group { margin-top: 34px; }
+    .card { padding: 18px 18px 16px; }
+  }
+</style>
+</head>
+<body data-page-node-id="WUirAQ0ItvMaWVpm2DdO2D">
+<div class="wrap" data-page-node-id="WOhu6QA8hr8wMWsihsUFog">
+
+  <header data-page-node-id="H5G3pIenkwzYrJLy214z0T">
+    <div class="eyebrow" data-page-node-id="BKzjG4Gr60XsyeWwMiEUAC"><span class="dot" data-page-node-id="2qabUL7tjzmp8MATZOCK4H"></span>AI AGENT PORTFOLIO</div>
+    <h1 data-page-node-id="sZK8sbj0qquKh3nhUris90">个人 <span class="accent" data-page-node-id="DHhaE8Act3PQ3uMD5oZ1lb">AI Agent</span> 作品集导航页</h1>
+    <p class="subtitle" data-page-node-id="tbvKaaMBsYrUaxnuWGvKRh">李宣奕 · 用 WorkBuddy 完成的 15 个 AI 产品 Demo</p>
+    <div class="stats" id="stats" data-page-node-id="PnmCIL3AWFxFLBj934bAL5"></div>
+  </header>
+
+  <main id="board" data-page-node-id="lSvO3JjC0WXBJHeYOuQGMP"></main>
+
+  <footer data-page-node-id="N4do8ttnGGbrHufvYscpFx">
+    <span data-page-node-id="eojlUG7zDNjNIV0p7NLVXC">全部 Demo 均为本地单文件 HTML，零外部依赖</span>
+    <span data-page-node-id="udtAqPdBSJAEkFrsfzGuOR">Built with WorkBuddy</span>
+  </footer>
+
+</div>
+
+<script>
+/* ============================================================================
+   1. 数据源：分类 + 项目
+   —— 只需维护这两个数组，页面其余部分自动生成 ——
+   ========================================================================== */
+
+// 分类（数组顺序 = 页面展示顺序）
+const CATEGORIES = [
+  'AI Agent 实战',
+  '金融科技',
+  '腾讯产品AI化模拟',
+  '工具效率',
+  '趣味社交'
+];
+
+// 项目列表：cat 需对应上方可分类名
+const PROJECTS = [
+  // 分类一：AI Agent 实战
+  { cat: 'AI Agent 实战', name: 'AI投研助手', file: 'AI投研助手_方案与原型.html',
+    desc: '面向普通投资者的财报异动解读智能体', tags: ['AI Agent', '金融'] },
+
+  // 分类二：金融科技
+  { cat: '金融科技', name: '资产配置助手', file: 'portfolio_agent.html',
+    desc: '模拟AI Agent团队协作完成资产配置', tags: ['金融', '多智能体'] },
+  { cat: '金融科技', name: '随手记账本', file: 'ledger.html',
+    desc: '极简记账工具，色块条展示消费结构', tags: ['工具', '数据'] },
+
+  // 分类三：腾讯产品AI化模拟
+  { cat: '腾讯产品AI化模拟', name: '腾讯营销智能体模拟器', file: 'magic_agent_simulator.html',
+    desc: '模拟MAGIC Agent五大营销智能体协同', tags: ['营销', 'Agent'] },
+  { cat: '腾讯产品AI化模拟', name: 'WeGame AI游戏推荐器', file: 'wegame_recommend.html',
+    desc: '模拟WeGame平台智能游戏推荐', tags: ['游戏', '推荐'] },
+  { cat: '腾讯产品AI化模拟', name: '造化工坊', file: 'zaohua_studio.html',
+    desc: '基于光子AI的互动影游创意工坊', tags: ['游戏', '创意'] },
+  { cat: '腾讯产品AI化模拟', name: '腾讯视频AI观影助手', file: 'tencent_video_ai.html',
+    desc: '模拟腾讯视频VV AI观影助手', tags: ['视频', '推荐'] },
+  { cat: '腾讯产品AI化模拟', name: '腾讯地图AI行程管家', file: 'tencent_map_agent.html',
+    desc: '模拟腾讯地图叮当智能体行程规划', tags: ['地图', '出行'] },
+  { cat: '腾讯产品AI化模拟', name: '元宝派', file: 'yuanbao_agent.html',
+    desc: '模拟元宝从“给答案”到“帮办事”', tags: ['Agent', '办公'] },
+  { cat: '腾讯产品AI化模拟', name: 'ima知识号', file: 'ima_knowledge_card.html',
+    desc: '模拟ima copilot知识卡片生成', tags: ['知识管理'] },
+
+  // 分类四：工具效率
+  { cat: '工具效率', name: '每日例行事务管理看板', file: 'daily_routine.html',
+    desc: '运动/行测/投简历/写论文的每日打卡工具', tags: ['工具', '效率'] },
+  { cat: '工具效率', name: '番茄钟', file: 'pomodoro.html',
+    desc: '专注力管理工具，含烟花/统计/白噪音', tags: ['工具', '效率'] },
+  { cat: '工具效率', name: '情绪日志', file: 'mood_log.html',
+    desc: '5秒记录心情，看7天趋势', tags: ['工具', '自我觉察'] },
+  { cat: '工具效率', name: '个人阅读清单', file: 'reading_log.html',
+    desc: '管理想读/在读/已读完的书籍', tags: ['工具', '知识管理'] },
+
+  // 分类五：趣味社交
+  { cat: '趣味社交', name: '水果性格测试', file: 'fruit_test.html',
+    desc: '12道题测出15种水果人格', tags: ['社交', '趣味'] }
+];
+
+
+/* ============================================================================
+   2. 渲染逻辑（一般无需修改）
+   ========================================================================== */
+
+const esc = s => String(s).replace(/[&<>"]/g, c =>
+  ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+// 顶部统计：项目数 + 实际有内容的分类数，自动计算
+const activeCats = CATEGORIES.filter(c => PROJECTS.some(p => p.cat === c));
+document.getElementById('stats').innerHTML =
+  `共 <span class="num">${PROJECTS.length}</span> 个项目 ` +
+  `<span class="sep">·</span> ` +
+  `<span class="num">${activeCats.length}</span> 个分类`;
+
+// 按分类分组渲染
+document.getElementById('board').innerHTML = activeCats.map(cat => {
+  const list = PROJECTS.filter(p => p.cat === cat);
+  const cards = list.map(p => `
+    <a class="card" href="${esc(p.file)}" target="_blank" rel="noopener">
+      <h3>${esc(p.name)}</h3>
+      <p class="desc">${esc(p.desc)}</p>
+      <div class="tags">${p.tags.map(t => `<span class="tag">${esc(t)}</span>`).join('')}</div>
+      <span class="go">查看 <span class="arrow">→</span></span>
+    </a>`).join('');
+
+  return `
+    <section class="group">
+      <div class="group-head">
+        <span class="bar"></span>
+        <h2>${esc(cat)}</h2>
+        <span class="count">${list.length} 个项目</span>
+      </div>
+      <div class="grid">${cards}</div>
+    </section>`;
+}).join('');
+</script>
+</body>
+</html>
